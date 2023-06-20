@@ -1,0 +1,12 @@
+.link {
+    color: inherit;
+	text-decoration: underline;
+    font-family: 'Rubik';
+    color: var(--primary-blue-color);
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+.link:hover {
+    opacity: 0.9;
+}

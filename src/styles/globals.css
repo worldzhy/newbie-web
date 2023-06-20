@@ -1,6 +1,9 @@
 :root {
   --primary-black-color: #424242;
   --primary-white-color: #FFFFFF;
+  --primary-blue-color: #2C73FF;
+
+  --transition: ease-in-out 0.3s;
 }
 
 * {

@@ -3,6 +3,7 @@ import { Typography, Container, Grid } from '@mui/material';
 import styles from '@/styles/Login.module.css';
 import InputText from '@/components/InputText/InputText';
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
+import LinkCustom from '@/components/LinkCustom/LinkCustom';
 import Pre from '@/widgets/Pre';
 
 const Home = (): ReactElement => {
@@ -23,6 +24,9 @@ const Home = (): ReactElement => {
                   </Grid>
                   <Grid item xs={12}>
                     <InputText id="outlined-basic" label="Password" variant="outlined" />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <LinkCustom href='/forgot-password'>Forgot Password</LinkCustom>
                   </Grid>
                   <Grid item xs={12}>
                     <ButtonCustom color='dark'>Login</ButtonCustom>
