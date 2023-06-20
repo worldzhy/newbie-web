@@ -1,7 +1,8 @@
-import styles from '@/styles/Login.module.css';
-import { Typography, Container, Grid } from '@mui/material';
-import InputText from '@/components/InputText/InputText';
 import React, { type ReactElement } from 'react';
+import { Typography, Container, Grid } from '@mui/material';
+import styles from '@/styles/Login.module.css';
+import InputText from '@/components/InputText/InputText';
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import Pre from '@/widgets/Pre';
 
 const Home = (): ReactElement => {
@@ -24,7 +25,7 @@ const Home = (): ReactElement => {
                     <InputText id="outlined-basic" label="Password" variant="outlined" />
                   </Grid>
                   <Grid item xs={12}>
-                    <button>Click!</button>
+                    <ButtonCustom color='dark'>Login</ButtonCustom>
                   </Grid>
                 </Grid>
               </form>
