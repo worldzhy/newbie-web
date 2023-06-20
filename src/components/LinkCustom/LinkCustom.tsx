@@ -10,7 +10,6 @@ const LinkCustom: FC<Props & HTMLProps<HTMLAnchorElement>> = ({ className, href,
   return (
     <Link
       className={`${className === undefined ? '' : className} ${styles.link}`}
-      target='_blank'
       href={href === undefined ? '' : href}
     >
       {children}
