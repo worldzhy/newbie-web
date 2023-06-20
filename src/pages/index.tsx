@@ -17,16 +17,14 @@ const Home = (): ReactElement => {
               <Typography className={`${styles.title}`} variant='h1'>InceptionPad Backyard</Typography>
             </Grid>
             <Grid item xs={12}>
-              <form>
+              <form className={`${styles.form}`}>
                 <Grid container rowSpacing={4}>
                   <Grid item xs={12}>
                     <InputText id="outlined-basic" label="Email" variant="outlined" />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} className={`${styles.password}`}>
                     <InputText id="outlined-basic" label="Password" variant="outlined" />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <LinkCustom href='/forgot-password'>Forgot Password</LinkCustom>
+                    <LinkCustom href='/forgot-password' className={`${styles.forgotPassword}`}>Forgot Password</LinkCustom>
                   </Grid>
                   <Grid item xs={12}>
                     <ButtonCustom color='dark'>Login</ButtonCustom>

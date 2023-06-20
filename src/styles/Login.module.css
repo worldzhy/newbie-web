@@ -5,3 +5,17 @@
 .title {
   margin: 2rem 0 1rem 0;
 }
+
+.form {
+  width: 275px;
+  margin: auto;
+}
+
+.password {
+  text-align: end;
+}
+
+.forgotPassword {
+  margin-top: 5px;
+  display: block;
+}
