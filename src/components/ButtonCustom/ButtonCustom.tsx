@@ -31,10 +31,11 @@ const theme = createTheme({
   }
 });
 
-const ButtonCustom: FC<Props & ButtonProps> = ({ color, className, children, ...props }) => {
+const ButtonCustom: FC<Props & ButtonProps> = ({ color, onClick, className, children, ...props }) => {
   return (
     <ThemeProvider theme={theme}>
       <Button
+        onClick={onClick}
         className={`${className === undefined ? '' : className} ${styles.button}`}
         color={color}
         variant='contained'
