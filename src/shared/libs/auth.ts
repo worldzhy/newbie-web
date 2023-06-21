@@ -6,7 +6,6 @@ export default class Auth {
 
   public async login (input: ILoginPayload): Promise<ILoginReturn> {
     const url = `${this.baseUrl}/login/password`;
-    console.log({ url });
     const data = {
       account: input.account,
       password: input.password

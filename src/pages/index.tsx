@@ -6,7 +6,6 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import LinkCustom from '@/components/LinkCustom/LinkCustom';
 import Pre from '@/widgets/Pre';
 import Auth from '@/shared/libs/auth';
-import { AxiosError } from 'axios';
 import { showError } from '@/shared/libs/mixins';
 
 const Home = (): ReactElement => {
@@ -37,11 +36,6 @@ const Home = (): ReactElement => {
     } catch (err: unknown) {
       setIsLoading(false);
       showError(err);
-      if (err instanceof AxiosError) {
-        console.error(err.response?.data.message);
-      } else {
-        console.error(JSON.stringify(err, null, 4));
-      }
     }
   };
 
