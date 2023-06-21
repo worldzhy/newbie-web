@@ -71,3 +71,14 @@ export const showError = (err: unknown): void => {
   showToast('error', message);
   log(err);
 };
+
+export const sendRequest = async (setIsLoading: (v: React.SetStateAction<any>) => void, fn: () => Promise<void>): Promise<void> => {
+  try {
+    setIsLoading(true);
+    await fn();
+    setIsLoading(false);
+  } catch (err: unknown) {
+    setIsLoading(false);
+    showError(err);
+  }
+};

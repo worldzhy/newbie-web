@@ -6,7 +6,7 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import LinkCustom from '@/components/LinkCustom/LinkCustom';
 import Pre from '@/widgets/Pre';
 import Auth from '@/shared/libs/auth';
-import { showError } from '@/shared/libs/mixins';
+import { sendRequest } from '@/shared/libs/mixins';
 
 const Home = (): ReactElement => {
   /**
@@ -24,19 +24,14 @@ const Home = (): ReactElement => {
   /**
   * Handlers
   */
-  const login = async (): Promise<void> => {
-    try {
-      setIsLoading(true);
+  const loginHandler = async (): Promise<void> => {
+    await sendRequest(setIsLoading, async () => {
       const data = {
         account: email,
         password
       };
       await auth.login(data);
-      setIsLoading(false);
-    } catch (err: unknown) {
-      setIsLoading(false);
-      showError(err);
-    }
+    });
   };
 
   return (
@@ -78,7 +73,7 @@ const Home = (): ReactElement => {
                     <ButtonCustom
                       color='dark'
                       onClick={() => {
-                        void login();
+                        void loginHandler();
                       }}
                     >
                       Login
