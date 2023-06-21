@@ -48,10 +48,11 @@ const Home = (): ReactElement => {
                 <Grid container rowSpacing={4}>
                   <Grid item xs={12}>
                     <InputText
-                      id="outlined-basic"
-                      label="Email"
-                      variant="outlined"
+                      id='outlined-basic'
+                      label='Email'
+                      variant='outlined'
                       value={email}
+                      type='email'
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setEmail(e.target.value);
                       }}
@@ -59,10 +60,11 @@ const Home = (): ReactElement => {
                   </Grid>
                   <Grid item xs={12} className={`${styles.password}`}>
                     <InputText
-                      id="outlined-basic"
-                      label="Password"
-                      variant="outlined"
+                      id='outlined-basic'
+                      label='Password'
+                      variant='outlined'
                       value={password}
+                      type='password'
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setPassword(e.target.value);
                       }}

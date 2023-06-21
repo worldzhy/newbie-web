@@ -43,10 +43,11 @@ const Home = (): ReactElement => {
                 <Grid container rowSpacing={4}>
                   <Grid item xs={12} className={`${styles.email}`}>
                     <InputText
-                      id="outlined-basic"
-                      label="Email"
-                      variant="outlined"
+                      id='outlined-basic'
+                      label='Email'
+                      variant='outlined'
                       value={email}
+                      type='email'
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setEmail(e.target.value);
                       }}

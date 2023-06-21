@@ -6,7 +6,7 @@ interface Props {
   className?: string
 }
 
-const InputText: FC<Props & TextFieldProps> = ({ className, id, label, variant, onChange, value, ...props }) => {
+const InputText: FC<Props & TextFieldProps> = ({ className, id, label, variant, onChange, value, type, ...props }) => {
   return <TextField
     className={`${className === undefined ? '' : className} ${styles.inputText}`}
     id={id}
@@ -14,6 +14,7 @@ const InputText: FC<Props & TextFieldProps> = ({ className, id, label, variant, 
     variant={variant}
     onChange={onChange}
     value={value}
+    type={type}
   />;
 };
 
