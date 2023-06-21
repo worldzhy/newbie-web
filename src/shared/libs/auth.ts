@@ -14,6 +14,13 @@ export default class Auth {
     setCookie('token', res.data.token);
     return res.data;
   }
+
+  // TO DO: Update return type to be more type safe
+  public async forgotPassword (email: string): Promise<any> {
+    const url = `${this.baseUrl}/reset-password/verification-code/email/${email}`;
+    const res = await axios.get(url);
+    return res.data;
+  }
 }
 
 /**
