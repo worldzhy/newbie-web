@@ -8,7 +8,7 @@ import Pre from '@/widgets/Pre';
 import Auth from '@/shared/libs/auth';
 import { sendRequest } from '@/shared/libs/mixins';
 
-const Home = (): ReactElement => {
+const Page = (): ReactElement => {
   /**
   * Declarations
   */
@@ -91,4 +91,4 @@ const Home = (): ReactElement => {
   );
 };
 
-export default Home;
+export default Page;
