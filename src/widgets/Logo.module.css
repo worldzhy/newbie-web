@@ -1,4 +1,9 @@
 .logo {
+  text-decoration: none;
+  color: var(--primary-black-color);
+}
+
+.logo .text {
   font-size: 18px;
   font-weight: 400;
   text-transform: uppercase;
