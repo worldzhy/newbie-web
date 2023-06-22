@@ -1,0 +1,40 @@
+/* Header */
+
+.header {
+  box-shadow: none;
+}
+
+.header .toolbar {
+  border: 2px solid var(--primary-gray-color);
+  border-left: none;
+  background-color: var(--primary-white-color);
+  color: var(--primary-black-color);
+}
+
+.header .stack {
+  width: 100%;
+}
+
+
+/* Side menu */
+
+.menu {
+  box-shadow: none; 
+}
+
+.menu .toolbar {
+  border: 2px solid var(--primary-gray-color);
+  border-right: none;
+}
+
+.menuButtons {
+  width: 100%;
+}
+
+/* Diff component */
+
+.logo {
+  font-size: 18px;
+  font-weight: 400;
+  text-transform: uppercase;
+}

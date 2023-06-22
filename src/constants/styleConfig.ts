@@ -1,6 +1,8 @@
 const styleConfig = {
   color: {
-    primaryBlackColor: '#424242'
+    primaryBlackColor: '#424242',
+    primaryWhiteColor: '#FFFFFF',
+    primaryGrayColor: '#A8A8A8'
   }
 };
 

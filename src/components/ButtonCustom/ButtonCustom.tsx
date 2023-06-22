@@ -11,6 +11,7 @@ interface Props {
 declare module '@mui/material/styles' {
   interface CustomPalette {
     dark: PaletteColorOptions
+    light: PaletteColorOptions
   }
   interface Palette extends CustomPalette {}
   interface PaletteOptions extends CustomPalette {}
@@ -19,6 +20,7 @@ declare module '@mui/material/styles' {
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
     dark: true
+    light: true
   }
 }
 
@@ -27,11 +29,12 @@ const { augmentColor } = palette;
 const createColor = (mainColor: string): PaletteColor => augmentColor({ color: { main: mainColor } });
 const theme = createTheme({
   palette: {
-    dark: createColor(styleConfig.color.primaryBlackColor)
+    dark: createColor(styleConfig.color.primaryBlackColor),
+    light: createColor(styleConfig.color.primaryWhiteColor)
   }
 });
 
-const ButtonCustom: FC<Props & ButtonProps> = ({ color, onClick, className, children, ...props }) => {
+const ButtonCustom: FC<Props & ButtonProps> = ({ color, onClick, href, className, children, ...props }) => {
   return (
     <ThemeProvider theme={theme}>
       <Button
@@ -39,6 +42,7 @@ const ButtonCustom: FC<Props & ButtonProps> = ({ color, onClick, className, chil
         className={`${className === undefined ? '' : className} ${styles.button}`}
         color={color}
         variant='contained'
+        href={href}
       >
         {children}
       </Button>
