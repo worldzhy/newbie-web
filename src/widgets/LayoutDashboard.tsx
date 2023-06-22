@@ -6,6 +6,7 @@ import { AppBar, Box, Breadcrumbs, CssBaseline, Divider, Drawer, IconButton, Lis
 import styleConfig from '@/constants/styleConfig';
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import LinkCustom from '@/components/LinkCustom/LinkCustom';
+import Logo from '@/widgets/Logo';
 import styles from './LayoutDashboard.module.css';
 
 const drawerWidth = 240;
@@ -31,7 +32,7 @@ const LayoutDashboard = ({ children, window }: Props): ReactElement => {
   const drawer = (
     <div className={styles.menu} >
       <Toolbar className={styles.toolbar}>
-        <Typography className={styles.logo} variant='h1'>Logo</Typography>
+        <Logo/>
       </Toolbar>
       <Divider />
       <List >

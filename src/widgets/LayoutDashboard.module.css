@@ -30,11 +30,3 @@
 .menuButtons {
   width: 100%;
 }
-
-/* Diff component */
-
-.logo {
-  font-size: 18px;
-  font-weight: 400;
-  text-transform: uppercase;
-}
