@@ -1,12 +1,12 @@
 import React, { type ReactElement, useState } from 'react';
 import { Typography, Container, Grid } from '@mui/material';
-import styles from '@/styles/Login.module.css';
-import InputText from '@/components/InputText/InputText';
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
+import InputText from '@/components/InputText/InputText';
 import LinkCustom from '@/components/LinkCustom/LinkCustom';
-import Pre from '@/widgets/Pre';
 import Auth from '@/shared/libs/auth';
 import { sendRequest } from '@/shared/libs/mixins';
+import styles from '@/styles/Login.module.css';
+import Pre from '@/widgets/Pre';
 
 const Page = (): ReactElement => {
   /**
