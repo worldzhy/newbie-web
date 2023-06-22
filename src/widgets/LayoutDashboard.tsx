@@ -14,9 +14,15 @@ const drawerWidth = 240;
 interface Props {
   window?: () => Window
   children: ReactElement
-}
+  active: 'Projects' | 'Services' | 'Wiki' | 'Team' | 'My space'
+};
 
-const LayoutDashboard = ({ children, window }: Props): ReactElement => {
+const LayoutDashboard = ({ window, children, active }: Props): ReactElement => {
+  /**
+  * Declarations
+  */
+  const subMenus = ['Projects', 'Services', 'Wiki', 'Team', 'My space'];
+
   /**
   * States
   */
@@ -36,12 +42,12 @@ const LayoutDashboard = ({ children, window }: Props): ReactElement => {
       </Toolbar>
       <Divider />
       <List >
-        {['Projects', 'Services', 'Wiki', 'Team', 'My space'].map((text, index) => (
+        {subMenus.map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ButtonCustom
                 className={styles.menuButtons}
-                color='light'
+                color={text === active ? 'dark' : 'light'}
                 href={`/${text.toLowerCase()}`}
               >
                 {text}
@@ -87,7 +93,7 @@ const LayoutDashboard = ({ children, window }: Props): ReactElement => {
                 Home
               </LinkCustom>
               <Typography color='text.primary'>
-                Team
+                {active}
               </Typography>
             </Breadcrumbs>
             <AccountCircleIcon/>

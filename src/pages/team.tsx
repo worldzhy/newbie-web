@@ -23,5 +23,5 @@ export default Page;
  * Layout wrapper
  */
 Page.getLayout = (page: ReactElement) => {
-  return <LayoutDashboard>{page}</LayoutDashboard>;
+  return <LayoutDashboard active='Team'>{page}</LayoutDashboard>;
 };
