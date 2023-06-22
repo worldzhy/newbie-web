@@ -43,7 +43,6 @@ const Page = (): ReactElement => {
                 <Grid container rowSpacing={4}>
                   <Grid item xs={12} className={`${styles.email}`}>
                     <InputText
-                      id='outlined-basic'
                       label='Email'
                       variant='outlined'
                       value={email}

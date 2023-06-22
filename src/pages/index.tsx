@@ -48,7 +48,6 @@ const Page = (): ReactElement => {
                 <Grid container rowSpacing={4}>
                   <Grid item xs={12}>
                     <InputText
-                      id='outlined-basic'
                       label='Email'
                       variant='outlined'
                       value={email}
@@ -60,7 +59,6 @@ const Page = (): ReactElement => {
                   </Grid>
                   <Grid item xs={12} className={`${styles.password}`}>
                     <InputText
-                      id='outlined-basic'
                       label='Password'
                       variant='outlined'
                       value={password}
