@@ -1,10 +1,11 @@
 import React, { type ReactElement, type SyntheticEvent } from 'react';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Box, Tab } from '@mui/material';
 
-import LayoutDashboard from '@/widgets/LayoutDashboard';
-import styles from '@/styles/Team.module.css';
 import styleConfig from '@/constants/styleConfig';
+import styles from '@/styles/Team.module.css';
+import LayoutDashboard from '@/widgets/LayoutDashboard';
+import TeamMembers from '@/widgets/Team/Members';
 
 const Page = (): ReactElement => {
   const [value, setValue] = React.useState('1');
@@ -12,22 +13,6 @@ const Page = (): ReactElement => {
   const handleChange = (event: SyntheticEvent, newValue: string): void => {
     setValue(newValue);
   };
-
-  // Panel 1 Data
-  const createData = (
-    name: string,
-    email: string,
-    phone: string,
-    role: string
-  ): { name: string, email: string, phone: string, role: string } => {
-    return { name, email, phone, role };
-  };
-
-  const rows = [
-    createData('hongbin', 'hongbin@inceptionpad.com', '13256484466', 'Developer'),
-    createData('xiabin', 'xiabin@inceptionpad.com', '15605437789', 'Developer'),
-    createData('joe', 'joe@inceptionpad.com', '18978545785', 'Developer')
-  ];
 
   return (
     <Box sx={{ width: '100%', typography: 'body1' }}>
@@ -63,40 +48,7 @@ const Page = (): ReactElement => {
           value="1"
           sx={{ border: 2, borderColor: styleConfig.color.primaryGrayColor, marginTop: 2 }}
         >
-          <TableContainer component={Paper} >
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow
-                  sx={{
-                    backgroundColor: `${styleConfig.color.primaryGrayColor}`,
-                    '& td, & th': { border: `2px solid ${styleConfig.color.primaryBlackColor}` },
-                    '& th': { color: `${styleConfig.color.primaryWhiteColor}`, fontSize: '14px', fontWeight: '700' }
-                  }}
-                >
-                  <TableCell align='center'>Members</TableCell>
-                  <TableCell align='center'>Email</TableCell>
-                  <TableCell align='center'>Phone</TableCell>
-                  <TableCell align='center'>Role</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow
-                    key={row.name}
-                    sx={{
-                      '& td, & th': { border: `2px solid ${styleConfig.color.primaryBlackColor}` },
-                      '& th': { color: `${styleConfig.color.primaryGrayColor}`, fontSize: '14px', fontWeight: '400' }
-                    }}
-                  >
-                    <TableCell align='center'>{row.name}</TableCell>
-                    <TableCell align='center'>{row.email}</TableCell>
-                    <TableCell align='center'>{row.phone}</TableCell>
-                    <TableCell align='center'>{row.role}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <TeamMembers/>
         </TabPanel>
         <TabPanel
           value="2"
