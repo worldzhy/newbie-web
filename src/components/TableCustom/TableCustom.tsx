@@ -1,5 +1,5 @@
 import React, { type ReactElement, type FC } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Skeleton, Stack } from '@mui/material';
 
 import styleConfig from '@/constants/styleConfig';
 
@@ -9,7 +9,18 @@ interface Props {
 }
 
 const TableCustom: FC<Props> = ({ headers, rows }): ReactElement => {
-  return (
+  const skeleton = (
+    <Stack
+      direction='column'
+      spacing={1}
+    >
+      {Array.from(new Array(3)).map((_, key: number) => (
+        <Skeleton key={key} variant='rounded' animation='wave' height={60} />
+      ))}
+    </Stack>
+  );
+
+  const table = (
     <TableContainer component={Paper} >
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -43,6 +54,8 @@ const TableCustom: FC<Props> = ({ headers, rows }): ReactElement => {
       </Table>
     </TableContainer>
   );
+
+  return rows.length === 0 ? skeleton : table;
 };
 
 export default TableCustom;
