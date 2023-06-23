@@ -1,25 +1,46 @@
-import React, { type ReactElement } from 'react';
+import React, { useState, useEffect, type ReactElement } from 'react';
 import TableCustom from '@/components/TableCustom/TableCustom';
-
-// Panel 2 Data
-const headers = ['Name', 'Description', 'Permissions'];
-
-const createData = (
-  name: string,
-  description: string,
-  permissions: string
-): { name: string, description: string, permissions: string } => {
-  return { name, description, permissions };
-};
-
-const rows = [
-  createData('Developer', 'xxx', 'Edit'),
-  createData('Product Owner', 'xxx', 'Edit'),
-  createData('Administrator', 'xxx', 'Edit'),
-  createData('Lead Developer', 'xxx', 'Edit')
-];
+import Role from '@/shared/libs/role';
 
 const TeamRoles = (): ReactElement => {
+  /**
+  * Declarations
+  */
+  const headers = ['Name', 'Description', 'Permissions'];
+
+  /**
+  * States
+  */
+  const [rows, setRows] = useState([] as Array<Record<string, any>>);
+
+  /**
+  * Handlers
+  */
+  useEffect(() => {
+    const startFetching = async (): Promise<void> => {
+      try {
+        setRows([]);
+        const roles = await (new Role()).get();
+        if (!ignore) {
+          const createData = (name: string, description: string, permissions: string): { name: string, description: string, permissions: string } => {
+            return { name, description, permissions };
+          };
+          const fetchedRows = roles.map(role => createData(role.name, role.description ?? 'xxx', 'Edit'));
+          setRows(fetchedRows);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    let ignore = false;
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    startFetching();
+    return () => {
+      ignore = true;
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <TableCustom headers={headers} rows={rows} ></TableCustom>
   );
