@@ -1,4 +1,6 @@
 import React, { useState, useEffect, type ReactElement } from 'react';
+import { Stack } from '@mui/material';
+import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import TableCustom from '@/components/TableCustom/TableCustom';
 import Role from '@/shared/libs/role';
 
@@ -42,7 +44,21 @@ const TeamRoles = (): ReactElement => {
   }, []);
 
   return (
-    <TableCustom headers={headers} rows={rows} ></TableCustom>
+    <Stack
+      direction='column'
+      spacing={2}
+      alignItems="flex-end"
+    >
+      <ButtonCustom
+        color='dark'
+        // onClick={() => {
+        //   void addRoleHandler();
+        // }}
+      >
+        New role
+      </ButtonCustom>
+      <TableCustom headers={headers} rows={rows} ></TableCustom>
+    </Stack>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { type ReactElement, type FC } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Skeleton, Stack } from '@mui/material';
-
 import styleConfig from '@/constants/styleConfig';
+import styles from './TableCustom.module.css';
 
 interface Props {
   headers: string[]
@@ -13,6 +13,7 @@ const TableCustom: FC<Props> = ({ headers, rows }): ReactElement => {
     <Stack
       direction='column'
       spacing={1}
+      className={styles.skeleton}
     >
       {Array.from(new Array(3)).map((_, key: number) => (
         <Skeleton key={key} variant='rounded' animation='wave' height={60} />
