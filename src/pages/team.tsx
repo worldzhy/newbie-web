@@ -6,6 +6,7 @@ import styleConfig from '@/constants/styleConfig';
 import styles from '@/styles/Team.module.css';
 import LayoutDashboard from '@/widgets/LayoutDashboard';
 import TeamMembers from '@/widgets/Team/Members';
+import TeamRoles from '@/widgets/Team/Role';
 
 const Page = (): ReactElement => {
   const [value, setValue] = React.useState('1');
@@ -54,7 +55,7 @@ const Page = (): ReactElement => {
           value="2"
           sx={{ border: 2, borderColor: styleConfig.color.primaryGrayColor, marginTop: 2 }}
         >
-          Item Two
+          <TeamRoles/>
         </TabPanel>
         <TabPanel
           value="3"
