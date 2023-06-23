@@ -36,7 +36,7 @@ const Page = (): ReactElement => {
         <Container>
           <Grid container rowSpacing={4}>
             <Grid item xs={12}>
-              <Typography className={`${styles.text}`}>If an account exists for Email@inceptionpad.com, you will get an email with instructions on resetting your password. If it doesn&apos;t arrive, be sure to check your spam folder.</Typography>
+              <Typography className={`${styles.text}`}>If there is a corresponding account for the email address you fill in, you will get an email with instructions on resetting your password. If it doesn&apos;t arrive, be sure to check your spam folder.</Typography>
             </Grid>
             <Grid item xs={12}>
               <form className={`${styles.form}`}>
