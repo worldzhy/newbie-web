@@ -6,25 +6,29 @@ export default class Permission {
   private readonly accessToken = getCookie('token');
 
   public async get (): Promise<IPermissionSummaryItem[]> {
-    const resources = await this.getResources();
-    const actions = await this.getActions();
+    const [resources, actions] = await Promise.all([this.getResources(), this.getActions()]);
     const permissionsSummary: IPermissionSummaryItem[] = [];
 
-    for (const resource of resources) {
+    const tasks = resources.map(async (resource) => {
+      // Get permissions associated with the resource
       const permissions = await this.getPermissionOfResource(resource);
+      // Prepare permission item
       const permissionsItem: IPermissionSummaryItem = {
         resource,
         permission: {}
       };
       for (const action of actions) {
+        // Populate permission item by checking if permission is present for specific resource and item
         if (permissions.find(p => p.resource === resource && p.action === action) !== undefined) {
           permissionsItem.permission[action] = true;
         } else {
           permissionsItem.permission[action] = false;
         }
       }
+      // Add permission item to summary object
       permissionsSummary.push(permissionsItem);
-    }
+    });
+    await Promise.allSettled(tasks);
 
     return permissionsSummary;
   }
