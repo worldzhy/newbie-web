@@ -1,0 +1,15 @@
+.inputText {
+    background: var(--primary-white-color);
+    width: 275px;
+    max-width: 100%;
+}
+
+.inputText fieldset {
+    border: 2px solid var(--primary-black-color);
+}
+
+.inputText label {
+    color: var(--primary-black-color);
+    font-weight: 400;
+}
+

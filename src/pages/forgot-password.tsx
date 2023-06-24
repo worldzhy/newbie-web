@@ -1,7 +1,7 @@
 import React, { useState, type ReactElement } from 'react';
 import { Typography, Container, Grid } from '@mui/material';
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
-import InputText from '@/components/InputText/InputText';
+import InputTextCustom from '@/components/InputTextCustom/InputTextCustom';
 import LinkCustom from '@/components/LinkCustom/LinkCustom';
 import Auth from '@/shared/libs/auth';
 import { sendRequest } from '@/shared/libs/mixins';
@@ -42,7 +42,7 @@ const Page = (): ReactElement => {
               <form className={`${styles.form}`}>
                 <Grid container rowSpacing={4}>
                   <Grid item xs={12} className={`${styles.email}`}>
-                    <InputText
+                    <InputTextCustom
                       label='Email'
                       variant='outlined'
                       value={email}
