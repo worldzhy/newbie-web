@@ -107,13 +107,20 @@ const TeamRoles = (): ReactElement => {
           sx={{ padding: '16px 24px' }}
         >
           <LoadingButtonCustom
+            color='dark'
             loading={isProcessing}
             onClick={() => {
               void createRole();
-            }}>
-              Confirm
+            }}
+          >
+            Confirm
           </LoadingButtonCustom>
-          <ButtonCustom color='dark' onClick={modalCloseHandler}>Cancel</ButtonCustom>
+          <ButtonCustom
+            color='light'
+            onClick={modalCloseHandler}
+          >
+            Cancel
+          </ButtonCustom>
         </DialogActions>
       </Dialog>
     </>
