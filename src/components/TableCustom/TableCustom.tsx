@@ -1,4 +1,4 @@
-import React, { type ReactElement, type FC } from 'react';
+import React, { type ReactElement, type FC, type ReactNode } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Skeleton, Stack } from '@mui/material';
 import styleConfig from '@/constants/styleConfig';
 import styles from './TableCustom.module.css';
@@ -6,9 +6,11 @@ import styles from './TableCustom.module.css';
 interface Props {
   headers: string[]
   rows: Array<Record<string, any>>
+  isLastColActions: boolean
+  children?: ReactNode
 }
 
-const TableCustom: FC<Props> = ({ headers, rows }): ReactElement => {
+const TableCustom: FC<Props> = ({ headers, rows, isLastColActions, children }): ReactElement => {
   const skeleton = (
     <Stack
       direction='column'
@@ -46,9 +48,12 @@ const TableCustom: FC<Props> = ({ headers, rows }): ReactElement => {
                 '& th': { color: `${styleConfig.color.primaryGrayColor}`, fontSize: '14px', fontWeight: '400' }
               }}
             >
-              {Object.keys(row).map((field: string, key: number) => (
-                <TableCell key={key} align='center'>{row[field]}</TableCell>
-              ))}
+              {Object.keys(row).map((field: string, key: number) => {
+                if (isLastColActions && Object.keys(row).length - 1 === key) {
+                  return <TableCell key={key} align='center'>{children}</TableCell>;
+                }
+                return <TableCell key={key} align='center'>{row[field]}</TableCell>;
+              })}
             </TableRow>
           ))}
         </TableBody>

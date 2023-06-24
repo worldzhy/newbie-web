@@ -85,7 +85,16 @@ const TeamRoles = (): ReactElement => {
         >
           New role
         </ButtonCustom>
-        <TableCustom headers={headers} rows={rows} ></TableCustom>
+        <TableCustom headers={headers} rows={rows} isLastColActions={true}>
+          <ButtonCustom
+            customColor='link'
+            // onClick={() => {
+            //   modalOpenHandler();
+            // }}
+          >
+            Edit
+          </ButtonCustom>
+        </TableCustom>
       </Stack>
       <Dialog open={modal} onClose={modalCloseHandler}>
         <DialogTitle>Role Name</DialogTitle>

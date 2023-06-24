@@ -21,7 +21,7 @@ const rows = [
 
 const TeamMembers = (): ReactElement => {
   return (
-    <TableCustom headers={headers} rows={rows} ></TableCustom>
+    <TableCustom headers={headers} rows={rows} isLastColActions={false}></TableCustom>
   );
 };
 
