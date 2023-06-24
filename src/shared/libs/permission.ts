@@ -5,13 +5,25 @@ export default class Permission {
   private readonly baseUrl = `${process.env.BASE_URL ?? ''}/permissions`;
   private readonly accessToken = getCookie('token');
 
-  public async get (): Promise<IPermissionSummaryItem[]> {
+  public async get (roleId: string): Promise<IPermissionSummaryItem[]> {
     const [resources, actions] = await Promise.all([this.getResources(), this.getActions()]);
+    // eslint-disable-next-line @typescript-eslint/return-await
+    const permissionsAll = await Promise.allSettled(resources.map(async (resource) => this.getPermissionOfResource(resource)));
+
+    // Process only resources that have valid query results
+    const permissions: IPermission[][] = [];
+    permissionsAll.forEach(p => {
+      if (p.status === 'fulfilled') {
+        permissions.push(p.value);
+      }
+    });
+
+    // Prepare summary object
     const permissionsSummary: IPermissionSummaryItem[] = [];
 
-    const tasks = resources.map(async (resource) => {
-      // Get permissions associated with the resource
-      const permissions = await this.getPermissionOfResource(resource);
+    // Cross check permission to role and action
+    for (const resourcePermissions of permissions) {
+      const resource = resourcePermissions[0].resource;
       // Prepare permission item
       const permissionsItem: IPermissionSummaryItem = {
         resource,
@@ -19,7 +31,7 @@ export default class Permission {
       };
       for (const action of actions) {
         // Populate permission item by checking if permission is present for specific resource and item
-        if (permissions.find(p => p.resource === resource && p.action === action) !== undefined) {
+        if (resourcePermissions.find(p => p.trustedEntityId === roleId && p.action === action) !== undefined) {
           permissionsItem.permission[action] = true;
         } else {
           permissionsItem.permission[action] = false;
@@ -27,8 +39,7 @@ export default class Permission {
       }
       // Add permission item to summary object
       permissionsSummary.push(permissionsItem);
-    });
-    await Promise.allSettled(tasks);
+    }
 
     return permissionsSummary;
   }
@@ -56,7 +67,7 @@ export default class Permission {
   }
 
   private async getPermissionOfResource (resource: string): Promise<IPermission[]> {
-    const url = `${this.baseUrl}?resources=${resource}`;
+    const url = `${this.baseUrl}?resource=${resource}`;
     const config = {
       headers: {
         Authorization: `Bearer ${this.accessToken as string}`
