@@ -8,6 +8,7 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import LinkCustom from '@/components/LinkCustom/LinkCustom';
 import Logo from '@/widgets/Logo';
 import styles from './LayoutDashboard.module.css';
+import Pre from './Pre';
 
 const drawerWidth = 240;
 
@@ -62,83 +63,86 @@ const LayoutDashboard = ({ window, children, active }: Props): ReactElement => {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: 'flex' }} >
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={styles.header}
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` }
-        }}
-      >
-        <Toolbar className={styles.toolbar}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Stack
-            direction='row'
-            justifyContent='space-between'
-            alignItems='center'
-            className={styles.stack}
-          >
-            <Breadcrumbs aria-label='breadcrumb' separator={<ArrowRightIcon fontSize='medium' />}>
-              <LinkCustom href='/'>
-                Home
-              </LinkCustom>
-              <Typography color='text.primary'>
-                {active}
-              </Typography>
-            </Breadcrumbs>
-            <AccountCircleIcon/>
-          </Stack>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true
-          }}
+    <>
+      <Pre title={active} isLoading={false}/>
+      <Box sx={{ display: 'flex' }} >
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          className={styles.header}
           sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: `2px solid ${styleConfig.color.primaryGrayColor}` }
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` }
           }}
         >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: `2px solid ${styleConfig.color.primaryGrayColor}` }
-          }}
-          open
+          <Toolbar className={styles.toolbar}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Stack
+              direction='row'
+              justifyContent='space-between'
+              alignItems='center'
+              className={styles.stack}
+            >
+              <Breadcrumbs aria-label='breadcrumb' separator={<ArrowRightIcon fontSize='medium' />}>
+                <LinkCustom href='/'>
+                  Home
+                </LinkCustom>
+                <Typography color='text.primary'>
+                  {active}
+                </Typography>
+              </Breadcrumbs>
+              <AccountCircleIcon/>
+            </Stack>
+          </Toolbar>
+        </AppBar>
+        <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          aria-label="mailbox folders"
         >
-          {drawer}
-        </Drawer>
+          <Drawer
+            container={container}
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true
+            }}
+            sx={{
+              display: { xs: 'block', sm: 'none' },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: `2px solid ${styleConfig.color.primaryGrayColor}` }
+            }}
+          >
+            {drawer}
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: 'none', sm: 'block' },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: `2px solid ${styleConfig.color.primaryGrayColor}` }
+            }}
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Box>
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+        >
+          <Toolbar />
+          {children}
+        </Box>
       </Box>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-      >
-        <Toolbar />
-        {children}
-      </Box>
-    </Box>
+    </>
   );
 };
 
