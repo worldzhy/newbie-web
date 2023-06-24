@@ -63,7 +63,7 @@ export const showToast = (mode: toastMode, message: string): void => {
 
 export const showError = (err: unknown): void => {
   let message = 'Something is wrong. Please try again or contact us if issue persists.';
-  if (err instanceof AxiosError) {
+  if (err instanceof AxiosError && typeof err.response?.data.message === 'string') {
     message = err.response?.data.message;
   } else if (typeof err === 'string') {
     message = err;
