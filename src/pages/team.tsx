@@ -9,8 +9,14 @@ import TeamMembers from '@/widgets/Team/Members';
 import TeamRoles from '@/widgets/Team/Role';
 
 const Page = (): ReactElement => {
+  /**
+  * States
+  */
   const [value, setValue] = React.useState('1');
 
+  /**
+  * Handlers
+  */
   const handleChange = (event: SyntheticEvent, newValue: string): void => {
     setValue(newValue);
   };
