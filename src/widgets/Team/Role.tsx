@@ -78,7 +78,7 @@ const TeamRoles = (): ReactElement => {
         alignItems="flex-end"
       >
         <ButtonCustom
-          color='dark'
+          customColor='dark'
           onClick={() => {
             modalOpenHandler();
           }}
@@ -109,7 +109,7 @@ const TeamRoles = (): ReactElement => {
           sx={{ padding: '16px 24px' }}
         >
           <LoadingButtonCustom
-            color='dark'
+            customColor='dark'
             loading={isProcessing}
             onClick={() => {
               void createRole();
@@ -118,7 +118,7 @@ const TeamRoles = (): ReactElement => {
             Confirm
           </LoadingButtonCustom>
           <ButtonCustom
-            color='light'
+            customColor='light'
             onClick={modalCloseHandler}
           >
             Cancel

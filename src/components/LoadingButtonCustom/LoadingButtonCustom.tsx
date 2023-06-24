@@ -1,13 +1,14 @@
-import React, { type FC } from 'react';
+import React, { type ReactNode, type FC } from 'react';
 import { LoadingButton, type LoadingButtonProps } from '@mui/lab';
 import styleConfig from '@/constants/styleConfig';
 
-interface Props {
+interface Props extends LoadingButtonProps {
   className?: string
-  color: 'dark' | 'light'
+  customColor: 'dark' | 'light'
+  children: ReactNode
 }
 
-const LoadingButtonCustom: FC<Props & LoadingButtonProps> = ({ className, color, onClick, loading, children, ...props }) => {
+const LoadingButtonCustom: FC<Props> = ({ className, customColor, onClick, loading, children }) => {
   return (
     <LoadingButton
       variant='contained'
@@ -22,12 +23,12 @@ const LoadingButtonCustom: FC<Props & LoadingButtonProps> = ({ className, color,
         borderRadius: '0',
         padding: '8px 24px',
         border: `2px solid ${styleConfig.color.primaryBlackColor}`,
-        ...(color === 'dark' && {
+        ...(customColor === 'dark' && {
           color: `${styleConfig.color.primaryWhiteColor}`,
           backgroundColor: `${styleConfig.color.primaryBlackColor}`,
           '&:hover': { backgroundColor: `${styleConfig.color.primaryBlackColorDark}` }
         }),
-        ...(color === 'light' && {
+        ...(customColor === 'light' && {
           color: `${styleConfig.color.primaryBlackColor}`,
           backgroundColor: `${styleConfig.color.primaryWhiteColor}`,
           '&:hover': { backgroundColor: `${styleConfig.color.primaryGrayColor}` }

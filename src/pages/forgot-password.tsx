@@ -55,7 +55,7 @@ const Page = (): ReactElement => {
                   </Grid>
                   <Grid item xs={12}>
                     <ButtonCustom
-                      color='dark'
+                      customColor='dark'
                       onClick={() => {
                         void forgotPasswordHandler();
                       }}

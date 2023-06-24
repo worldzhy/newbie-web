@@ -48,7 +48,7 @@ const LayoutDashboard = ({ window, children, active }: Props): ReactElement => {
             <ListItemButton>
               <ButtonCustom
                 className={styles.menuButtons}
-                color={text === active ? 'dark' : 'light'}
+                customColor={text === active ? 'dark' : 'light'}
                 href={`/${text.toLowerCase()}`}
               >
                 {text}
