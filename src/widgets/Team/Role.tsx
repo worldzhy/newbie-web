@@ -57,7 +57,9 @@ const TeamRoles = (): ReactElement => {
           setRows(fetchedRows);
         }
       } catch (err: unknown) {
-        showError(err);
+        if (!ignore) {
+          showError(err);
+        }
       }
     };
     let ignore = false;
