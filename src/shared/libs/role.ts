@@ -15,6 +15,18 @@ export default class Role {
     const res = await axios.get(url, config);
     return res.data;
   }
+
+  public async create (name: string): Promise<IRole> {
+    const url = this.baseUrl;
+    const data = { name };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${this.accessToken as string}`
+      }
+    };
+    const res = await axios.post(url, data, config);
+    return res.data;
+  }
 }
 
 /**
