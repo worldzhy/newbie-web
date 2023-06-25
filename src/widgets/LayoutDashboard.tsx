@@ -15,14 +15,14 @@ const drawerWidth = 240;
 interface Props {
   window?: () => Window
   children: ReactElement
-  active: 'Projects' | 'Services' | 'Wiki' | 'Team' | 'My space'
+  active: 'Projects' | 'Services' | 'Wiki' | 'Team' | 'My space' | 'Workflow'
 };
 
 const LayoutDashboard = ({ window, children, active }: Props): ReactElement => {
   /**
   * Declarations
   */
-  const subMenus = ['Projects', 'Services', 'Wiki', 'Team', 'My space'];
+  const subMenus = ['Projects', 'Services', 'Wiki', 'Team', 'My space', 'Workflow'];
 
   /**
   * States
