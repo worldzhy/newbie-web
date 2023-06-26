@@ -1,14 +1,13 @@
-import React, { type ReactElement, type FC, useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Skeleton, Stack, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import React, { type ReactElement, type FC, type ReactNode, useEffect, useState } from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Skeleton, Stack } from '@mui/material';
 import styleConfig from '@/constants/styleConfig';
-import Permission from '@/shared/libs/permission';
 import { showError } from '@/shared/libs/mixins';
 
 /**
 *
-* Table responsible for showing the per role (as identified by roleId) permissions against resources.
-* To use this table, provide roleId in props. This component will do the data fetching or the permissions here.
-* This component is used in Team > Roles > Edit page.
+* Table responsible for showing the list of roles.
+* To use this table, provide roleId in props. This component will do the data fetching of the permissions here.
+* This component is used in Team > Roles page.
 *
 **/
 
@@ -17,15 +16,14 @@ import { showError } from '@/shared/libs/mixins';
 */
 
 interface Props {
-  rows?: Array<Record<string, any>>
-  roleId: string
+  children?: ReactNode
 }
 
-const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
+const TablePermission: FC<Props> = ({ children }): ReactElement => {
   /**
   * Declarations
   */
-  const headers = ['Resouce', 'Permission'];
+  const headers = ['Name', 'Description', 'Permission'];
 
   /**
   * States
@@ -39,9 +37,14 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
     const startFetching = async (): Promise<void> => {
       try {
         setRows([]);
-        const permissions = await (new Permission()).get(roleId);
+        // const roles = await (new Role()).get();
+        const roles = [{ name: 'Name', description: null }];
         if (!ignore) {
-          setRows(permissions);
+          const createData = (name: string, description: string, permissions: string): { name: string, description: string, permissions: string } => {
+            return { name, description, permissions };
+          };
+          const fetchedRows = roles.map(role => createData(role.name, role.description ?? 'xxx', 'Edit'));
+          setRows(fetchedRows);
         }
       } catch (err: unknown) {
         if (!ignore) {
@@ -55,7 +58,6 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
     return () => {
       ignore = true;
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const skeleton = (
@@ -94,25 +96,12 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
                 '& th': { color: `${styleConfig.color.primaryGrayColor}`, fontSize: '14px', fontWeight: '400' }
               }}
             >
-              <TableCell key={key} align='center'>{row.resource}</TableCell>
-              <TableCell key={key} align='center'>
-                <FormGroup row={true}>
-                  {Object.keys(row.permission).map((action: string, key: number) => (
-                    <FormControlLabel
-                        key={key}
-                        control={
-                            <Checkbox
-                                checked={row.permission[action]}
-                                sx={{
-                                  color: `${styleConfig.color.primaryBlackColor}`,
-                                  '&.Mui-checked': { color: `${styleConfig.color.primaryBlackColor}` }
-                                }}
-                            />}
-                        label={action}
-                    />
-                  ))}
-                </FormGroup>
-              </TableCell>
+              {Object.keys(row).map((field: string, key: number) => {
+                if (Object.keys(row).length - 1 === key) {
+                  return <TableCell key={key} align='center'>{children}</TableCell>;
+                }
+                return <TableCell key={key} align='center'>{row[field]}</TableCell>;
+              })}
             </TableRow>
           ))}
         </TableBody>

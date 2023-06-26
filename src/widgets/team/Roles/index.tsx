@@ -3,15 +3,15 @@ import { Stack, Dialog, DialogActions, DialogContent, DialogContentText, DialogT
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom/InputTextCustom';
 import LoadingButtonCustom from '@/components/LoadingButtonCustom/LoadingButtonCustom';
-import TableCustom from '@/components/TableCustom/TableCustom';
 import { sendRequest, showError } from '@/shared/libs/mixins';
 import Role from '@/shared/libs/role';
+import TablePermission from './Permissions';
+import RolesTable from './Roles';
 
 const TeamRoles = (): ReactElement => {
   /**
   * Declarations
   */
-  const headers = ['Name', 'Description', 'Permissions'];
 
   /**
   * States
@@ -21,6 +21,8 @@ const TeamRoles = (): ReactElement => {
   const [newFetch, setNewFetch] = React.useState(false);
   const [rows, setRows] = useState([] as Array<Record<string, any>>);
   const [roleName, setRoleName] = React.useState('');
+
+  const [activeRole, setActiveRole] = React.useState<null | string>(null);
 
   /**
   * Handlers
@@ -50,10 +52,10 @@ const TeamRoles = (): ReactElement => {
         setRows([]);
         const roles = await (new Role()).get();
         if (!ignore) {
-          const createData = (name: string, description: string, permissions: string): { name: string, description: string, permissions: string } => {
-            return { name, description, permissions };
+          const createData = (id: string, name: string, description: string, permissions: string): { id: string, name: string, description: string, permissions: string } => {
+            return { id, name, description, permissions };
           };
-          const fetchedRows = roles.map(role => createData(role.name, role.description ?? 'xxx', 'Edit'));
+          const fetchedRows = roles.map(role => createData(role.id, role.name, role.description ?? 'xxx', 'Edit'));
           setRows(fetchedRows);
         }
       } catch (err: unknown) {
@@ -85,16 +87,7 @@ const TeamRoles = (): ReactElement => {
         >
           New role
         </ButtonCustom>
-        <TableCustom headers={headers} rows={rows} isLastColActions={true}>
-          <ButtonCustom
-            customColor='link'
-            // onClick={() => {
-            //   modalOpenHandler();
-            // }}
-          >
-            Edit
-          </ButtonCustom>
-        </TableCustom>
+        <RolesTable rows={rows} setDiaglogState={setActiveRole} />
       </Stack>
       <Dialog open={modal} onClose={modalCloseHandler}>
         <DialogTitle>Role Name</DialogTitle>
@@ -129,6 +122,40 @@ const TeamRoles = (): ReactElement => {
           <ButtonCustom
             customColor='light'
             onClick={modalCloseHandler}
+          >
+            Cancel
+          </ButtonCustom>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={activeRole != null} maxWidth={false} onClose={() => {
+        setActiveRole(null);
+      }}>
+        <DialogTitle>Form</DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            sx={{ paddingBottom: '12px' }}
+          >
+            Check permissions
+          </DialogContentText>
+          <TablePermission roleId={activeRole as string}/>
+        </DialogContent>
+        <DialogActions
+          sx={{ padding: '16px 24px' }}
+        >
+          <LoadingButtonCustom
+            customColor='dark'
+            loading={isProcessing}
+            onClick={() => {
+              // void createRole();
+            }}
+          >
+            Confirm
+          </LoadingButtonCustom>
+          <ButtonCustom
+            customColor='light'
+            onClick={() => {
+              setActiveRole(null);
+            }}
           >
             Cancel
           </ButtonCustom>

@@ -3,10 +3,10 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
 
 import styleConfig from '@/constants/styleConfig';
-import styles from '@/styles/Team.module.css';
+import styles from './index.module.css';
 import LayoutDashboard from '@/widgets/LayoutDashboard';
-import TeamMembers from '@/widgets/Team/Members';
-import TeamRoles from '@/widgets/Team/Role';
+import TeamMembers from '@/widgets/team/Members';
+import TeamRoles from '../../widgets/team/Roles';
 
 const Page = (): ReactElement => {
   /**
