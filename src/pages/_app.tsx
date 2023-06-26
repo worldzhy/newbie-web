@@ -6,12 +6,17 @@ import type { AppProps } from 'next/app';
 import { theme } from '@/constants/theme';
 import '@/styles/globals.css';
 
-export type NextPageWithLayout<P = { /* */ }, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode
+export type NextPageWithLayout<
+  P = {
+    /* */
+  },
+  IP = P
+> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
+  Component: NextPageWithLayout;
 };
 
 const App = ({ Component, pageProps }: AppPropsWithLayout): ReactElement => {

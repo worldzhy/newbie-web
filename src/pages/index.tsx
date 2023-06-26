@@ -10,25 +10,25 @@ import Pre from '@/widgets/Pre';
 
 const Page = (): ReactElement => {
   /**
-  * Declarations
-  */
+   * Declarations
+   */
   const auth = new Auth();
 
   /**
-  * States
-  */
+   * States
+   */
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   /**
-  * Handlers
-  */
+   * Handlers
+   */
   const loginHandler = async (): Promise<void> => {
     await sendRequest(setIsLoading, async () => {
       const data = {
         account: email,
-        password
+        password,
       };
       await auth.login(data);
     });
@@ -36,22 +36,24 @@ const Page = (): ReactElement => {
 
   return (
     <>
-      <Pre title='Login' isLoading={isLoading}/>
+      <Pre title="Login" isLoading={isLoading} />
       <main className={`${styles.main}`}>
         <Container>
           <Grid container rowSpacing={4}>
             <Grid item xs={12}>
-              <Typography className={`${styles.title}`} variant='h1'>InceptionPad Backyard</Typography>
+              <Typography className={`${styles.title}`} variant="h1">
+                InceptionPad Backyard
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               <form className={`${styles.form}`}>
                 <Grid container rowSpacing={4}>
                   <Grid item xs={12}>
                     <InputTextCustom
-                      label='Email'
-                      variant='outlined'
+                      label="Email"
+                      variant="outlined"
                       value={email}
-                      type='email'
+                      type="email"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setEmail(e.target.value);
                       }}
@@ -59,19 +61,24 @@ const Page = (): ReactElement => {
                   </Grid>
                   <Grid item xs={12} className={`${styles.password}`}>
                     <InputTextCustom
-                      label='Password'
-                      variant='outlined'
+                      label="Password"
+                      variant="outlined"
                       value={password}
-                      type='password'
+                      type="password"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setPassword(e.target.value);
                       }}
                     />
-                    <LinkCustom href='/forgot-password' className={`${styles.forgotPassword}`}>Forgot Password</LinkCustom>
+                    <LinkCustom
+                      href="/forgot-password"
+                      className={`${styles.forgotPassword}`}
+                    >
+                      Forgot Password
+                    </LinkCustom>
                   </Grid>
                   <Grid item xs={12}>
                     <ButtonCustom
-                      customColor='dark'
+                      customColor="dark"
                       onClick={() => {
                         void loginHandler();
                       }}

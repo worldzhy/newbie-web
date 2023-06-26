@@ -5,14 +5,12 @@ import '@fontsource/rubik/latin-700.css';
 
 const theme = createTheme({
   typography: {
-    fontFamily: [
-      'Rubik'
-    ].join(','),
+    fontFamily: ['Rubik'].join(','),
     h1: {
       fontSize: 40,
       fontWeight: 700,
-      lineHeight: 1.185
-    }
-  }
+      lineHeight: 1.185,
+    },
+  },
 });
 export { theme };

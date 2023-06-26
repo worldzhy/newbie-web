@@ -10,13 +10,13 @@ import TeamRoles from '../../widgets/team/Roles';
 
 const Page = (): ReactElement => {
   /**
-  * States
-  */
+   * States
+   */
   const [value, setValue] = React.useState('1');
 
   /**
-  * Handlers
-  */
+   * Handlers
+   */
   const handleChange = (event: SyntheticEvent, newValue: string): void => {
     setValue(newValue);
   };
@@ -30,12 +30,13 @@ const Page = (): ReactElement => {
             aria-label="lab API tabs example"
             sx={{
               '& .MuiTabs-flexContainer': { gap: 2 },
-              '& .MuiTabs-indicator': { display: 'none' }
+              '& .MuiTabs-indicator': { display: 'none' },
             }}
-            variant='scrollable'
+            variant="scrollable"
             scrollButtons="auto"
           >
-              {['Members', 'Roles', 'About us'].map((label: string, index: number) => (
+            {['Members', 'Roles', 'About us'].map(
+              (label: string, index: number) => (
                 <Tab
                   key={label}
                   className={styles.tabItems}
@@ -44,28 +45,41 @@ const Page = (): ReactElement => {
                   sx={{
                     '&.Mui-selected': {
                       color: styleConfig.color.primaryWhiteColor,
-                      background: styleConfig.color.primaryBlackColor
-                    }
+                      background: styleConfig.color.primaryBlackColor,
+                    },
                   }}
                 />
-              ))}
+              )
+            )}
           </TabList>
         </Box>
         <TabPanel
           value="1"
-          sx={{ border: 2, borderColor: styleConfig.color.primaryGrayColor, marginTop: 2 }}
+          sx={{
+            border: 2,
+            borderColor: styleConfig.color.primaryGrayColor,
+            marginTop: 2,
+          }}
         >
-          <TeamMembers/>
+          <TeamMembers />
         </TabPanel>
         <TabPanel
           value="2"
-          sx={{ border: 2, borderColor: styleConfig.color.primaryGrayColor, marginTop: 2 }}
+          sx={{
+            border: 2,
+            borderColor: styleConfig.color.primaryGrayColor,
+            marginTop: 2,
+          }}
         >
-          <TeamRoles/>
+          <TeamRoles />
         </TabPanel>
         <TabPanel
           value="3"
-          sx={{ border: 2, borderColor: styleConfig.color.primaryGrayColor, marginTop: 2 }}
+          sx={{
+            border: 2,
+            borderColor: styleConfig.color.primaryGrayColor,
+            marginTop: 2,
+          }}
         >
           Item Three
         </TabPanel>
@@ -80,5 +94,5 @@ export default Page;
  * Layout wrapper
  */
 Page.getLayout = (page: ReactElement) => {
-  return <LayoutDashboard active='Team'>{page}</LayoutDashboard>;
+  return <LayoutDashboard active="Team">{page}</LayoutDashboard>;
 };

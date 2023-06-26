@@ -7,7 +7,7 @@ const Toast = (): ReactElement => {
   return (
     <ToastContainer
       className={styles.toast}
-      position='top-right'
+      position="top-right"
       autoClose={5000}
       hideProgressBar={false}
       newestOnTop={false}
@@ -16,7 +16,7 @@ const Toast = (): ReactElement => {
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      theme='colored'
+      theme="colored"
     />
   );
 };

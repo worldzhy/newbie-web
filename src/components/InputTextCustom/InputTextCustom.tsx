@@ -3,19 +3,32 @@ import React, { type FC } from 'react';
 import { TextField, type TextFieldProps } from '@mui/material';
 
 interface Props {
-  className?: string
+  className?: string;
 }
 
-const InputTextCustom: FC<Props & TextFieldProps> = ({ className, id, label, variant, onChange, value, type, ...props }) => {
-  return <TextField
-    className={`${className === undefined ? '' : className} ${styles.inputText}`}
-    id={id}
-    label={label}
-    variant={variant}
-    onChange={onChange}
-    value={value}
-    type={type}
-  />;
+const InputTextCustom: FC<Props & TextFieldProps> = ({
+  className,
+  id,
+  label,
+  variant,
+  onChange,
+  value,
+  type,
+  ...props
+}) => {
+  return (
+    <TextField
+      className={`${className === undefined ? '' : className} ${
+        styles.inputText
+      }`}
+      id={id}
+      label={label}
+      variant={variant}
+      onChange={onChange}
+      value={value}
+      type={type}
+    />
+  );
 };
 
 export default InputTextCustom;

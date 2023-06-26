@@ -3,15 +3,21 @@ import { LoadingButton, type LoadingButtonProps } from '@mui/lab';
 import styleConfig from '@/constants/styleConfig';
 
 interface Props extends LoadingButtonProps {
-  className?: string
-  customColor: 'dark' | 'light'
-  children: ReactNode
+  className?: string;
+  customColor: 'dark' | 'light';
+  children: ReactNode;
 }
 
-const LoadingButtonCustom: FC<Props> = ({ className, customColor, onClick, loading, children }) => {
+const LoadingButtonCustom: FC<Props> = ({
+  className,
+  customColor,
+  onClick,
+  loading,
+  children,
+}) => {
   return (
     <LoadingButton
-      variant='contained'
+      variant="contained"
       className={`${className === undefined ? '' : className}`}
       onClick={onClick}
       loading={loading}
@@ -26,13 +32,17 @@ const LoadingButtonCustom: FC<Props> = ({ className, customColor, onClick, loadi
         ...(customColor === 'dark' && {
           color: `${styleConfig.color.primaryWhiteColor}`,
           backgroundColor: `${styleConfig.color.primaryBlackColor}`,
-          '&:hover': { backgroundColor: `${styleConfig.color.primaryBlackColorDark}` }
+          '&:hover': {
+            backgroundColor: `${styleConfig.color.primaryBlackColorDark}`,
+          },
         }),
         ...(customColor === 'light' && {
           color: `${styleConfig.color.primaryBlackColor}`,
           backgroundColor: `${styleConfig.color.primaryWhiteColor}`,
-          '&:hover': { backgroundColor: `${styleConfig.color.primaryGrayColor}` }
-        })
+          '&:hover': {
+            backgroundColor: `${styleConfig.color.primaryGrayColor}`,
+          },
+        }),
       }}
     >
       {children}

@@ -19,7 +19,7 @@ export const showToast = (mode: toastMode, message: string): void => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'colored'
+        theme: 'colored',
       });
       break;
     case 'success':
@@ -31,7 +31,7 @@ export const showToast = (mode: toastMode, message: string): void => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'colored'
+        theme: 'colored',
       });
       break;
     case 'error':
@@ -43,7 +43,7 @@ export const showToast = (mode: toastMode, message: string): void => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'colored'
+        theme: 'colored',
       });
       break;
     case 'default':
@@ -55,15 +55,19 @@ export const showToast = (mode: toastMode, message: string): void => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'colored'
+        theme: 'colored',
       });
       break;
   }
 };
 
 export const showError = (err: unknown): void => {
-  let message = 'Something is wrong. Please try again or contact us if issue persists.';
-  if (err instanceof AxiosError && typeof err.response?.data.message === 'string') {
+  let message =
+    'Something is wrong. Please try again or contact us if issue persists.';
+  if (
+    err instanceof AxiosError &&
+    typeof err.response?.data.message === 'string'
+  ) {
     message = err.response?.data.message;
   } else if (typeof err === 'string') {
     message = err;
@@ -72,7 +76,10 @@ export const showError = (err: unknown): void => {
   log(err);
 };
 
-export const sendRequest = async (setIsLoading: (v: React.SetStateAction<any>) => void, fn: () => Promise<void>): Promise<void> => {
+export const sendRequest = async (
+  setIsLoading: (v: React.SetStateAction<any>) => void,
+  fn: () => Promise<void>
+): Promise<void> => {
   try {
     setIsLoading(true);
     await fn();

@@ -3,16 +3,23 @@ import { Button, type ButtonProps } from '@mui/material';
 import styleConfig from '@/constants/styleConfig';
 
 interface Props {
-  className?: string
-  customColor: 'dark' | 'light' | 'link'
+  className?: string;
+  customColor: 'dark' | 'light' | 'link';
 }
 
-const ButtonCustom: FC<Props & ButtonProps> = ({ customColor, onClick, href, className, children, ...props }) => {
+const ButtonCustom: FC<Props & ButtonProps> = ({
+  customColor,
+  onClick,
+  href,
+  className,
+  children,
+  ...props
+}) => {
   return (
     <Button
       onClick={onClick}
       className={`${className === undefined ? '' : className}`}
-      variant='contained'
+      variant="contained"
       href={href}
       sx={{
         fontFamily: 'Rubik',
@@ -25,7 +32,9 @@ const ButtonCustom: FC<Props & ButtonProps> = ({ customColor, onClick, href, cla
           border: `2px solid ${styleConfig.color.primaryBlackColor}`,
           color: `${styleConfig.color.primaryWhiteColor}`,
           backgroundColor: `${styleConfig.color.primaryBlackColor}`,
-          '&:hover': { backgroundColor: `${styleConfig.color.primaryBlackColorDark}` }
+          '&:hover': {
+            backgroundColor: `${styleConfig.color.primaryBlackColorDark}`,
+          },
         }),
         ...(customColor === 'light' && {
           borderRadius: '0',
@@ -33,7 +42,9 @@ const ButtonCustom: FC<Props & ButtonProps> = ({ customColor, onClick, href, cla
           border: `2px solid ${styleConfig.color.primaryBlackColor}`,
           color: `${styleConfig.color.primaryBlackColor}`,
           backgroundColor: `${styleConfig.color.primaryWhiteColor}`,
-          '&:hover': { backgroundColor: `${styleConfig.color.primaryGrayColor}` }
+          '&:hover': {
+            backgroundColor: `${styleConfig.color.primaryGrayColor}`,
+          },
         }),
         ...(customColor === 'link' && {
           fontSize: '14px',
@@ -42,8 +53,13 @@ const ButtonCustom: FC<Props & ButtonProps> = ({ customColor, onClick, href, cla
           textDecoration: 'underline',
           backgroundColor: 'transparent',
           boxShadow: 'none',
-          '&:hover': { opacity: '0.9', backgroundColor: 'transparent', boxShadow: 'none', textDecoration: 'underline' }
-        })
+          '&:hover': {
+            opacity: '0.9',
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
+            textDecoration: 'underline',
+          },
+        }),
       }}
     >
       {children}

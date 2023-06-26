@@ -10,19 +10,19 @@ import Pre from '@/widgets/Pre';
 
 const Page = (): ReactElement => {
   /**
-  * Declarations
-  */
+   * Declarations
+   */
   const auth = new Auth();
 
   /**
-  * States
-  */
+   * States
+   */
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
 
   /**
-  * Handlers
-  */
+   * Handlers
+   */
   const forgotPasswordHandler = async (): Promise<void> => {
     await sendRequest(setIsLoading, async () => {
       await auth.forgotPassword(email);
@@ -31,31 +31,38 @@ const Page = (): ReactElement => {
 
   return (
     <>
-      <Pre title='Forgot Passwprd' isLoading={isLoading}/>
+      <Pre title="Forgot Passwprd" isLoading={isLoading} />
       <main className={`${styles.main}`}>
         <Container>
           <Grid container rowSpacing={4}>
             <Grid item xs={12}>
-              <Typography className={`${styles.text}`}>If there is a corresponding account for the email address you fill in, you will get an email with instructions on resetting your password. If it doesn&apos;t arrive, be sure to check your spam folder.</Typography>
+              <Typography className={`${styles.text}`}>
+                If there is a corresponding account for the email address you
+                fill in, you will get an email with instructions on resetting
+                your password. If it doesn&apos;t arrive, be sure to check your
+                spam folder.
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               <form className={`${styles.form}`}>
                 <Grid container rowSpacing={4}>
                   <Grid item xs={12} className={`${styles.email}`}>
                     <InputTextCustom
-                      label='Email'
-                      variant='outlined'
+                      label="Email"
+                      variant="outlined"
                       value={email}
-                      type='email'
+                      type="email"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setEmail(e.target.value);
                       }}
                     />
-                    <LinkCustom href='/' className={`${styles.returnLogin}`}>Return to login</LinkCustom>
+                    <LinkCustom href="/" className={`${styles.returnLogin}`}>
+                      Return to login
+                    </LinkCustom>
                   </Grid>
                   <Grid item xs={12}>
                     <ButtonCustom
-                      customColor='dark'
+                      customColor="dark"
                       onClick={() => {
                         void forgotPasswordHandler();
                       }}

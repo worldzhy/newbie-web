@@ -3,10 +3,14 @@ import React, { type FC, type HTMLProps } from 'react';
 import Link from 'next/link';
 
 interface Props {
-  className?: string
+  className?: string;
 }
 
-const LinkCustom: FC<Props & HTMLProps<HTMLAnchorElement>> = ({ className, href, children }) => {
+const LinkCustom: FC<Props & HTMLProps<HTMLAnchorElement>> = ({
+  className,
+  href,
+  children,
+}) => {
   return (
     <Link
       className={`${className === undefined ? '' : className} ${styles.link}`}

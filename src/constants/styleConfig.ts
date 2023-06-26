@@ -4,8 +4,8 @@ const styleConfig = {
     primaryWhiteColor: '#FFFFFF',
     primaryGrayColor: '#A8A8A8',
     primaryBlackColorDark: '#2E2E2E',
-    primaryBlueColor: '#2C73FF'
-  }
+    primaryBlueColor: '#2C73FF',
+  },
 };
 
 export default styleConfig;
