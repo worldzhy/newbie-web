@@ -15,11 +15,18 @@ import styles from './index.module.css';
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 
 interface Props {
-  rows: Array<Record<string, any>>;
+  rows: Array<{
+    id: string;
+    name: string;
+    description: string;
+  }>;
   setDiaglogState: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const RolesTable: FC<Props> = ({ rows, setDiaglogState }): ReactElement => {
+  /**
+   * Declarations
+   */
   const headers = ['Name', 'Description', 'Permissions'];
 
   const skeleton = (
@@ -69,17 +76,13 @@ const RolesTable: FC<Props> = ({ rows, setDiaglogState }): ReactElement => {
                 },
               }}
             >
-              {['name', 'description'].map((field: string, key: number) => {
-                return (
-                  <TableCell key={key} align="center">
-                    {row[field]}
-                  </TableCell>
-                );
-              })}
+              <TableCell align="center">{row.name}</TableCell>
+              <TableCell align="center">{row.description}</TableCell>
               <TableCell align="center">
                 <ButtonCustom
                   customColor="link"
                   onClick={() => {
+                    // setNewFetch(!newFetch);
                     setDiaglogState(row.id);
                   }}
                 >

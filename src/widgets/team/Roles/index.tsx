@@ -1,4 +1,4 @@
-import React, { useState, useEffect, type ReactElement } from 'react';
+import React, { type ReactElement, useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom/InputTextCustom';
@@ -10,34 +10,24 @@ import FormDialogCustom from '@/components/FormDialogCustom';
 
 const TeamRoles = (): ReactElement => {
   /**
-   * Declarations
+   * States
    */
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [newRoleModal, setNewRoleModal] = useState(false);
+  const [roleName, setRoleName] = useState('');
+  const [newFetch, setNewFetch] = useState(false);
+  const [activeRole, setActiveRole] = useState<null | string>(null);
 
   /**
    * States
    */
-  const [isProcessing, setIsProcessing] = React.useState(false);
-  // New Role Modal
-  const [newRoleModal, setNewRoleModal] = React.useState(false);
-
-  // Edit Role Modal
-  // const [editRoleModal, setEditRolemodal] = React.useState(false);
-  const [newFetch, setNewFetch] = React.useState(false);
-  const [rows, setRows] = useState([] as Array<Record<string, any>>);
-  const [roleName, setRoleName] = React.useState('');
-
-  const [activeRole, setActiveRole] = React.useState<null | string>(null);
-
-  /**
-   * Handlers
-   */
-  const createRole = async (): Promise<void> => {
-    await sendRequest(setIsProcessing, async () => {
-      await new Role().create(roleName);
-    });
-    setNewRoleModal(false);
-    setNewFetch(!newFetch);
-  };
+  const [rows, setRows] = useState<
+    Array<{
+      id: string;
+      name: string;
+      description: string;
+    }>
+  >([]);
 
   /**
    * Data Fetching
@@ -48,22 +38,9 @@ const TeamRoles = (): ReactElement => {
         setRows([]);
         const roles = await new Role().get();
         if (!ignore) {
-          const createData = (
-            id: string,
-            name: string,
-            description: string,
-            permissions: string
-          ): {
-            id: string;
-            name: string;
-            description: string;
-            permissions: string;
-          } => {
-            return { id, name, description, permissions };
-          };
-          const fetchedRows = roles.map((role) =>
-            createData(role.id, role.name, role.description ?? 'xxx', 'Edit')
-          );
+          const fetchedRows = roles.map(({ id, name, description }) => {
+            return { id, name, description: description ?? 'xxx' };
+          });
           setRows(fetchedRows);
         }
       } catch (err: unknown) {
@@ -79,6 +56,17 @@ const TeamRoles = (): ReactElement => {
       ignore = true;
     };
   }, [newFetch]);
+
+  /**
+   * Handlers
+   */
+  const createRole = async (): Promise<void> => {
+    await sendRequest(setIsProcessing, async () => {
+      await new Role().create(roleName);
+    });
+    setNewFetch(!newFetch);
+    setNewRoleModal(false);
+  };
 
   return (
     <>
@@ -99,7 +87,7 @@ const TeamRoles = (): ReactElement => {
         contentText="Enter the desired role name in the designated field to create a
             role."
         closeDialogHandler={() => {
-          setNewRoleModal(true);
+          setNewRoleModal(false);
         }}
         formSubmitHandler={createRole}
         isProcessing={isProcessing}
@@ -116,7 +104,7 @@ const TeamRoles = (): ReactElement => {
       </FormDialogCustom>
       <FormDialogCustom
         open={activeRole != null}
-        title="Edit Role Permission"
+        title="Edit Role Permissions"
         closeDialogHandler={() => {
           setActiveRole(null);
         }}
