@@ -1,9 +1,13 @@
 /** @type {import('next').NextConfig} */
+
+const { DEPLOY_ENV, BASE_URL } = process.env;
+
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    BASE_URL: process.env.BASE_URL
-  }
-}
+    DEPLOY_ENV,
+    BASE_URL,
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
