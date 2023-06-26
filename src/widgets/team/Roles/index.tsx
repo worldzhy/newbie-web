@@ -1,19 +1,12 @@
 import React, { useState, useEffect, type ReactElement } from 'react';
-import {
-  Stack,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material';
+import { Stack } from '@mui/material';
 import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom/InputTextCustom';
-import LoadingButtonCustom from '@/components/LoadingButtonCustom/LoadingButtonCustom';
 import { sendRequest, showError } from '@/shared/libs/mixins';
 import Role from '@/shared/libs/role';
 import TablePermission from './Permissions';
 import RolesTable from './Roles';
+import FormDialogCustom from '@/components/FormDialogCustom';
 
 const TeamRoles = (): ReactElement => {
   /**
@@ -24,7 +17,11 @@ const TeamRoles = (): ReactElement => {
    * States
    */
   const [isProcessing, setIsProcessing] = React.useState(false);
-  const [modal, setModal] = React.useState(false);
+  // New Role Modal
+  const [newRoleModal, setNewRoleModal] = React.useState(false);
+
+  // Edit Role Modal
+  // const [editRoleModal, setEditRolemodal] = React.useState(false);
   const [newFetch, setNewFetch] = React.useState(false);
   const [rows, setRows] = useState([] as Array<Record<string, any>>);
   const [roleName, setRoleName] = React.useState('');
@@ -34,19 +31,11 @@ const TeamRoles = (): ReactElement => {
   /**
    * Handlers
    */
-  const modalOpenHandler = (): void => {
-    setModal(true);
-  };
-
-  const modalCloseHandler = (): void => {
-    setModal(false);
-  };
-
   const createRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
       await new Role().create(roleName);
     });
-    modalCloseHandler();
+    setNewRoleModal(false);
     setNewFetch(!newFetch);
   };
 
@@ -97,79 +86,45 @@ const TeamRoles = (): ReactElement => {
         <ButtonCustom
           customColor="dark"
           onClick={() => {
-            modalOpenHandler();
+            setNewRoleModal(true);
           }}
         >
           New role
         </ButtonCustom>
         <RolesTable rows={rows} setDiaglogState={setActiveRole} />
       </Stack>
-      <Dialog open={modal} onClose={modalCloseHandler}>
-        <DialogTitle>Role Name</DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ paddingBottom: '12px' }}>
-            Enter the desired role name in the designated field to create a
-            role.
-          </DialogContentText>
-          <InputTextCustom
-            label="Role name"
-            variant="outlined"
-            value={roleName}
-            type="text"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setRoleName(e.target.value);
-            }}
-          />
-        </DialogContent>
-        <DialogActions sx={{ padding: '16px 24px' }}>
-          <LoadingButtonCustom
-            customColor="dark"
-            loading={isProcessing}
-            onClick={() => {
-              void createRole();
-            }}
-          >
-            Confirm
-          </LoadingButtonCustom>
-          <ButtonCustom customColor="light" onClick={modalCloseHandler}>
-            Cancel
-          </ButtonCustom>
-        </DialogActions>
-      </Dialog>
-      <Dialog
+      <FormDialogCustom
+        open={newRoleModal}
+        title="Role Name"
+        contentText="Enter the desired role name in the designated field to create a
+            role."
+        closeDialogHandler={() => {
+          setNewRoleModal(true);
+        }}
+        formSubmitHandler={createRole}
+        isProcessing={isProcessing}
+      >
+        <InputTextCustom
+          label="Role name"
+          variant="outlined"
+          value={roleName}
+          type="text"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setRoleName(e.target.value);
+          }}
+        />
+      </FormDialogCustom>
+      <FormDialogCustom
         open={activeRole != null}
-        maxWidth={false}
-        onClose={() => {
+        title="Edit Role Permission"
+        closeDialogHandler={() => {
           setActiveRole(null);
         }}
+        formSubmitHandler={createRole}
+        isProcessing={isProcessing}
       >
-        <DialogTitle>Form</DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ paddingBottom: '12px' }}>
-            Check permissions
-          </DialogContentText>
-          <TablePermission roleId={activeRole as string} />
-        </DialogContent>
-        <DialogActions sx={{ padding: '16px 24px' }}>
-          <LoadingButtonCustom
-            customColor="dark"
-            loading={isProcessing}
-            onClick={() => {
-              // void createRole();
-            }}
-          >
-            Confirm
-          </LoadingButtonCustom>
-          <ButtonCustom
-            customColor="light"
-            onClick={() => {
-              setActiveRole(null);
-            }}
-          >
-            Cancel
-          </ButtonCustom>
-        </DialogActions>
-      </Dialog>
+        <TablePermission roleId={activeRole as string} />
+      </FormDialogCustom>
     </>
   );
 };

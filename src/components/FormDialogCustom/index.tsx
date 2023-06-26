@@ -16,7 +16,7 @@ interface Props {
   closeDialogHandler: () => void;
   formSubmitHandler: () => Promise<void>;
   isProcessing: boolean;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const FormDialogCustom: FC<Props> = ({
