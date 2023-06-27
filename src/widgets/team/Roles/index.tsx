@@ -85,6 +85,8 @@ const TeamRoles = (): ReactElement => {
     await sendRequest(setIsProcessing, async () => {
       await new Permission().update(requests);
     });
+    setRequests(new Map());
+    // To do: Add permission id to data after creating new permission
   };
 
   return (
