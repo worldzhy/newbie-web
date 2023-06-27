@@ -4,11 +4,23 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom/InputTextCustom';
 import { sendRequest, showError } from '@/shared/libs/mixins';
 import Role from '@/shared/libs/role';
+import Permission from '@/shared/libs/permission';
 import TablePermission from './Permissions';
 import RolesTable from './Roles';
 import FormDialogCustom from '@/components/FormDialogCustom';
 
 const TeamRoles = (): ReactElement => {
+  /**
+   * Types
+   */
+  interface Request {
+    change: 'add' | 'delete';
+    resourceId?: number;
+    resource: string;
+    action: string;
+    roleId: string;
+  }
+
   /**
    * States
    */
@@ -17,6 +29,7 @@ const TeamRoles = (): ReactElement => {
   const [roleName, setRoleName] = useState('');
   const [newFetch, setNewFetch] = useState(false);
   const [activeRole, setActiveRole] = useState<null | string>(null);
+  const [requests, setRequests] = useState<Map<string, Request>>(new Map());
 
   /**
    * States
@@ -69,11 +82,9 @@ const TeamRoles = (): ReactElement => {
   };
 
   const updatePermissions = async (): Promise<void> => {
-    // await sendRequest(setIsProcessing, async () => {
-    //   await new Role().create(roleName);
-    // });
-    // setNewFetch(!newFetch);
-    // setNewRoleModal(false);
+    await sendRequest(setIsProcessing, async () => {
+      await new Permission().update(requests);
+    });
   };
 
   return (
@@ -119,7 +130,11 @@ const TeamRoles = (): ReactElement => {
         formSubmitHandler={updatePermissions}
         isProcessing={isProcessing}
       >
-        <TablePermission roleId={activeRole as string} />
+        <TablePermission
+          roleId={activeRole as string}
+          requests={requests}
+          setRequests={setRequests}
+        />
       </FormDialogCustom>
     </>
   );

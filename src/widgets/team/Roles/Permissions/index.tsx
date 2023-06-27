@@ -31,17 +31,15 @@ import { showError } from '@/shared/libs/mixins';
 
 interface Props {
   roleId: string;
+  requests: any;
+  setRequests: any;
 }
 
-interface Request {
-  change: 'add' | 'delete';
-  resourceId?: string;
-  resource: string;
-  action: string;
-  roleId: string;
-}
-
-const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
+const TablePermission: FC<Props> = ({
+  roleId,
+  requests,
+  setRequests,
+}): ReactElement => {
   /**
    * Declarations
    */
@@ -60,7 +58,6 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
       }>;
     }>
   >([]);
-  const [requests, setRequests] = useState<Map<string, Request>>(new Map());
 
   /**
    * Data Fetching
@@ -112,7 +109,7 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
       return;
     }
     const requestId = `${resource}-${action}`;
-    if (requests?.has(requestId)) {
+    if (requests?.has(requestId) === true) {
       requests.delete(requestId);
     } else {
       requests?.set(requestId, {

@@ -64,7 +64,26 @@ export default class Permission {
     return permissionsByResources;
   }
 
-  public async addPermission(
+  public async update(reqs: Map<string, Request>): Promise<void> {
+    const reqsArray = Array.from(reqs);
+    await Promise.all(
+      reqsArray.map(async ([_, data]) => {
+        const { change, resource, resourceId, action, roleId } = data;
+        if (change === 'add') {
+          // eslint-disable-next-line @typescript-eslint/return-await
+          return this.add(resource, action, roleId);
+        } else {
+          if (resourceId === undefined) {
+            throw new Error('No resource id found.');
+          }
+          // eslint-disable-next-line @typescript-eslint/return-await
+          return this.delete(resourceId);
+        }
+      })
+    );
+  }
+
+  public async add(
     resource: string,
     action: string,
     roleId: string
@@ -90,7 +109,7 @@ export default class Permission {
     return res.data;
   }
 
-  public async deletePermission(permissionId: number): Promise<string[]> {
+  public async delete(permissionId: number): Promise<string[]> {
     const url = `${this.baseUrl}/${permissionId}`;
     const config = {
       headers: {
@@ -161,4 +180,12 @@ interface IPermissionsByResources {
     action: string;
     allow: boolean;
   }>;
+}
+
+interface Request {
+  change: 'add' | 'delete';
+  resourceId?: number;
+  resource: string;
+  action: string;
+  roleId: string;
 }
