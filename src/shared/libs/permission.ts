@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '@/shared/libs/axiosInstance';
 import { getCookie } from 'cookies-next';
 
 export default class Permission {
@@ -99,7 +99,7 @@ export default class Permission {
       trustedEntityType: 'USER',
       trustedEntityId: roleId,
     };
-    const res = await axios.post(url, data, config);
+    const res = await axiosInstance.post(url, data, config);
     return res.data;
   }
 
@@ -110,7 +110,7 @@ export default class Permission {
         Authorization: `Bearer ${this.accessToken as string}`,
       },
     };
-    const res = await axios.delete(url, config);
+    const res = await axiosInstance.delete(url, config);
     return res.data;
   }
 
@@ -121,7 +121,7 @@ export default class Permission {
         Authorization: `Bearer ${this.accessToken as string}`,
       },
     };
-    const res = await axios.get(url, config);
+    const res = await axiosInstance.get(url, config);
     return res.data;
   }
 
@@ -132,7 +132,7 @@ export default class Permission {
         Authorization: `Bearer ${this.accessToken as string}`,
       },
     };
-    const res = await axios.get(url, config);
+    const res = await axiosInstance.get(url, config);
     return res.data;
   }
 
@@ -145,7 +145,7 @@ export default class Permission {
         Authorization: `Bearer ${this.accessToken as string}`,
       },
     };
-    const res = await axios.get(url, config);
+    const res = await axiosInstance.get(url, config);
     return res.data;
   }
 
@@ -156,7 +156,7 @@ export default class Permission {
         Authorization: `Bearer ${this.accessToken as string}`,
       },
     };
-    const res = await axios.get(url, config);
+    const res = await axiosInstance.get(url, config);
     return res.data;
   }
 }

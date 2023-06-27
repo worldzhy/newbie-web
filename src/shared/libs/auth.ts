@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '@/shared/libs/axiosInstance';
 import { setCookie } from 'cookies-next';
 
 export default class Auth {
@@ -10,7 +10,7 @@ export default class Auth {
       account: input.account,
       password: input.password,
     };
-    const res = await axios.post(url, data);
+    const res = await axiosInstance.post(url, data);
     setCookie('token', res.data.token);
     return res.data;
   }
@@ -18,7 +18,7 @@ export default class Auth {
   // TO DO: Update return type to be more type safe
   public async forgotPassword(email: string): Promise<any> {
     const url = `${this.baseUrl}/reset-password/verification-code/email/${email}`;
-    const res = await axios.get(url);
+    const res = await axiosInstance.get(url);
     return res.data;
   }
 }

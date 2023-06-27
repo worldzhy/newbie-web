@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '@/shared/libs/axiosInstance';
 import { getCookie } from 'cookies-next';
 
 export default class Role {
@@ -12,7 +12,7 @@ export default class Role {
         Authorization: `Bearer ${this.accessToken as string}`,
       },
     };
-    const res = await axios.get(url, config);
+    const res = await axiosInstance.get(url, config);
     return res.data;
   }
 
@@ -24,7 +24,7 @@ export default class Role {
         Authorization: `Bearer ${this.accessToken as string}`,
       },
     };
-    const res = await axios.post(url, data, config);
+    const res = await axiosInstance.post(url, data, config);
     return res.data;
   }
 }
