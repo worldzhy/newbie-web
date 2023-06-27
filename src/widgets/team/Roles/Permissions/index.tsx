@@ -33,6 +33,14 @@ interface Props {
   roleId: string;
 }
 
+interface Request {
+  change: 'add' | 'delete';
+  resourceId?: string;
+  resource: string;
+  action: string;
+  roleId: string;
+}
+
 const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
   /**
    * Declarations
@@ -45,9 +53,14 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
   const [data, setData] = useState<
     Array<{
       resource: string;
-      permission: Record<any, boolean>;
+      permissions: Array<{
+        id: number | null;
+        action: string;
+        allow: boolean;
+      }>;
     }>
   >([]);
+  const [requests, setRequests] = useState<Map<string, Request>>(new Map());
 
   /**
    * Data Fetching
@@ -78,14 +91,39 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
   /**
    * Handlers
    */
-  const onChangeHandler = (resource: string, action: string): void => {
+  const onChangeHandler = (
+    resource: string,
+    action: string,
+    id: number | null
+  ): void => {
     const updatedData = data.map((d) => {
       if (d.resource === resource) {
-        d.permission[action] = !d.permission[action];
+        const actionIndex = d.permissions.findIndex((p) => p.action === action);
+        d.permissions[actionIndex].allow = !d.permissions[actionIndex].allow;
       }
       return d;
     });
     setData(updatedData);
+
+    const isAdd = data
+      .find((d) => d.resource === resource)
+      ?.permissions.find((p) => p.action === action)?.allow;
+    if (isAdd === undefined) {
+      return;
+    }
+    const requestId = `${resource}-${action}`;
+    if (requests?.has(requestId)) {
+      requests.delete(requestId);
+    } else {
+      requests?.set(requestId, {
+        change: isAdd ? 'add' : 'delete',
+        resourceId: undefined,
+        resource,
+        action,
+        roleId,
+      });
+    }
+    setRequests(requests);
   };
 
   const skeleton = (
@@ -123,7 +161,7 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
         <TableBody>
           {data
             .sort((a, b) => a.resource.localeCompare(b.resource))
-            .map((d, key) => (
+            .map(({ resource, permissions }, key) => (
               <TableRow
                 key={key}
                 sx={{
@@ -137,31 +175,29 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
                   },
                 }}
               >
-                <TableCell align="center">{d.resource}</TableCell>
+                <TableCell align="center">{resource}</TableCell>
                 <TableCell align="center">
                   <FormGroup row={true}>
-                    {Object.keys(d.permission).map(
-                      (action: string, key: number) => (
-                        <FormControlLabel
-                          key={key}
-                          control={
-                            <Checkbox
-                              checked={d.permission[action]}
-                              sx={{
+                    {permissions.map((p, key: number) => (
+                      <FormControlLabel
+                        key={key}
+                        control={
+                          <Checkbox
+                            checked={p.allow}
+                            sx={{
+                              color: `${styleConfig.color.primaryBlackColor}`,
+                              '&.Mui-checked': {
                                 color: `${styleConfig.color.primaryBlackColor}`,
-                                '&.Mui-checked': {
-                                  color: `${styleConfig.color.primaryBlackColor}`,
-                                },
-                              }}
-                              onChange={() => {
-                                onChangeHandler(d.resource, action);
-                              }}
-                            />
-                          }
-                          label={action}
-                        />
-                      )
-                    )}
+                              },
+                            }}
+                            onChange={() => {
+                              onChangeHandler(resource, p.action, p.id);
+                            }}
+                          />
+                        }
+                        label={p.action}
+                      />
+                    ))}
                   </FormGroup>
                 </TableCell>
               </TableRow>

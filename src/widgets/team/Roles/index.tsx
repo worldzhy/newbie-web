@@ -68,6 +68,14 @@ const TeamRoles = (): ReactElement => {
     setNewRoleModal(false);
   };
 
+  const updatePermissions = async (): Promise<void> => {
+    // await sendRequest(setIsProcessing, async () => {
+    //   await new Role().create(roleName);
+    // });
+    // setNewFetch(!newFetch);
+    // setNewRoleModal(false);
+  };
+
   return (
     <>
       <Stack direction="column" spacing={2} alignItems="flex-end">
@@ -108,7 +116,7 @@ const TeamRoles = (): ReactElement => {
         closeDialogHandler={() => {
           setActiveRole(null);
         }}
-        formSubmitHandler={createRole}
+        formSubmitHandler={updatePermissions}
         isProcessing={isProcessing}
       >
         <TablePermission roleId={activeRole as string} />

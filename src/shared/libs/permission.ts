@@ -5,52 +5,63 @@ export default class Permission {
   private readonly baseUrl = `${process.env.BASE_URL ?? ''}/permissions`;
   private readonly accessToken = getCookie('token');
 
-  public async get(roleId: string): Promise<IPermissionSummaryItem[]> {
+  public async get(roleId: string): Promise<IPermissionsByResources[]> {
+    // Get list of resources and actions
     const [resources, actions] = await Promise.all([
       this.getResources(),
       this.getActions(),
     ]);
+
+    // Get list of permissions for each resource
+    const permissionsValid: IPermission[][] = [];
     const permissionsAll = await Promise.allSettled(
       // eslint-disable-next-line @typescript-eslint/return-await
       resources.map(async (resource) => this.getPermissionOfResource(resource))
     );
-
-    // Process only resources that have valid query results
-    const permissions: IPermission[][] = [];
     permissionsAll.forEach((p) => {
       if (p.status === 'fulfilled') {
-        permissions.push(p.value);
+        permissionsValid.push(p.value);
       }
     });
 
-    // Prepare summary object
-    const permissionsSummary: IPermissionSummaryItem[] = [];
+    // Prepare summary object which will contain summary of permissions by resources
+    const permissionsByResources: IPermissionsByResources[] = [];
 
-    // Cross check permission to role and action
-    for (const resourcePermissions of permissions) {
-      const resource = resourcePermissions[0].resource;
-      // Prepare permission item
-      const permissionsItem: IPermissionSummaryItem = {
-        resource,
-        permission: {},
-      };
+    // Begin building summary object. Tackling one resource at a time.
+    for (const permissions of permissionsValid) {
+      const resource = permissions[0].resource;
+      const resourcePermissionItems: Array<{
+        id: number | null;
+        action: string;
+        allow: boolean;
+      }> = [];
+
       for (const action of actions) {
-        // Populate permission item by checking if permission is present for specific resource and item
-        if (
-          resourcePermissions.find(
-            (p) => p.trustedEntityId === roleId && p.action === action
-          ) !== undefined
-        ) {
-          permissionsItem.permission[action] = true;
+        const permission = permissions.find(
+          (p) => p.trustedEntityId === roleId && p.action === action
+        );
+        if (permission !== undefined) {
+          resourcePermissionItems.push({
+            id: permission.id,
+            action,
+            allow: true,
+          });
         } else {
-          permissionsItem.permission[action] = false;
+          resourcePermissionItems.push({
+            id: null,
+            action,
+            allow: false,
+          });
         }
       }
-      // Add permission item to summary object
-      permissionsSummary.push(permissionsItem);
+
+      permissionsByResources.push({
+        resource,
+        permissions: resourcePermissionItems,
+      });
     }
 
-    return permissionsSummary;
+    return permissionsByResources;
   }
 
   public async addPermission(
@@ -143,7 +154,11 @@ interface IPermission {
   updatedAt: string;
 }
 
-interface IPermissionSummaryItem {
+interface IPermissionsByResources {
   resource: string;
-  permission: Record<any, boolean>;
+  permissions: Array<{
+    id: number | null;
+    action: string;
+    allow: boolean;
+  }>;
 }
