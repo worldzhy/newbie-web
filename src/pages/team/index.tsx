@@ -1,12 +1,11 @@
 import React, { type ReactElement, type SyntheticEvent } from 'react';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
-
-import styleConfig from '@/constants/styleConfig';
 import styles from './index.module.css';
+import styleConfig from '@/constants/styleConfig';
 import LayoutDashboard from '@/widgets/LayoutDashboard';
 import TeamMembers from '@/widgets/team/Members';
-import TeamRoles from '../../widgets/team/Roles';
+import TeamRoles from '@/widgets/team/Roles';
 
 const Page = (): ReactElement => {
   /**

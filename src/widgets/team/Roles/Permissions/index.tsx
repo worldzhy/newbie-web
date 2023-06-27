@@ -20,7 +20,7 @@ import { showError } from '@/shared/libs/mixins';
 /**
  *
  * Table responsible for showing the per role (as identified by roleId) permissions against resources.
- * To use this table, provide roleId in props. This component will do the data fetching or the permissions here.
+ * To use this table, provide roleId in props. This component will do the data fetching of the permissions here.
  * This component is used in Team > Roles > Edit page.
  *
  **/
@@ -30,7 +30,6 @@ import { showError } from '@/shared/libs/mixins';
  */
 
 interface Props {
-  rows?: Array<Record<string, any>>;
   roleId: string;
 }
 
@@ -43,7 +42,12 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
   /**
    * States
    */
-  const [rows, setRows] = useState([] as Array<Record<string, any>>);
+  const [rows, setRows] = useState<
+    Array<{
+      resource: string;
+      permission: Record<any, boolean>;
+    }>
+  >([]);
 
   /**
    * Data Fetching
@@ -104,46 +108,48 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, key) => (
-            <TableRow
-              key={key}
-              sx={{
-                '& td, & th': {
-                  border: `2px solid ${styleConfig.color.primaryBlackColor}`,
-                },
-                '& th': {
-                  color: `${styleConfig.color.primaryGrayColor}`,
-                  fontSize: '14px',
-                  fontWeight: '400',
-                },
-              }}
-            >
-              <TableCell align="center">{row.resource}</TableCell>
-              <TableCell align="center">
-                <FormGroup row={true}>
-                  {Object.keys(row.permission).map(
-                    (action: string, key: number) => (
-                      <FormControlLabel
-                        key={key}
-                        control={
-                          <Checkbox
-                            checked={row.permission[action]}
-                            sx={{
-                              color: `${styleConfig.color.primaryBlackColor}`,
-                              '&.Mui-checked': {
+          {rows
+            .sort((a, b) => a.resource.localeCompare(b.resource))
+            .map((row, key) => (
+              <TableRow
+                key={key}
+                sx={{
+                  '& td, & th': {
+                    border: `2px solid ${styleConfig.color.primaryBlackColor}`,
+                  },
+                  '& th': {
+                    color: `${styleConfig.color.primaryGrayColor}`,
+                    fontSize: '14px',
+                    fontWeight: '400',
+                  },
+                }}
+              >
+                <TableCell align="center">{row.resource}</TableCell>
+                <TableCell align="center">
+                  <FormGroup row={true}>
+                    {Object.keys(row.permission).map(
+                      (action: string, key: number) => (
+                        <FormControlLabel
+                          key={key}
+                          control={
+                            <Checkbox
+                              checked={row.permission[action]}
+                              sx={{
                                 color: `${styleConfig.color.primaryBlackColor}`,
-                              },
-                            }}
-                          />
-                        }
-                        label={action}
-                      />
-                    )
-                  )}
-                </FormGroup>
-              </TableCell>
-            </TableRow>
-          ))}
+                                '&.Mui-checked': {
+                                  color: `${styleConfig.color.primaryBlackColor}`,
+                                },
+                              }}
+                            />
+                          }
+                          label={action}
+                        />
+                      )
+                    )}
+                  </FormGroup>
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>
