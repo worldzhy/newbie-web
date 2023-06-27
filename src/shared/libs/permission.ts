@@ -6,59 +6,53 @@ export default class Permission {
   private readonly accessToken = getCookie('token');
 
   public async get(roleId: string): Promise<IPermissionsByResources[]> {
-    // Get list of resources and actions
-    const [resources, actions] = await Promise.all([
+    // Get list of all resources, actions, and permissions
+    const [resources, actions, permissionsAll] = await Promise.all([
       this.getResources(),
       this.getActions(),
+      this.getAllPermissions(),
     ]);
-
-    // Get list of permissions for each resource
-    const permissionsValid: IPermission[][] = [];
-    const permissionsAll = await Promise.allSettled(
-      // eslint-disable-next-line @typescript-eslint/return-await
-      resources.map(async (resource) => this.getPermissionOfResource(resource))
+    const permissions = permissionsAll.filter(
+      (p) => p.trustedEntityId === roleId
     );
-    permissionsAll.forEach((p) => {
-      if (p.status === 'fulfilled') {
-        permissionsValid.push(p.value);
+
+    // Construct base summary object which contains summary of permissions by resources
+    const permissionsByResources: IPermissionsByResources[] = resources.map(
+      (resource) => {
+        return {
+          resource,
+          permissions: actions.map((action) => {
+            return {
+              id: null,
+              action,
+              allow: false,
+            };
+          }),
+        };
       }
-    });
+    );
 
-    // Prepare summary object which will contain summary of permissions by resources
-    const permissionsByResources: IPermissionsByResources[] = [];
+    // Begin updating summary object
+    for (const permission of permissions) {
+      const { id, action, resource } = permission;
 
-    // Begin building summary object. Tackling one resource at a time.
-    for (const permissions of permissionsValid) {
-      const resource = permissions[0].resource;
-      const resourcePermissionItems: Array<{
-        id: number | null;
-        action: string;
-        allow: boolean;
-      }> = [];
-
-      for (const action of actions) {
-        const permission = permissions.find(
-          (p) => p.trustedEntityId === roleId && p.action === action
-        );
-        if (permission !== undefined) {
-          resourcePermissionItems.push({
-            id: permission.id,
-            action,
-            allow: true,
-          });
-        } else {
-          resourcePermissionItems.push({
-            id: null,
-            action,
-            allow: false,
-          });
-        }
+      const resourceIndex = permissionsByResources.findIndex(
+        (p) => p.resource === resource
+      );
+      if (resourceIndex === -1) {
+        continue;
       }
 
-      permissionsByResources.push({
-        resource,
-        permissions: resourcePermissionItems,
-      });
+      const actionIndex = permissionsByResources[
+        resourceIndex
+      ].permissions.findIndex((p) => p.action === action);
+      if (actionIndex === -1) {
+        continue;
+      }
+
+      permissionsByResources[resourceIndex].permissions[actionIndex].allow =
+        true;
+      permissionsByResources[resourceIndex].permissions[actionIndex].id = id;
     }
 
     return permissionsByResources;
@@ -146,6 +140,17 @@ export default class Permission {
     resource: string
   ): Promise<IPermission[]> {
     const url = `${this.baseUrl}?resource=${resource}`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${this.accessToken as string}`,
+      },
+    };
+    const res = await axios.get(url, config);
+    return res.data;
+  }
+
+  private async getAllPermissions(): Promise<IPermission[]> {
+    const url = this.baseUrl;
     const config = {
       headers: {
         Authorization: `Bearer ${this.accessToken as string}`,

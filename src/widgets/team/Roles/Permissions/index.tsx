@@ -114,7 +114,7 @@ const TablePermission: FC<Props> = ({
     } else {
       requests?.set(requestId, {
         change: isAdd ? 'add' : 'delete',
-        resourceId: undefined,
+        resourceId: id,
         resource,
         action,
         roleId,
