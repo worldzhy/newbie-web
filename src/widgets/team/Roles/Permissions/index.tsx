@@ -42,7 +42,7 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
   /**
    * States
    */
-  const [rows, setRows] = useState<
+  const [data, setData] = useState<
     Array<{
       resource: string;
       permission: Record<any, boolean>;
@@ -55,10 +55,10 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
   useEffect(() => {
     const startFetching = async (): Promise<void> => {
       try {
-        setRows([]);
+        setData([]);
         const permissions = await new Permission().get(roleId);
         if (!ignore) {
-          setRows(permissions);
+          setData(permissions);
         }
       } catch (err: unknown) {
         if (!ignore) {
@@ -74,6 +74,19 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /**
+   * Handlers
+   */
+  const onChangeHandler = (resource: string, action: string): void => {
+    const updatedData = data.map((d) => {
+      if (d.resource === resource) {
+        d.permission[action] = !d.permission[action];
+      }
+      return d;
+    });
+    setData(updatedData);
+  };
 
   const skeleton = (
     <Stack direction="column" spacing={1}>
@@ -108,9 +121,9 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows
+          {data
             .sort((a, b) => a.resource.localeCompare(b.resource))
-            .map((row, key) => (
+            .map((d, key) => (
               <TableRow
                 key={key}
                 sx={{
@@ -124,21 +137,24 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
                   },
                 }}
               >
-                <TableCell align="center">{row.resource}</TableCell>
+                <TableCell align="center">{d.resource}</TableCell>
                 <TableCell align="center">
                   <FormGroup row={true}>
-                    {Object.keys(row.permission).map(
+                    {Object.keys(d.permission).map(
                       (action: string, key: number) => (
                         <FormControlLabel
                           key={key}
                           control={
                             <Checkbox
-                              checked={row.permission[action]}
+                              checked={d.permission[action]}
                               sx={{
                                 color: `${styleConfig.color.primaryBlackColor}`,
                                 '&.Mui-checked': {
                                   color: `${styleConfig.color.primaryBlackColor}`,
                                 },
+                              }}
+                              onChange={() => {
+                                onChangeHandler(d.resource, action);
                               }}
                             />
                           }
@@ -155,7 +171,7 @@ const TablePermission: FC<Props> = ({ roleId }): ReactElement => {
     </TableContainer>
   );
 
-  return rows.length === 0 ? skeleton : table;
+  return data.length === 0 ? skeleton : table;
 };
 
 export default TablePermission;

@@ -53,6 +53,43 @@ export default class Permission {
     return permissionsSummary;
   }
 
+  public async addPermission(
+    resource: string,
+    action: string,
+    roleId: string
+  ): Promise<string[]> {
+    const url = `${this.baseUrl}`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${this.accessToken as string}`,
+      },
+    };
+    const data = {
+      resource,
+      action,
+      where: {
+        state: {
+          in: ['StateA', 'StateB'],
+        },
+      },
+      trustedEntityType: 'USER',
+      trustedEntityId: roleId,
+    };
+    const res = await axios.post(url, data, config);
+    return res.data;
+  }
+
+  public async deletePermission(permissionId: number): Promise<string[]> {
+    const url = `${this.baseUrl}/${permissionId}`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${this.accessToken as string}`,
+      },
+    };
+    const res = await axios.delete(url, config);
+    return res.data;
+  }
+
   private async getResources(): Promise<string[]> {
     const url = `${this.baseUrl}/resources`;
     const config = {
