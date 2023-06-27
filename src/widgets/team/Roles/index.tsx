@@ -28,7 +28,10 @@ const TeamRoles = (): ReactElement => {
   const [newRoleModal, setNewRoleModal] = useState(false);
   const [roleName, setRoleName] = useState('');
   const [newFetch, setNewFetch] = useState(false);
-  const [activeRole, setActiveRole] = useState<null | string>(null);
+  const [activeRole, setActiveRole] = useState<null | {
+    id: string;
+    name: string;
+  }>(null);
   const [requests, setRequests] = useState<Map<string, Request>>(new Map());
 
   /**
@@ -125,7 +128,7 @@ const TeamRoles = (): ReactElement => {
       </FormDialogCustom>
       <FormDialogCustom
         open={activeRole != null}
-        title="Edit Role Permissions"
+        title={`Edit ${activeRole?.name as string} Permissions`}
         closeDialogHandler={() => {
           setActiveRole(null);
         }}
@@ -133,7 +136,7 @@ const TeamRoles = (): ReactElement => {
         isProcessing={isProcessing}
       >
         <TablePermission
-          roleId={activeRole as string}
+          roleId={activeRole?.id as string}
           requests={requests}
           setRequests={setRequests}
         />

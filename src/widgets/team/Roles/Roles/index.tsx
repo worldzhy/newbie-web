@@ -20,7 +20,12 @@ interface Props {
     name: string;
     description: string;
   }>;
-  setDiaglogState: React.Dispatch<React.SetStateAction<string | null>>;
+  setDiaglogState: React.Dispatch<
+    React.SetStateAction<{
+      id: string;
+      name: string;
+    } | null>
+  >;
 }
 
 const RolesTable: FC<Props> = ({ rows, setDiaglogState }): ReactElement => {
@@ -82,8 +87,7 @@ const RolesTable: FC<Props> = ({ rows, setDiaglogState }): ReactElement => {
                 <ButtonCustom
                   customColor="link"
                   onClick={() => {
-                    // setNewFetch(!newFetch);
-                    setDiaglogState(row.id);
+                    setDiaglogState({ id: row.id, name: row.name });
                   }}
                 >
                   Edit
