@@ -1,9 +1,9 @@
-import LayoutDashboard from "@/widgets/LayoutDashboard";
 import { ReactElement } from "react";
+import LayoutDashboard from "@/widgets/LayoutDashboard";
 
 const Page = () => {
-  return <>Workflow</>;
-};
+  return <>this is manage page</>
+}
 
 export default Page;
 
