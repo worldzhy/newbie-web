@@ -52,7 +52,7 @@ const RolesPermissions: FC<Props> = ({
   const [data, setData] = useState<IPermissionByResource[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [requests, setRequests] = useState<Map<string, IRequest>>(new Map());
-  const [fetch, newFetch] = useState(false);
+  const [fetch, setFetch] = useState(false);
 
   /**
    * Handlers
@@ -62,8 +62,7 @@ const RolesPermissions: FC<Props> = ({
       await new Permission().update(requests);
     });
     setRequests(new Map());
-    newFetch(!fetch);
-    // To do: Add permission id to data after creating new permission
+    setFetch(!fetch);
   };
 
   const checkBoxOnChangeHandler = (

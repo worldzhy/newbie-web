@@ -4,8 +4,8 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom/InputTextCustom';
 import { sendRequest, showError } from '@/shared/libs/mixins';
 import Role from '@/shared/libs/role';
-import RolesPermissions from './permissions';
-import RolesTable from './roles';
+import RolesPermissions from './permissionsList';
+import RolesTable from './rolesList';
 import FormDialogCustom from '@/components/FormDialogCustom';
 
 const TeamRoles = (): ReactElement => {
@@ -15,7 +15,7 @@ const TeamRoles = (): ReactElement => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [newRoleModal, setNewRoleModal] = useState(false);
   const [roleName, setRoleName] = useState('');
-  const [newFetch, setNewFetch] = useState(false);
+  const [fetch, setFetch] = useState(false);
   const [activeRole, setActiveRole] = useState<null | {
     id: string;
     name: string;
@@ -58,7 +58,7 @@ const TeamRoles = (): ReactElement => {
     return () => {
       ignore = true;
     };
-  }, [newFetch]);
+  }, [fetch]);
 
   /**
    * Handlers
@@ -67,7 +67,7 @@ const TeamRoles = (): ReactElement => {
     await sendRequest(setIsProcessing, async () => {
       await new Role().create(roleName);
     });
-    setNewFetch(!newFetch);
+    setFetch(!fetch);
     setNewRoleModal(false);
   };
 
