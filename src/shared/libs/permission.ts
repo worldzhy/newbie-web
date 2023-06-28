@@ -67,7 +67,7 @@ export default class Permission {
           // eslint-disable-next-line @typescript-eslint/return-await
           return this.add(resource, action, roleId);
         } else {
-          if (resourceId === undefined) {
+          if (resourceId === null) {
             throw new Error('No resource id found.');
           }
           // eslint-disable-next-line @typescript-eslint/return-await
@@ -189,7 +189,7 @@ interface IPermissionsByResources {
 
 interface Request {
   change: 'add' | 'delete';
-  resourceId?: number;
+  resourceId: number | null;
   resource: string;
   action: string;
   roleId: string;
