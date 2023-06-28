@@ -4,23 +4,11 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom/InputTextCustom';
 import { sendRequest, showError } from '@/shared/libs/mixins';
 import Role from '@/shared/libs/role';
-import Permission from '@/shared/libs/permission';
-import TablePermission from './Permissions';
+import RolesPermissions from './Permissions';
 import RolesTable from './Roles';
 import FormDialogCustom from '@/components/FormDialogCustom';
 
 const TeamRoles = (): ReactElement => {
-  /**
-   * Types
-   */
-  interface Request {
-    change: 'add' | 'delete';
-    resourceId?: number;
-    resource: string;
-    action: string;
-    roleId: string;
-  }
-
   /**
    * States
    */
@@ -32,7 +20,6 @@ const TeamRoles = (): ReactElement => {
     id: string;
     name: string;
   }>(null);
-  const [requests, setRequests] = useState<Map<string, Request>>(new Map());
 
   /**
    * States
@@ -84,14 +71,6 @@ const TeamRoles = (): ReactElement => {
     setNewRoleModal(false);
   };
 
-  const updatePermissions = async (): Promise<void> => {
-    await sendRequest(setIsProcessing, async () => {
-      await new Permission().update(requests);
-    });
-    setRequests(new Map());
-    // To do: Add permission id to data after creating new permission
-  };
-
   return (
     <>
       <Stack direction="column" spacing={2} alignItems="flex-end">
@@ -126,21 +105,7 @@ const TeamRoles = (): ReactElement => {
           }}
         />
       </FormDialogCustom>
-      <FormDialogCustom
-        open={activeRole != null}
-        title={`Edit ${activeRole?.name as string} Permissions`}
-        closeDialogHandler={() => {
-          setActiveRole(null);
-        }}
-        formSubmitHandler={updatePermissions}
-        isProcessing={isProcessing}
-      >
-        <TablePermission
-          roleId={activeRole?.id as string}
-          requests={requests}
-          setRequests={setRequests}
-        />
-      </FormDialogCustom>
+      <RolesPermissions activeRole={activeRole} setActiveRole={setActiveRole} />
     </>
   );
 };

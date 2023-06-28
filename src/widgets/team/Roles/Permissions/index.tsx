@@ -1,21 +1,8 @@
 import React, { type ReactElement, type FC, useEffect, useState } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Skeleton,
-  Stack,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-} from '@mui/material';
-import styleConfig from '@/constants/styleConfig';
 import Permission from '@/shared/libs/permission';
-import { showError } from '@/shared/libs/mixins';
+import { sendRequest, showError } from '@/shared/libs/mixins';
+import FormDialogCustom from '@/components/FormDialogCustom';
+import TablePermission from './Table';
 
 /**
  *
@@ -30,65 +17,55 @@ import { showError } from '@/shared/libs/mixins';
  */
 
 interface Props {
-  roleId: string;
-  requests: any;
-  setRequests: any;
+  activeRole: IActiveRole;
+  setActiveRole: React.Dispatch<React.SetStateAction<IActiveRole>>;
 }
 
-const TablePermission: FC<Props> = ({
-  roleId,
-  requests,
-  setRequests,
-}): ReactElement => {
-  /**
-   * Declarations
-   */
-  const headers = ['Resouce', 'Permission'];
+type IActiveRole = {
+  id: string;
+  name: string;
+} | null;
 
+interface IRequest {
+  change: 'add' | 'delete';
+  resourceId: number | null;
+  resource: string;
+  action: string;
+  roleId: string;
+}
+
+interface IPermissionByResource {
+  resource: string;
+  permissions: Array<{
+    id: number | null;
+    action: string;
+    allow: boolean;
+  }>;
+}
+
+const RolesPermissions: FC<Props> = ({
+  activeRole,
+  setActiveRole,
+}): ReactElement => {
   /**
    * States
    */
-  const [data, setData] = useState<
-    Array<{
-      resource: string;
-      permissions: Array<{
-        id: number | null;
-        action: string;
-        allow: boolean;
-      }>;
-    }>
-  >([]);
-
-  /**
-   * Data Fetching
-   */
-  useEffect(() => {
-    const startFetching = async (): Promise<void> => {
-      try {
-        setData([]);
-        const permissions = await new Permission().get(roleId);
-        if (!ignore) {
-          setData(permissions);
-        }
-      } catch (err: unknown) {
-        if (!ignore) {
-          showError(err);
-        }
-      }
-    };
-    let ignore = false;
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    startFetching();
-    return () => {
-      ignore = true;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [data, setData] = useState<IPermissionByResource[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [requests, setRequests] = useState<Map<string, IRequest>>(new Map());
 
   /**
    * Handlers
    */
-  const onChangeHandler = (
+  const updatePermissions = async (): Promise<void> => {
+    await sendRequest(setIsProcessing, async () => {
+      await new Permission().update(requests);
+    });
+    setRequests(new Map());
+    // To do: Add permission id to data after creating new permission
+  };
+
+  const checkBoxOnChangeHandler = (
     resource: string,
     action: string,
     id: number | null
@@ -109,7 +86,7 @@ const TablePermission: FC<Props> = ({
       return;
     }
     const requestId = `${resource}-${action}`;
-    if (requests?.has(requestId) === true) {
+    if (requests?.has(requestId)) {
       requests.delete(requestId);
     } else {
       requests?.set(requestId, {
@@ -117,94 +94,53 @@ const TablePermission: FC<Props> = ({
         resourceId: id,
         resource,
         action,
-        roleId,
+        roleId: activeRole?.id as string,
       });
     }
     setRequests(requests);
   };
 
-  const skeleton = (
-    <Stack direction="column" spacing={1}>
-      {Array.from(new Array(3)).map((_, key: number) => (
-        <Skeleton key={key} variant="rounded" animation="wave" height={60} />
-      ))}
-    </Stack>
-  );
+  /**
+   * Data Fetching
+   */
+  useEffect(() => {
+    const startFetching = async (): Promise<void> => {
+      try {
+        setData([]);
+        const permissions = await new Permission().get(
+          activeRole?.id as string
+        );
+        if (!ignore) {
+          setData(permissions);
+        }
+      } catch (err: unknown) {
+        if (!ignore) {
+          showError(err);
+        }
+      }
+    };
+    let ignore = false;
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    startFetching();
+    return () => {
+      ignore = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeRole]);
 
-  const table = (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow
-            sx={{
-              backgroundColor: `${styleConfig.color.primaryGrayColor}`,
-              '& td, & th': {
-                border: `2px solid ${styleConfig.color.primaryBlackColor}`,
-              },
-              '& th': {
-                color: `${styleConfig.color.primaryWhiteColor}`,
-                fontSize: '14px',
-                fontWeight: '700',
-              },
-            }}
-          >
-            {headers.map((label: string, key: number) => (
-              <TableCell key={key} align="center">
-                {label}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data
-            .sort((a, b) => a.resource.localeCompare(b.resource))
-            .map(({ resource, permissions }, key) => (
-              <TableRow
-                key={key}
-                sx={{
-                  '& td, & th': {
-                    border: `2px solid ${styleConfig.color.primaryBlackColor}`,
-                  },
-                  '& th': {
-                    color: `${styleConfig.color.primaryGrayColor}`,
-                    fontSize: '14px',
-                    fontWeight: '400',
-                  },
-                }}
-              >
-                <TableCell align="center">{resource}</TableCell>
-                <TableCell align="center">
-                  <FormGroup row={true}>
-                    {permissions.map((p, key: number) => (
-                      <FormControlLabel
-                        key={key}
-                        control={
-                          <Checkbox
-                            checked={p.allow}
-                            sx={{
-                              color: `${styleConfig.color.primaryBlackColor}`,
-                              '&.Mui-checked': {
-                                color: `${styleConfig.color.primaryBlackColor}`,
-                              },
-                            }}
-                            onChange={() => {
-                              onChangeHandler(resource, p.action, p.id);
-                            }}
-                          />
-                        }
-                        label={p.action}
-                      />
-                    ))}
-                  </FormGroup>
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+  return (
+    <FormDialogCustom
+      open={activeRole != null}
+      title={`Edit ${activeRole?.name as string} Permissions`}
+      closeDialogHandler={() => {
+        setActiveRole(null);
+      }}
+      formSubmitHandler={updatePermissions}
+      isProcessing={isProcessing}
+    >
+      <TablePermission data={data} onChangeHandler={checkBoxOnChangeHandler} />
+    </FormDialogCustom>
   );
-
-  return data.length === 0 ? skeleton : table;
 };
 
-export default TablePermission;
+export default RolesPermissions;
