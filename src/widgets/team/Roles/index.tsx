@@ -4,8 +4,8 @@ import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom/InputTextCustom';
 import { sendRequest, showError } from '@/shared/libs/mixins';
 import Role from '@/shared/libs/role';
-import RolesPermissions from './Permissions';
-import RolesTable from './Roles';
+import RolesPermissions from './permissions';
+import RolesTable from './roles';
 import FormDialogCustom from '@/components/FormDialogCustom';
 
 const TeamRoles = (): ReactElement => {
@@ -39,8 +39,8 @@ const TeamRoles = (): ReactElement => {
     const startFetching = async (): Promise<void> => {
       try {
         setRows([]);
-        const roles = await new Role().get();
         if (!ignore) {
+          const roles = await new Role().get();
           const fetchedRows = roles.map(({ id, name, description }) => {
             return { id, name, description: description ?? 'xxx' };
           });

@@ -4,8 +4,8 @@ import { Box, Tab } from '@mui/material';
 import styles from './index.module.css';
 import styleConfig from '@/constants/styleConfig';
 import LayoutDashboard from '@/widgets/LayoutDashboard';
-import TeamMembers from '@/widgets/team/Members';
-import TeamRoles from '@/widgets/team/Roles';
+import TeamMembers from '@/widgets/team/members';
+import TeamRoles from '@/widgets/team/roles';
 
 const Page = (): ReactElement => {
   /**

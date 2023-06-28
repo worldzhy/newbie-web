@@ -2,12 +2,11 @@ import React, { type ReactElement, type FC, useEffect, useState } from 'react';
 import Permission from '@/shared/libs/permission';
 import { sendRequest, showError } from '@/shared/libs/mixins';
 import FormDialogCustom from '@/components/FormDialogCustom';
-import TablePermission from './Table';
+import TablePermission from './table';
 
 /**
  *
  * Table responsible for showing the per role (as identified by roleId) permissions against resources.
- * To use this table, provide roleId in props. This component will do the data fetching of the permissions here.
  * This component is used in Team > Roles > Edit page.
  *
  **/
@@ -53,6 +52,7 @@ const RolesPermissions: FC<Props> = ({
   const [data, setData] = useState<IPermissionByResource[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [requests, setRequests] = useState<Map<string, IRequest>>(new Map());
+  const [fetch, newFetch] = useState(false);
 
   /**
    * Handlers
@@ -62,6 +62,7 @@ const RolesPermissions: FC<Props> = ({
       await new Permission().update(requests);
     });
     setRequests(new Map());
+    newFetch(!fetch);
     // To do: Add permission id to data after creating new permission
   };
 
@@ -126,7 +127,7 @@ const RolesPermissions: FC<Props> = ({
       ignore = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeRole]);
+  }, [activeRole, fetch]);
 
   return (
     <FormDialogCustom
