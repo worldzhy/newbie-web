@@ -13,13 +13,14 @@ const TeamRoles = (): ReactElement => {
    * States
    */
   const [isProcessing, setIsProcessing] = useState(false);
-  const [newRoleModal, setNewRoleModal] = useState(false);
+  const [roleModal, setRoleModal] = useState(false);
   const [roleName, setRoleName] = useState('');
   const [fetch, setFetch] = useState(false);
-  const [activeRole, setActiveRole] = useState<null | {
-    id: string;
-    name: string;
-  }>(null);
+  const [permissionModal, setPermissionModal] = useState(false);
+  const [activeRole, setActiveRole] = useState<{
+    id?: string;
+    name?: string;
+  }>({});
 
   /**
    * States
@@ -68,7 +69,7 @@ const TeamRoles = (): ReactElement => {
       await new Role().create(roleName);
     });
     setFetch(!fetch);
-    setNewRoleModal(false);
+    setRoleModal(false);
   };
 
   return (
@@ -77,20 +78,24 @@ const TeamRoles = (): ReactElement => {
         <ButtonCustom
           customColor="dark"
           onClick={() => {
-            setNewRoleModal(true);
+            setRoleModal(true);
           }}
         >
           New role
         </ButtonCustom>
-        <RolesTable rows={rows} setDiaglogState={setActiveRole} />
+        <RolesTable
+          rows={rows}
+          setActiveRole={setActiveRole}
+          setPermissionModal={setPermissionModal}
+        />
       </Stack>
       <FormDialogCustom
-        open={newRoleModal}
+        open={roleModal}
         title="Role Name"
         contentText="Enter the desired role name in the designated field to create a
             role."
         closeDialogHandler={() => {
-          setNewRoleModal(false);
+          setRoleModal(false);
         }}
         formSubmitHandler={createRole}
         isProcessing={isProcessing}
@@ -105,7 +110,11 @@ const TeamRoles = (): ReactElement => {
           }}
         />
       </FormDialogCustom>
-      <RolesPermissions activeRole={activeRole} setActiveRole={setActiveRole} />
+      <RolesPermissions
+        activeRole={activeRole}
+        setPermissionModal={setPermissionModal}
+        permissionModal={permissionModal}
+      />
     </>
   );
 };

@@ -20,15 +20,20 @@ interface Props {
     name: string;
     description: string;
   }>;
-  setDiaglogState: React.Dispatch<
+  setActiveRole: React.Dispatch<
     React.SetStateAction<{
-      id: string;
-      name: string;
-    } | null>
+      id?: string;
+      name?: string;
+    }>
   >;
+  setPermissionModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RolesTable: FC<Props> = ({ rows, setDiaglogState }): ReactElement => {
+const RolesTable: FC<Props> = ({
+  rows,
+  setActiveRole,
+  setPermissionModal,
+}): ReactElement => {
   /**
    * Declarations
    */
@@ -87,7 +92,8 @@ const RolesTable: FC<Props> = ({ rows, setDiaglogState }): ReactElement => {
                 <ButtonCustom
                   customColor="link"
                   onClick={() => {
-                    setDiaglogState({ id: row.id, name: row.name });
+                    setActiveRole({ id: row.id, name: row.name });
+                    setPermissionModal(true);
                   }}
                 >
                   Edit

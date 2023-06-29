@@ -17,13 +17,14 @@ import TablePermission from './table';
 
 interface Props {
   activeRole: IActiveRole;
-  setActiveRole: React.Dispatch<React.SetStateAction<IActiveRole>>;
+  permissionModal: boolean;
+  setPermissionModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-type IActiveRole = {
-  id: string;
-  name: string;
-} | null;
+interface IActiveRole {
+  id?: string;
+  name?: string;
+}
 
 interface IRequest {
   change: 'add' | 'delete';
@@ -44,7 +45,8 @@ interface IPermissionByResource {
 
 const RolesPermissions: FC<Props> = ({
   activeRole,
-  setActiveRole,
+  permissionModal,
+  setPermissionModal,
 }): ReactElement => {
   /**
    * States
@@ -130,10 +132,10 @@ const RolesPermissions: FC<Props> = ({
 
   return (
     <FormDialogCustom
-      open={activeRole != null}
+      open={permissionModal}
       title={`Edit ${activeRole?.name as string} Permissions`}
       closeDialogHandler={() => {
-        setActiveRole(null);
+        setPermissionModal(false);
       }}
       formSubmitHandler={updatePermissions}
       isProcessing={isProcessing}
