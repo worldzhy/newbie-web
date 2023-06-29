@@ -1,9 +1,9 @@
-import { ReactElement } from "react";
-import LayoutDashboard from "@/widgets/LayoutDashboard";
+import { type ReactElement } from 'react';
+import LayoutDashboard from '@/widgets/LayoutDashboard';
 
-const Page = () => {
-  return <>this is run page</>
-}
+const Page = (): ReactElement => {
+  return <>this is run page</>;
+};
 
 export default Page;
 

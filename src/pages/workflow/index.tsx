@@ -1,10 +1,10 @@
-import { ReactElement, useState } from 'react';
+import { type ReactElement, useState } from 'react';
 import AddModal from './components/AddModal';
 import WorkflowTable from './components/WorkflowTable';
 import LayoutDashboard from '@/widgets/LayoutDashboard';
 import ButtonCustom from '@/components/ButtonCustom';
 
-const Page = () => {
+const Page = (): ReactElement => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -13,7 +13,9 @@ const Page = () => {
         <ButtonCustom
           size="small"
           customColor="light"
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            setOpen(true);
+          }}
         >
           Add Workflow
         </ButtonCustom>
