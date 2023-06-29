@@ -22,7 +22,7 @@ export default class User {
  * Types
  */
 
-interface IUser {
+export interface IUser {
   id: string;
   email: string | null;
   phone: string | null;

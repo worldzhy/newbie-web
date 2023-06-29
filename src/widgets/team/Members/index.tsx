@@ -1,29 +1,69 @@
-import React, { type ReactElement } from 'react';
+import React, { useEffect, type ReactElement, useState } from 'react';
 import TableCustom from '@/components/TableCustom';
+import User from '@/shared/libs/user';
+import { showError } from '@/shared/libs/mixins';
 
-// Panel 1 Data
-const headers = ['Name', 'Email', 'Phone', 'Role'];
+/**
+ * Types
+ */
 
-const createData = (
-  name: string,
-  email: string,
-  phone: string,
-  role: string
-): { name: string; email: string; phone: string; role: string } => {
-  return { name, email, phone, role };
-};
-
-const rows = [
-  createData('hongbin', 'hongbin@inceptionpad.com', '13256484466', 'Developer'),
-  createData('xiabin', 'xiabin@inceptionpad.com', '15605437789', 'Developer'),
-  createData('joe', 'joe@inceptionpad.com', '18978545785', 'Developer'),
-];
+interface IData {
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+}
 
 const TeamMembers = (): ReactElement => {
+  /**
+   * Declarations
+   */
+  const headers = ['Name', 'Email', 'Phone', 'Role'];
+
+  /**
+   * States
+   */
+  const [data, setData] = useState<IData[]>([]);
+
+  /**
+   * Data Fetching
+   */
+  useEffect(() => {
+    const startFetching = async (): Promise<void> => {
+      try {
+        setData([]);
+        if (!ignore) {
+          const users = await new User().get();
+          const fetchedData = users.records.map(
+            ({ username, email, phone, roles }) => {
+              return {
+                name: username,
+                email: email ?? 'null',
+                phone: phone ?? 'null',
+                role: roles[0]?.name ?? 'null',
+              };
+            }
+          );
+          setData(fetchedData);
+        }
+      } catch (err: unknown) {
+        if (!ignore) {
+          showError(err);
+        }
+      }
+    };
+    let ignore = false;
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    startFetching();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   return (
     <TableCustom
       headers={headers}
-      rows={rows}
+      rows={data}
       isLastColActions={false}
     ></TableCustom>
   );
