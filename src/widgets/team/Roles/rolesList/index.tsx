@@ -11,7 +11,7 @@ import {
   Stack,
 } from '@mui/material';
 import styleConfig from '@/constants/styleConfig';
-import styles from './index.module.css';
+import styles from './index.module.scss';
 import ButtonCustom from '@/components/ButtonCustom';
 
 interface Props {

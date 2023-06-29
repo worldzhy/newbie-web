@@ -1,6 +1,6 @@
 import React, { useState, type ReactElement } from 'react';
 import { Typography, Container, Grid } from '@mui/material';
-import styles from './index.module.css';
+import styles from './index.module.scss';
 import ButtonCustom from '@/components/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom';
 import LinkCustom from '@/components/LinkCustom';

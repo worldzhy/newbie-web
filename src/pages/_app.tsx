@@ -4,7 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { theme } from '@/constants/theme';
-import '@/styles/globals.css';
+import '@/styles/globals.scss';
 
 export type NextPageWithLayout<
   P = {

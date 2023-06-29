@@ -1,4 +1,4 @@
-import styles from './index.module.css';
+import styles from './index.module.scss';
 import React, { type FC } from 'react';
 import { TextField, type TextFieldProps } from '@mui/material';
 

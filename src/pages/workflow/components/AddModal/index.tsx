@@ -4,7 +4,7 @@ import { Box, FormControl, Input, InputLabel, Modal } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ButtonCustom from '@/components/ButtonCustom';
 
-import styles from './index.module.css';
+import styles from './index.module.scss';
 
 interface IProps {
   open: boolean;

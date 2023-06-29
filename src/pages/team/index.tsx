@@ -1,7 +1,7 @@
 import React, { type ReactElement, type SyntheticEvent } from 'react';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
-import styles from './index.module.css';
+import styles from './index.module.scss';
 import styleConfig from '@/constants/styleConfig';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 import TeamMembers from '@/widgets/team/members';

@@ -1,5 +1,5 @@
 import { type ReactElement } from 'react';
-import styles from './index.module.css';
+import styles from './index.module.scss';
 
 const Loading = (): ReactElement => {
   return (
