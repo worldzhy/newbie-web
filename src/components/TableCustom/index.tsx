@@ -11,7 +11,7 @@ import {
   Stack,
 } from '@mui/material';
 import styleConfig from '@/constants/styleConfig';
-import styles from './TableCustom.module.css';
+import styles from './index.module.css';
 
 interface Props {
   headers: string[];

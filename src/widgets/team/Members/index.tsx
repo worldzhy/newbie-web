@@ -1,5 +1,5 @@
 import React, { type ReactElement } from 'react';
-import TableCustom from '@/components/TableCustom/TableCustom';
+import TableCustom from '@/components/TableCustom';
 
 // Panel 1 Data
 const headers = ['Name', 'Email', 'Phone', 'Role'];

@@ -6,8 +6,8 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
-import LoadingButtonCustom from '../LoadingButtonCustom/LoadingButtonCustom';
-import ButtonCustom from '../ButtonCustom/ButtonCustom';
+import LoadingButtonCustom from '../LoadingButtonCustom';
+import ButtonCustom from '../ButtonCustom';
 
 interface Props {
   open: boolean;

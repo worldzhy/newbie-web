@@ -1,8 +1,8 @@
 import React, { useState, type ReactElement } from 'react';
 import { Typography, Container, Grid } from '@mui/material';
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
-import InputTextCustom from '@/components/InputTextCustom/InputTextCustom';
-import LinkCustom from '@/components/LinkCustom/LinkCustom';
+import ButtonCustom from '@/components/ButtonCustom';
+import InputTextCustom from '@/components/InputTextCustom';
+import LinkCustom from '@/components/LinkCustom';
 import Auth from '@/shared/libs/auth';
 import { sendRequest } from '@/shared/libs/mixins';
 import styles from '@/styles/ForgotPassword.module.css';

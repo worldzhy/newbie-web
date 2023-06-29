@@ -1,7 +1,7 @@
 import React, { type ReactElement, useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
-import InputTextCustom from '@/components/InputTextCustom/InputTextCustom';
+import ButtonCustom from '@/components/ButtonCustom';
+import InputTextCustom from '@/components/InputTextCustom';
 import { sendRequest, showError } from '@/shared/libs/mixins';
 import Role from '@/shared/libs/role';
 import RolesPermissions from './permissionsList';

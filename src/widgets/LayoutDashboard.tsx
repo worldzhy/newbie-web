@@ -18,8 +18,8 @@ import {
   Typography,
 } from '@mui/material';
 import styleConfig from '@/constants/styleConfig';
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
-import LinkCustom from '@/components/LinkCustom/LinkCustom';
+import ButtonCustom from '@/components/ButtonCustom';
+import LinkCustom from '@/components/LinkCustom';
 import Logo from '@/widgets/Logo';
 import styles from './LayoutDashboard.module.css';
 import Pre from './Pre';

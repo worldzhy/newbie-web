@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import styleConfig from '@/constants/styleConfig';
 import styles from './index.module.css';
-import ButtonCustom from '@/components/ButtonCustom/ButtonCustom';
+import ButtonCustom from '@/components/ButtonCustom';
 
 interface Props {
   rows: Array<{

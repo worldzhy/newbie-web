@@ -11,7 +11,7 @@ import {
   Stack,
 } from '@mui/material';
 import styleConfig from '@/constants/styleConfig';
-import LinkCustom from '@/components/LinkCustom/LinkCustom';
+import LinkCustom from '@/components/LinkCustom';
 
 /**
  * Types

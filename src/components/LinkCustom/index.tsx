@@ -1,4 +1,4 @@
-import styles from './LinkCustom.module.css';
+import styles from './index.module.css';
 import React, { type FC, type HTMLProps } from 'react';
 import Link from 'next/link';
 
