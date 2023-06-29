@@ -3,7 +3,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
 import styles from './index.module.css';
 import styleConfig from '@/constants/styleConfig';
-import LayoutDashboard from '@/widgets/LayoutDashboard';
+import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 import TeamMembers from '@/widgets/team/members';
 import TeamRoles from '@/widgets/team/roles';
 import TeamAboutUs from '@/widgets/team/aboutUs';

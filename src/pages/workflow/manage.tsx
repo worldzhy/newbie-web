@@ -1,5 +1,5 @@
 import { type ReactElement } from 'react';
-import LayoutDashboard from '@/widgets/LayoutDashboard';
+import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 
 const Page = (): ReactElement => {
   return <>this is manage page</>;

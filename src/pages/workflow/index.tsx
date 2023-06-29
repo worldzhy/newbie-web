@@ -1,7 +1,7 @@
 import { type ReactElement, useState } from 'react';
 import AddModal from './components/AddModal';
 import WorkflowTable from './components/WorkflowTable';
-import LayoutDashboard from '@/widgets/LayoutDashboard';
+import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 import ButtonCustom from '@/components/ButtonCustom';
 
 const Page = (): ReactElement => {

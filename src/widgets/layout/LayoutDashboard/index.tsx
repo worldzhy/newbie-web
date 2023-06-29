@@ -17,12 +17,12 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
+import styles from './index.module.css';
 import styleConfig from '@/constants/styleConfig';
 import ButtonCustom from '@/components/ButtonCustom';
 import LinkCustom from '@/components/LinkCustom';
-import Logo from '@/widgets/Logo';
-import styles from './LayoutDashboard.module.css';
-import Pre from './Pre';
+import Logo from '@/widgets/shared/Logo';
+import Pre from '@/widgets/shared/Pre';
 
 const drawerWidth = 240;
 

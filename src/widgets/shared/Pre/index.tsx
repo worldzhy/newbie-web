@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import React, { type FC, type ReactElement } from 'react';
-import Loading from '@/widgets/Loading';
-import Toast from '@/components/Toast';
+import Loading from '@/widgets/shared/Loading';
+import Toast from '@/components/ToastCustom';
 
 interface Props {
   title?: string;
