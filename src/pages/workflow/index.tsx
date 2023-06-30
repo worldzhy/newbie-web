@@ -1,8 +1,8 @@
 import { type ReactElement, useState } from 'react';
-import AddModal from './components/AddModal';
-import WorkflowTable from './components/WorkflowTable';
-import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
+import AddModal from '@/widgets/workflow/AddModal';
 import ButtonCustom from '@/components/ButtonCustom';
+import WorkflowTable from '@/widgets/workflow/WorkflowTable';
+import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 
 const Page = (): ReactElement => {
   const [open, setOpen] = useState(false);
