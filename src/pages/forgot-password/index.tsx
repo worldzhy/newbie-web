@@ -5,7 +5,7 @@ import ButtonCustom from '@/components/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom';
 import LinkCustom from '@/components/LinkCustom';
 import Auth from '@/shared/libs/auth';
-import { sendRequest } from '@/shared/libs/mixins';
+import { sendRequest, showToast } from '@/shared/libs/mixins';
 import Pre from '@/widgets/shared/Pre';
 
 const Page = (): ReactElement => {
@@ -19,13 +19,23 @@ const Page = (): ReactElement => {
    */
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   /**
    * Handlers
    */
+  const sendVerificationCodeHandler = async (): Promise<void> => {
+    await sendRequest(setIsLoading, async () => {
+      await auth.sendVerificationCode(email);
+      showToast('success', 'Verification code sent to your email');
+    });
+  };
+
   const forgotPasswordHandler = async (): Promise<void> => {
     await sendRequest(setIsLoading, async () => {
-      await auth.forgotPassword(email);
+      await auth.forgotPassword({ email, verificationCode, newPassword });
+      // TO DO: Show success and redirect back to login
     });
   };
 
@@ -61,7 +71,7 @@ const Page = (): ReactElement => {
                         className={`${styles.button}`}
                         customColor="dark"
                         onClick={() => {
-                          void forgotPasswordHandler();
+                          void sendVerificationCodeHandler();
                         }}
                       >
                         Send
@@ -72,10 +82,10 @@ const Page = (): ReactElement => {
                     <InputTextCustom
                       label="Verification code"
                       variant="outlined"
-                      value={email}
-                      type="email"
+                      value={verificationCode}
+                      type="text"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setEmail(e.target.value);
+                        setVerificationCode(e.target.value);
                       }}
                     />
                   </Grid>
@@ -83,10 +93,10 @@ const Page = (): ReactElement => {
                     <InputTextCustom
                       label="New password"
                       variant="outlined"
-                      value={email}
-                      type="email"
+                      value={newPassword}
+                      type="password"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setEmail(e.target.value);
+                        setNewPassword(e.target.value);
                       }}
                     />
                   </Grid>
