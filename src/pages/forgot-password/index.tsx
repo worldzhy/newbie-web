@@ -45,10 +45,32 @@ const Page = (): ReactElement => {
             </Grid>
             <Grid item xs={12}>
               <form className={`${styles.form}`}>
-                <Grid container rowSpacing={4}>
+                <Grid container rowSpacing={2}>
                   <Grid item xs={12} className={`${styles.email}`}>
+                    <div className={`${styles.float}`}>
+                      <InputTextCustom
+                        label="Email"
+                        variant="outlined"
+                        value={email}
+                        type="email"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setEmail(e.target.value);
+                        }}
+                      />
+                      <ButtonCustom
+                        className={`${styles.button}`}
+                        customColor="dark"
+                        onClick={() => {
+                          void forgotPasswordHandler();
+                        }}
+                      >
+                        Send
+                      </ButtonCustom>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12}>
                     <InputTextCustom
-                      label="Email"
+                      label="Verification code"
                       variant="outlined"
                       value={email}
                       type="email"
@@ -56,9 +78,17 @@ const Page = (): ReactElement => {
                         setEmail(e.target.value);
                       }}
                     />
-                    <LinkCustom href="/" className={`${styles.returnLogin}`}>
-                      Return to login
-                    </LinkCustom>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <InputTextCustom
+                      label="New password"
+                      variant="outlined"
+                      value={email}
+                      type="email"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setEmail(e.target.value);
+                      }}
+                    />
                   </Grid>
                   <Grid item xs={12}>
                     <ButtonCustom
@@ -72,6 +102,9 @@ const Page = (): ReactElement => {
                   </Grid>
                 </Grid>
               </form>
+            </Grid>
+            <Grid item xs={12}>
+              <LinkCustom href="/">Return to login</LinkCustom>
             </Grid>
           </Grid>
         </Container>
