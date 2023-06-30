@@ -1,16 +1,16 @@
-import React, { type ReactElement, type SyntheticEvent } from 'react';
-import { Box, Tab } from '@mui/material';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import styleConfig from '@/constants/styleConfig';
-import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
+import React, { type ReactElement, type SyntheticEvent } from "react";
+import { Box, Tab } from "@mui/material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import styleConfig from "@/constants/styleConfig";
+import LayoutDashboard from "@/widgets/layout/LayoutDashboard";
 
-import styles from './index.module.css';
+import styles from "./index.module.scss";
 
 const Page = (): ReactElement => {
   /**
    * States
    */
-  const [value, setValue] = React.useState('1');
+  const [value, setValue] = React.useState("1");
 
   /**
    * Handlers
@@ -20,35 +20,33 @@ const Page = (): ReactElement => {
   };
 
   return (
-    <Box sx={{ width: '100%', typography: 'body1' }}>
+    <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
         <Box>
           <TabList
             onChange={handleChange}
             aria-label="lab API tabs example"
             sx={{
-              '& .MuiTabs-flexContainer': { gap: 2 },
-              '& .MuiTabs-indicator': { display: 'none' },
+              "& .MuiTabs-flexContainer": { gap: 2 },
+              "& .MuiTabs-indicator": { display: "none" },
             }}
             variant="scrollable"
             scrollButtons="auto"
           >
-            {['Tab 1', 'Tab 2', 'Tab 3'].map(
-              (label: string, index: number) => (
-                <Tab
-                  key={label}
-                  className={styles.tabItems}
-                  label={label}
-                  value={(index + 1).toString()}
-                  sx={{
-                    '&.Mui-selected': {
-                      color: styleConfig.color.primaryWhiteColor,
-                      background: styleConfig.color.primaryBlackColor,
-                    },
-                  }}
-                />
-              )
-            )}
+            {["Tab 1", "Tab 2", "Tab 3"].map((label: string, index: number) => (
+              <Tab
+                key={label}
+                className={styles.tabItems}
+                label={label}
+                value={(index + 1).toString()}
+                sx={{
+                  "&.Mui-selected": {
+                    color: styleConfig.color.primaryWhiteColor,
+                    background: styleConfig.color.primaryBlackColor,
+                  },
+                }}
+              />
+            ))}
           </TabList>
         </Box>
         <TabPanel
