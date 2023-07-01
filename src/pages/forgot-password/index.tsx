@@ -1,4 +1,5 @@
 import React, { useState, type ReactElement } from 'react';
+import { useRouter } from 'next/router';
 import { Typography, Container, Grid } from '@mui/material';
 import styles from './index.module.scss';
 import ButtonCustom from '@/components/ButtonCustom';
@@ -13,6 +14,7 @@ const Page = (): ReactElement => {
    * Declarations
    */
   const auth = new Auth();
+  const router = useRouter();
 
   /**
    * States
@@ -35,7 +37,10 @@ const Page = (): ReactElement => {
   const forgotPasswordHandler = async (): Promise<void> => {
     await sendRequest(setIsLoading, async () => {
       await auth.forgotPassword({ email, verificationCode, newPassword });
-      // TO DO: Show success and redirect back to login
+      showToast('success', 'Password successfully updated');
+      setTimeout(() => {
+        void router.push('/');
+      }, 2000);
     });
   };
 

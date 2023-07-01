@@ -15,15 +15,15 @@ export default class Auth {
     return res.data;
   }
 
-  // TO DO: Update return type to be more type safe
-  public async sendVerificationCode(email: string): Promise<any> {
+  public async sendVerificationCode(email: string): Promise<boolean> {
     const url = `${this.baseUrl}/reset-password/verification-code/email/${email}`;
     const res = await axiosInstance.get(url);
     return res.data;
   }
 
-  // TO DO: Update return type to be more type safe
-  public async forgotPassword(payload: IForgotPasswordPayload): Promise<any> {
+  public async forgotPassword(
+    payload: IForgotPasswordPayload
+  ): Promise<IForgotPasswordReturn> {
     const { email, verificationCode, newPassword } = payload;
     const url = `${this.baseUrl}/reset-password`;
     const data = {
@@ -58,4 +58,11 @@ interface IForgotPasswordPayload {
   email: string;
   verificationCode: string;
   newPassword: string;
+}
+
+interface IForgotPasswordReturn {
+  email: string;
+  id: string;
+  phone: string;
+  username: string;
 }
