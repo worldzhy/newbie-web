@@ -93,3 +93,9 @@ export const sendRequest = async (
 export const delayExecute = (fn: () => void, delayMs = 2000): void => {
   setTimeout(fn, delayMs);
 };
+
+export const isUnauthorized = (err: unknown): boolean => {
+  return (
+    err instanceof AxiosError && err.response?.data.message === 'Unauthorized'
+  );
+};

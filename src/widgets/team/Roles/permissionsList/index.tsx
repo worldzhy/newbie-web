@@ -1,6 +1,12 @@
 import React, { type ReactElement, type FC, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import Permission from '@/shared/libs/permission';
-import { sendRequest, showError } from '@/shared/libs/mixins';
+import {
+  delayExecute,
+  isUnauthorized,
+  sendRequest,
+  showError,
+} from '@/shared/libs/mixins';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import TablePermission from './table';
 
@@ -48,6 +54,11 @@ const RolesPermissions: FC<Props> = ({
   permissionModal,
   setPermissionModal,
 }): ReactElement => {
+  /**
+   * Declarations
+   */
+  const router = useRouter();
+
   /**
    * States
    */
@@ -118,6 +129,11 @@ const RolesPermissions: FC<Props> = ({
       } catch (err: unknown) {
         if (!ignore) {
           showError(err);
+          if (isUnauthorized(err)) {
+            delayExecute(() => {
+              void router.push('/');
+            });
+          }
         }
       }
     };
