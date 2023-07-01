@@ -6,7 +6,7 @@ import ButtonCustom from '@/components/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom';
 import LinkCustom from '@/components/LinkCustom';
 import Auth from '@/shared/libs/auth';
-import { sendRequest, showToast } from '@/shared/libs/mixins';
+import { delayExecute, sendRequest, showToast } from '@/shared/libs/mixins';
 import Pre from '@/widgets/shared/Pre';
 
 const Page = (): ReactElement => {
@@ -38,9 +38,9 @@ const Page = (): ReactElement => {
     await sendRequest(setIsLoading, async () => {
       await auth.forgotPassword({ email, verificationCode, newPassword });
       showToast('success', 'Password successfully updated');
-      setTimeout(() => {
+      delayExecute(() => {
         void router.push('/');
-      }, 2000);
+      });
     });
   };
 

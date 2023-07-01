@@ -1,11 +1,12 @@
 import React, { type ReactElement, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Typography, Container, Grid } from '@mui/material';
 import styles from './index.module.scss';
 import ButtonCustom from '@/components/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom';
 import LinkCustom from '@/components/LinkCustom';
 import Auth from '@/shared/libs/auth';
-import { sendRequest } from '@/shared/libs/mixins';
+import { delayExecute, sendRequest } from '@/shared/libs/mixins';
 import Pre from '@/widgets/shared/Pre';
 
 const Page = (): ReactElement => {
@@ -13,6 +14,7 @@ const Page = (): ReactElement => {
    * Declarations
    */
   const auth = new Auth();
+  const router = useRouter();
 
   /**
    * States
@@ -31,6 +33,9 @@ const Page = (): ReactElement => {
         password,
       };
       await auth.login(data);
+      delayExecute(() => {
+        void router.push('/projects');
+      });
     });
   };
 

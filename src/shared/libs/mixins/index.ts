@@ -89,3 +89,7 @@ export const sendRequest = async (
     showError(err);
   }
 };
+
+export const delayExecute = (fn: () => void, delayMs = 2000): void => {
+  setTimeout(fn, delayMs);
+};
