@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import LoadingButtonCustom from '../LoadingButtonCustom';
 import ButtonCustom from '../ButtonCustom';
+import styleConfig from '@/constants/styleConfig';
 
 interface Props {
   open: boolean;
@@ -30,7 +31,17 @@ const FormDialogCustom: FC<Props> = ({
   ...props
 }): ReactElement => {
   return (
-    <Dialog open={open} maxWidth={false} onClose={closeDialogHandler}>
+    <Dialog
+      open={open}
+      maxWidth={false}
+      onClose={closeDialogHandler}
+      sx={{
+        '.MuiDialog-paper': {
+          border: `2px solid ${styleConfig.color.primaryBlackColor}`,
+          padding: { xs: '0px', sm: '10px' },
+        },
+      }}
+    >
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         {contentText !== undefined && (

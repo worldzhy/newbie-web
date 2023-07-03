@@ -2,7 +2,16 @@ import React, { useEffect, type ReactElement, useState } from 'react';
 import { useRouter } from 'next/router';
 import TableCustom from '@/components/TableCustom';
 import User from '@/shared/libs/user';
-import { delayExecute, isUnauthorized, showError } from '@/shared/libs/mixins';
+import {
+  delayExecute,
+  isUnauthorized,
+  sendRequest,
+  showError,
+} from '@/shared/libs/mixins';
+import { Stack } from '@mui/material';
+import ButtonCustom from '@/components/ButtonCustom';
+import FormDialogCustom from '@/components/FormDialogCustom';
+import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 
 /**
  * Types
@@ -26,6 +35,13 @@ const TeamMembers = (): ReactElement => {
    * States
    */
   const [data, setData] = useState<IData[]>([]);
+  const [modal, setModal] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [fetch, setFetch] = useState(false);
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   /**
    * Data Fetching
@@ -68,12 +84,76 @@ const TeamMembers = (): ReactElement => {
     };
   }, []);
 
+  /**
+   * Handlers
+   */
+  const createRole = async (): Promise<void> => {
+    await sendRequest(setIsProcessing, async () => {
+      // To do: Add class method
+    });
+    setFetch(!fetch);
+    setModal(false);
+  };
+
   return (
-    <TableCustom
-      headers={headers}
-      rows={data}
-      isLastColActions={false}
-    ></TableCustom>
+    <>
+      <Stack direction="column" spacing={2} alignItems="flex-end">
+        <ButtonCustom
+          customColor="dark"
+          onClick={() => {
+            setModal(true);
+          }}
+        >
+          New member
+        </ButtonCustom>
+        <TableCustom
+          headers={headers}
+          rows={data}
+          isLastColActions={false}
+        ></TableCustom>
+      </Stack>
+      <FormDialogCustom
+        open={modal}
+        title="New member"
+        closeDialogHandler={() => {
+          setModal(false);
+        }}
+        formSubmitHandler={createRole}
+        isProcessing={isProcessing}
+      >
+        <Stack spacing={1}>
+          <FormDialogInputCustom
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setEmail(e.target.value);
+            }}
+          ></FormDialogInputCustom>
+          <FormDialogInputCustom
+            label="Phone"
+            value={phone}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setPhone(e.target.value);
+            }}
+          ></FormDialogInputCustom>
+          <FormDialogInputCustom
+            label="Username"
+            value={username}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setUsername(e.target.value);
+            }}
+          ></FormDialogInputCustom>
+          <FormDialogInputCustom
+            label="Password"
+            value={password}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setPassword(e.target.value);
+            }}
+          ></FormDialogInputCustom>
+        </Stack>
+      </FormDialogCustom>
+    </>
   );
 };
 
