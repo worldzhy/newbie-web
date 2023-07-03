@@ -2,7 +2,6 @@ import React, { type ReactElement, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Stack } from '@mui/material';
 import ButtonCustom from '@/components/ButtonCustom';
-import InputTextCustom from '@/components/InputTextCustom';
 import {
   delayExecute,
   isUnauthorized,
@@ -13,6 +12,7 @@ import Role from '@/shared/libs/role';
 import RolesPermissions from './permissionsList';
 import RolesTable from './rolesList';
 import FormDialogCustom from '@/components/FormDialogCustom';
+import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 
 const TeamRoles = (): ReactElement => {
   /**
@@ -104,24 +104,20 @@ const TeamRoles = (): ReactElement => {
       </Stack>
       <FormDialogCustom
         open={roleModal}
-        title="Role Name"
-        contentText="Enter the desired role name in the designated field to create a
-            role."
+        title="New role"
         closeDialogHandler={() => {
           setRoleModal(false);
         }}
         formSubmitHandler={createRole}
         isProcessing={isProcessing}
       >
-        <InputTextCustom
-          label="Role name"
-          variant="outlined"
+        <FormDialogInputCustom
+          label="Name"
           value={roleName}
-          type="text"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setRoleName(e.target.value);
           }}
-        />
+        ></FormDialogInputCustom>
       </FormDialogCustom>
       <RolesPermissions
         activeRole={activeRole}
