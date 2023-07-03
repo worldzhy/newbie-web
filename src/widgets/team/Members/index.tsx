@@ -1,7 +1,8 @@
 import React, { useEffect, type ReactElement, useState } from 'react';
+import { useRouter } from 'next/router';
 import TableCustom from '@/components/TableCustom';
 import User from '@/shared/libs/user';
-import { showError } from '@/shared/libs/mixins';
+import { delayExecute, isUnauthorized, showError } from '@/shared/libs/mixins';
 
 /**
  * Types
@@ -18,6 +19,7 @@ const TeamMembers = (): ReactElement => {
   /**
    * Declarations
    */
+  const router = useRouter();
   const headers = ['Name', 'Email', 'Phone', 'Role'];
 
   /**
@@ -49,6 +51,11 @@ const TeamMembers = (): ReactElement => {
       } catch (err: unknown) {
         if (!ignore) {
           showError(err);
+          if (isUnauthorized(err)) {
+            delayExecute(() => {
+              void router.push('/');
+            });
+          }
         }
       }
     };

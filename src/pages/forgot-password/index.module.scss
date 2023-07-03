@@ -3,22 +3,43 @@
   margin-top: 3rem;
 }
 
-.text {
-  margin: 2rem auto 1rem auto;
-  width: 480px;
-  text-align: start;
-}
-
 .form {
   width: 275px;
   margin: auto;
 }
 
-.email {
-  text-align: end;
+.text {
+  margin: 2rem auto 1rem auto;
+  width: 480px;
+  text-align: start;
+  max-width: 100%;
 }
 
-.returnLogin {
-  margin-top: 5px;
-  display: block;
+.email {
+  .float {
+    position: relative;
+  }
+
+  .button {
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+@media (max-width: 600px) {
+  .email {
+    .float {
+      position: relative;
+    }
+
+    .button {
+      position: relative;
+      left: 0;
+      top: 0;
+      transform: none;
+      margin-top: 16px;
+    }
+  }
 }

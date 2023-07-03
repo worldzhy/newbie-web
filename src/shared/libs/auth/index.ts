@@ -15,10 +15,23 @@ export default class Auth {
     return res.data;
   }
 
-  // TO DO: Update return type to be more type safe
-  public async forgotPassword(email: string): Promise<any> {
+  public async sendVerificationCode(email: string): Promise<boolean> {
     const url = `${this.baseUrl}/reset-password/verification-code/email/${email}`;
     const res = await axiosInstance.get(url);
+    return res.data;
+  }
+
+  public async forgotPassword(
+    payload: IForgotPasswordPayload
+  ): Promise<IForgotPasswordReturn> {
+    const { email, verificationCode, newPassword } = payload;
+    const url = `${this.baseUrl}/reset-password`;
+    const data = {
+      email,
+      verificationCode,
+      newPassword,
+    };
+    const res = await axiosInstance.patch(url, data);
     return res.data;
   }
 }
@@ -39,4 +52,17 @@ interface ILoginReturn {
   status: string;
   createdAt: string;
   updatedAt: string;
+}
+
+interface IForgotPasswordPayload {
+  email: string;
+  verificationCode: string;
+  newPassword: string;
+}
+
+interface IForgotPasswordReturn {
+  email: string;
+  id: string;
+  phone: string;
+  username: string;
 }

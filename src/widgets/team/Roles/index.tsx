@@ -1,14 +1,25 @@
 import React, { type ReactElement, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Stack } from '@mui/material';
 import ButtonCustom from '@/components/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom';
-import { sendRequest, showError } from '@/shared/libs/mixins';
+import {
+  delayExecute,
+  isUnauthorized,
+  sendRequest,
+  showError,
+} from '@/shared/libs/mixins';
 import Role from '@/shared/libs/role';
 import RolesPermissions from './permissionsList';
 import RolesTable from './rolesList';
 import FormDialogCustom from '@/components/FormDialogCustom';
 
 const TeamRoles = (): ReactElement => {
+  /**
+   * Declarations
+   */
+  const router = useRouter();
+
   /**
    * States
    */
@@ -21,10 +32,6 @@ const TeamRoles = (): ReactElement => {
     id?: string;
     name?: string;
   }>({});
-
-  /**
-   * States
-   */
   const [rows, setRows] = useState<
     Array<{
       id: string;
@@ -50,6 +57,11 @@ const TeamRoles = (): ReactElement => {
       } catch (err: unknown) {
         if (!ignore) {
           showError(err);
+          if (isUnauthorized(err)) {
+            delayExecute(() => {
+              void router.push('/');
+            });
+          }
         }
       }
     };
