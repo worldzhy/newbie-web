@@ -7,12 +7,14 @@ import ButtonCustom from "@/components/ButtonCustom";
 import styles from "./index.module.scss";
 
 interface IProps {
+  type: string;
   open: boolean;
   values?: Record<string, string>;
   setOpen: (open: boolean) => void;
 }
 
 const EditModal: FC<IProps> = ({
+  type,
   open,
   setOpen,
   values = { id: undefined, name: "", desc: "" },
@@ -22,7 +24,7 @@ const EditModal: FC<IProps> = ({
   const [desc, setDesc] = useState("");
 
   const handleUpdate = (): void => {
-    console.log(name, desc, "----> name desc");
+    console.log(type, name, desc, "----> type name desc");
     if (id) {
       // TODO: do update
     } else {
@@ -43,7 +45,9 @@ const EditModal: FC<IProps> = ({
       <Box sx={ModalStyle}>
         <div className={styles.container}>
           <CloseIcon className={styles.close} onClick={() => setOpen(false)} />
-          <h3 style={{ marginBottom: 30 }}>{!id ? "Add" : "Edit"} Workflow</h3>
+          <h3 style={{ marginBottom: 30 }}>
+            {!id ? "New" : "Edit"} {type}
+          </h3>
           <FormControl style={{ marginBottom: 30 }}>
             <InputLabel htmlFor="workflowName">Name</InputLabel>
             <Input
@@ -66,7 +70,7 @@ const EditModal: FC<IProps> = ({
             className={styles.submit}
             onClick={handleUpdate}
           >
-            {!id ? "Add" : "Update"}
+            {!id ? "Create" : "Update"}
           </ButtonCustom>
         </div>
       </Box>

@@ -1,7 +1,10 @@
-import React, { type ReactElement, type SyntheticEvent } from "react";
+import { ReactElement, SyntheticEvent, useState } from "react";
 import { Box, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import styleConfig from "@/constants/styleConfig";
+import ViewsTable from "@/widgets/workflow/ViewsTable";
+import StatesTable from "@/widgets/workflow/StatesTable";
+import RoutesTable from "@/widgets/workflow/RoutesTable";
 import LayoutDashboard from "@/widgets/layout/LayoutDashboard";
 
 import styles from "./index.module.scss";
@@ -10,7 +13,7 @@ const Page = (): ReactElement => {
   /**
    * States
    */
-  const [value, setValue] = React.useState("1");
+  const [value, setValue] = useState("1");
 
   /**
    * Handlers
@@ -59,7 +62,7 @@ const Page = (): ReactElement => {
             marginTop: 2,
           }}
         >
-          Views
+          <ViewsTable />
         </TabPanel>
         <TabPanel
           value="2"
@@ -69,7 +72,7 @@ const Page = (): ReactElement => {
             marginTop: 2,
           }}
         >
-          States
+          <StatesTable />
         </TabPanel>
         <TabPanel
           value="3"
@@ -79,7 +82,7 @@ const Page = (): ReactElement => {
             marginTop: 2,
           }}
         >
-          Routes
+          <RoutesTable />
         </TabPanel>
       </TabContext>
     </Box>

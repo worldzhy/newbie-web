@@ -14,14 +14,14 @@ const Page = (): ReactElement => {
       <div className={styles.addContainer}>
         <ButtonCustom
           size="small"
-          customColor="light"
+          customColor="dark"
           onClick={() => setOpen(true)}
         >
           New Workflow
         </ButtonCustom>
       </div>
       <WorkflowTable />
-      <EditModal open={open} setOpen={setOpen} />
+      <EditModal type="workflow" open={open} setOpen={setOpen} />
     </>
   );
 };

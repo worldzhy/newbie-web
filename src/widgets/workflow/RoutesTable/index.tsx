@@ -1,24 +1,33 @@
 import { FC, useState } from "react";
-import { useRouter } from "next/router";
 import { Box, Modal } from "@mui/material";
 import { ModalStyle } from "@/constants/styleConfig";
-import EditModal from "../EditModal";
 import CloseIcon from "@mui/icons-material/Close";
 import TableCustom from "@/components/TableCustom";
 import ButtonCustom from "@/components/ButtonCustom";
 
 import styles from "./index.module.scss";
 
-const headers = ["Workflow", "Description", "Actions"];
+const headers = ["View", "State", "Next View", "Actions"];
 
 // TODO: remove mock data
 const rows = [
-  { id: 1, name: "Workflow 1", desc: "Description 1", Actions: [] },
-  { id: 2, name: "Workflow 2", desc: "Description 2", Actions: [] },
+  {
+    id: 1,
+    view: "view 1",
+    state: "state 1",
+    nextView: "next view 1",
+    Actions: [],
+  },
+  {
+    id: 2,
+    view: "view 2",
+    state: "state 2",
+    nextView: "next view 2",
+    Actions: [],
+  },
 ];
 
 const Table: FC = () => {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [values, setValues] = useState<any>();
@@ -38,30 +47,6 @@ const Table: FC = () => {
       <ButtonCustom
         customColor="link"
         size="small"
-        onClick={() =>
-          router.push({
-            pathname: "/workflow/manage",
-            query: { id: "1" },
-          })
-        }
-      >
-        Configure
-      </ButtonCustom>
-      <ButtonCustom
-        customColor="link"
-        size="small"
-        onClick={() =>
-          router.push({
-            pathname: "/workflow/run",
-            query: { id: "1" },
-          })
-        }
-      >
-        Run
-      </ButtonCustom>
-      <ButtonCustom
-        customColor="link"
-        size="small"
         onClick={() => {
           setValues(rows[index]);
           setOpenDelete(true);
@@ -77,18 +62,31 @@ const Table: FC = () => {
 
   return (
     <>
+      <div className={styles.addContainer}>
+        <ButtonCustom
+          size="small"
+          customColor="light"
+          onClick={() => setOpen(true)}
+          style={{ marginRight: 20 }}
+        >
+          Set Starting Point
+        </ButtonCustom>
+        <ButtonCustom
+          size="small"
+          customColor="dark"
+          onClick={() => setOpen(true)}
+        >
+          New Route
+        </ButtonCustom>
+      </div>
       <TableCustom
         rows={rows.map(({ id, ...rest }) => rest)}
         headers={headers}
         isLastColActions={true}
         children={actionsRender}
       />
-      <EditModal
-        type="workflow"
-        open={open}
-        values={values}
-        setOpen={setOpen}
-      />
+      {/* TODO: add edit modal */}
+      {/* <EditModal type="state" open={open} setOpen={setOpen} values={values} /> */}
       <Modal open={openDelete} onClose={() => setOpenDelete(false)}>
         <Box sx={ModalStyle}>
           <div className={styles.container}>
@@ -99,7 +97,7 @@ const Table: FC = () => {
               }}
             />
             <h3 style={{ marginBottom: 30 }}>
-              Are you sure you want to delete {values?.name}
+              Are you sure you want to delete {values?.view}
             </h3>
             <ButtonCustom
               size="small"
