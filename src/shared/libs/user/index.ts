@@ -6,7 +6,7 @@ export default class User {
   private readonly baseUrl = `${process.env.BASE_URL ?? ''}/users`;
   private readonly accessToken = getCookie('token');
 
-  public async get(): Promise<IUserOutput> {
+  public async get(): Promise<IGetUserOutput> {
     const url = `${this.baseUrl}?pageSize=100&page=1&roleId=1&name=1`;
     const config = {
       headers: {
@@ -14,6 +14,26 @@ export default class User {
       },
     };
     const res = await axiosInstance.get(url, config);
+    return res.data;
+  }
+
+  public async add(payload: IAddUserPayload): Promise<IAddUserResponse> {
+    const { email, phone, username, password, roleIds } = payload;
+    const url = this.baseUrl;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${this.accessToken as string}`,
+      },
+    };
+    const data = {
+      email,
+      phone,
+      username,
+      password,
+      status: 'ACTIVE',
+      roleIds,
+    };
+    const res = await axiosInstance.post(url, data, config);
     return res.data;
   }
 }
@@ -37,7 +57,7 @@ export interface IUser {
   roles: IRole[];
 }
 
-interface IUserOutput {
+interface IGetUserOutput {
   records: IUser[];
   pagination: {
     page: number;
@@ -45,4 +65,23 @@ interface IUserOutput {
     currentNumberOfRecords: number;
     totalNumberOfRecords: number;
   };
+}
+
+interface IAddUserPayload {
+  email: string;
+  phone: string;
+  username: string;
+  password: string;
+  roleIds: Array<{
+    id: string;
+  }>;
+}
+
+interface IAddUserResponse {
+  id: string;
+  email: string;
+  phone: string;
+  username: string;
+  status: string;
+  profiles: [];
 }
