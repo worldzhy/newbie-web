@@ -49,17 +49,17 @@ const EditModal: FC<IProps> = ({
             {!id ? "New" : "Edit"} {type}
           </h3>
           <FormControl style={{ marginBottom: 30 }}>
-            <InputLabel htmlFor="workflowName">Name</InputLabel>
+            <InputLabel htmlFor="name">Name</InputLabel>
             <Input
-              id="workflowName"
+              id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </FormControl>
           <FormControl style={{ marginBottom: 20 }}>
-            <InputLabel htmlFor="workflowDesc">Description</InputLabel>
+            <InputLabel htmlFor="desc">Description</InputLabel>
             <Input
-              id="workflowDesc"
+              id="desc"
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
             />

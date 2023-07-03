@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { Box, Modal } from "@mui/material";
 import { ModalStyle } from "@/constants/styleConfig";
+import RouteModal from "../RouteModal";
 import CloseIcon from "@mui/icons-material/Close";
 import TableCustom from "@/components/TableCustom";
 import ButtonCustom from "@/components/ButtonCustom";
@@ -13,17 +14,25 @@ const headers = ["View", "State", "Next View", "Actions"];
 const rows = [
   {
     id: 1,
+    startPoint: true,
     view: "view 1",
+    viewId: "1",
     state: "state 1",
+    stateId: "1",
     nextView: "next view 1",
-    Actions: [],
+    nextViewId: "1",
+    actions: [],
   },
   {
     id: 2,
+    startPoint: false,
+    viewId: "2",
     view: "view 2",
+    stateId: "2",
     state: "state 2",
     nextView: "next view 2",
-    Actions: [],
+    nextViewId: "2",
+    actions: [],
   },
 ];
 
@@ -63,10 +72,11 @@ const Table: FC = () => {
   return (
     <>
       <div className={styles.addContainer}>
+        {/* TODO: check if we need this button */}
         <ButtonCustom
           size="small"
           customColor="light"
-          onClick={() => setOpen(true)}
+          onClick={() => {}}
           style={{ marginRight: 20 }}
         >
           Set Starting Point
@@ -80,13 +90,17 @@ const Table: FC = () => {
         </ButtonCustom>
       </div>
       <TableCustom
-        rows={rows.map(({ id, ...rest }) => rest)}
+        rows={rows.map(({ view, state, nextView, actions }) => ({
+          view,
+          state,
+          nextView,
+          actions,
+        }))}
         headers={headers}
         isLastColActions={true}
         children={actionsRender}
       />
-      {/* TODO: add edit modal */}
-      {/* <EditModal type="state" open={open} setOpen={setOpen} values={values} /> */}
+      <RouteModal open={open} setOpen={setOpen} values={values} />
       <Modal open={openDelete} onClose={() => setOpenDelete(false)}>
         <Box sx={ModalStyle}>
           <div className={styles.container}>
