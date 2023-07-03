@@ -1,0 +1,20 @@
+.container {
+  width: 512px;
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  background-color: white;
+}
+
+.close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.submit {
+  width: 100px;
+  margin-top: 20px;
+}

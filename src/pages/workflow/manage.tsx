@@ -25,7 +25,7 @@ const Page = (): ReactElement => {
         <Box>
           <TabList
             onChange={handleChange}
-            aria-label="lab API tabs example"
+            aria-label="lab API tabs"
             sx={{
               "& .MuiTabs-flexContainer": { gap: 2 },
               "& .MuiTabs-indicator": { display: "none" },
@@ -33,20 +33,22 @@ const Page = (): ReactElement => {
             variant="scrollable"
             scrollButtons="auto"
           >
-            {["Tab 1", "Tab 2", "Tab 3"].map((label: string, index: number) => (
-              <Tab
-                key={label}
-                className={styles.tabItems}
-                label={label}
-                value={(index + 1).toString()}
-                sx={{
-                  "&.Mui-selected": {
-                    color: styleConfig.color.primaryWhiteColor,
-                    background: styleConfig.color.primaryBlackColor,
-                  },
-                }}
-              />
-            ))}
+            {["Views", "States", "Routes"].map(
+              (label: string, index: number) => (
+                <Tab
+                  key={label}
+                  className={styles.tabItems}
+                  label={label}
+                  value={(index + 1).toString()}
+                  sx={{
+                    "&.Mui-selected": {
+                      color: styleConfig.color.primaryWhiteColor,
+                      background: styleConfig.color.primaryBlackColor,
+                    },
+                  }}
+                />
+              )
+            )}
           </TabList>
         </Box>
         <TabPanel
@@ -57,7 +59,7 @@ const Page = (): ReactElement => {
             marginTop: 2,
           }}
         >
-          Tab 1
+          Views
         </TabPanel>
         <TabPanel
           value="2"
@@ -67,7 +69,7 @@ const Page = (): ReactElement => {
             marginTop: 2,
           }}
         >
-          Tab 2
+          States
         </TabPanel>
         <TabPanel
           value="3"
@@ -77,7 +79,7 @@ const Page = (): ReactElement => {
             marginTop: 2,
           }}
         >
-          Tab 3
+          Routes
         </TabPanel>
       </TabContext>
     </Box>

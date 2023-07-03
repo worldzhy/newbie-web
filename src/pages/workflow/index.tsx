@@ -1,27 +1,27 @@
-import { type ReactElement, useState } from 'react';
-import AddModal from '@/widgets/workflow/AddModal';
-import ButtonCustom from '@/components/ButtonCustom';
-import WorkflowTable from '@/widgets/workflow/WorkflowTable';
-import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
+import { ReactElement, useState } from "react";
+import EditModal from "@/widgets/workflow/EditModal";
+import ButtonCustom from "@/components/ButtonCustom";
+import WorkflowTable from "@/widgets/workflow/WorkflowTable";
+import LayoutDashboard from "@/widgets/layout/LayoutDashboard";
+
+import styles from "./index.module.scss";
 
 const Page = (): ReactElement => {
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <div style={{ marginBottom: 10 }}>
+      <div className={styles.addContainer}>
         <ButtonCustom
           size="small"
           customColor="light"
-          onClick={() => {
-            setOpen(true);
-          }}
+          onClick={() => setOpen(true)}
         >
-          Add Workflow
+          New Workflow
         </ButtonCustom>
       </div>
       <WorkflowTable />
-      <AddModal open={open} setOpen={setOpen} />
+      <EditModal open={open} setOpen={setOpen} />
     </>
   );
 };

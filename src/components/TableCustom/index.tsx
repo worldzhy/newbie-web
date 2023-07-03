@@ -1,4 +1,4 @@
-import React, { type ReactElement, type FC, type ReactNode } from 'react';
+import React, { type ReactElement, type FC, type ReactNode } from "react";
 import {
   Table,
   TableBody,
@@ -9,22 +9,22 @@ import {
   Paper,
   Skeleton,
   Stack,
-} from '@mui/material';
-import styleConfig from '@/constants/styleConfig';
-import styles from './index.module.scss';
+} from "@mui/material";
+import styleConfig from "@/constants/styleConfig";
+import styles from "./index.module.scss";
 
 interface Props {
   headers: string[];
-  rows: Array<Record<string, any>>;
   isLastColActions: boolean;
-  children?: ReactNode;
+  rows: Array<Record<string, any>>;
+  children?: (key: number) => ReactNode;
 }
 
 const TableCustom: FC<Props> = ({
-  headers,
   rows,
-  isLastColActions,
+  headers,
   children,
+  isLastColActions,
 }): ReactElement => {
   const skeleton = (
     <Stack direction="column" spacing={1} className={styles.skeleton}>
@@ -41,13 +41,13 @@ const TableCustom: FC<Props> = ({
           <TableRow
             sx={{
               backgroundColor: `${styleConfig.color.primaryGrayColor}`,
-              '& td, & th': {
+              "& td, & th": {
                 border: `2px solid ${styleConfig.color.primaryBlackColor}`,
               },
-              '& th': {
+              "& th": {
                 color: `${styleConfig.color.primaryWhiteColor}`,
-                fontSize: '14px',
-                fontWeight: '700',
+                fontSize: "14px",
+                fontWeight: "700",
               },
             }}
           >
@@ -59,17 +59,17 @@ const TableCustom: FC<Props> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, key) => (
+          {rows.map((row, rowKey) => (
             <TableRow
-              key={key}
+              key={rowKey}
               sx={{
-                '& td, & th': {
+                "& td, & th": {
                   border: `2px solid ${styleConfig.color.primaryBlackColor}`,
                 },
-                '& th': {
+                "& th": {
                   color: `${styleConfig.color.primaryGrayColor}`,
-                  fontSize: '14px',
-                  fontWeight: '400',
+                  fontSize: "14px",
+                  fontWeight: "400",
                 },
               }}
             >
@@ -77,7 +77,7 @@ const TableCustom: FC<Props> = ({
                 if (isLastColActions && Object.keys(row).length - 1 === key) {
                   return (
                     <TableCell key={key} align="center">
-                      {children}
+                      {children && children(rowKey)}
                     </TableCell>
                   );
                 }
