@@ -128,11 +128,12 @@ const RolesPermissions: FC<Props> = ({
         }
       } catch (err: unknown) {
         if (!ignore) {
-          showError(err);
           if (isUnauthorized(err)) {
             delayExecute(() => {
               void router.push('/');
-            });
+            }, 0);
+          } else {
+            showError(err);
           }
         }
       }

@@ -91,7 +91,7 @@ export const sendRequest = async (
 };
 
 export const delayExecute = (fn: () => void, delayMs = 2000): void => {
-  setTimeout(fn, delayMs);
+  delayMs === 0 ? fn() : setTimeout(fn, delayMs);
 };
 
 export const isUnauthorized = (err: unknown): boolean => {
