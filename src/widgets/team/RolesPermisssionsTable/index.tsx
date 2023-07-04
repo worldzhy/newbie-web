@@ -1,9 +1,10 @@
 import React, { type ReactElement, type FC } from 'react';
-import { Skeleton, Stack, FormGroup, FormControlLabel } from '@mui/material';
+import { FormGroup, FormControlLabel } from '@mui/material';
 import CheckboxCustom from '@/components/CheckboxCustom';
 import TableContainerCustom from '@/components/TableContainerCustom';
 import TableRowCustom from '@/components/TableRowCustom';
 import TableCellCustom from '@/components/TableCellCustom';
+import TableSkeletonCustom from '@/components/TableSkeletonCustom';
 
 /**
  *
@@ -44,14 +45,6 @@ const RolesPermisssionsTable: FC<Props> = ({
    */
   const headers = ['Resouce', 'Permission'];
 
-  const skeleton = (
-    <Stack direction="column" spacing={1}>
-      {Array.from(new Array(3)).map((_, key: number) => (
-        <Skeleton key={key} variant="rounded" animation="wave" height={60} />
-      ))}
-    </Stack>
-  );
-
   const table = (
     <TableContainerCustom headers={headers}>
       {data
@@ -82,7 +75,7 @@ const RolesPermisssionsTable: FC<Props> = ({
     </TableContainerCustom>
   );
 
-  return data.length === 0 ? skeleton : table;
+  return data.length === 0 ? <TableSkeletonCustom /> : table;
 };
 
 export default RolesPermisssionsTable;
