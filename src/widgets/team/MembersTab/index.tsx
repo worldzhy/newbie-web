@@ -26,7 +26,7 @@ interface IData {
   role: string;
 }
 
-const TeamMembers = (): ReactElement => {
+const MembersTab = (): ReactElement => {
   /**
    * Declarations
    */
@@ -183,4 +183,4 @@ const TeamMembers = (): ReactElement => {
   );
 };
 
-export default TeamMembers;
+export default MembersTab;

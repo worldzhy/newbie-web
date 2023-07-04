@@ -4,7 +4,7 @@ import { Box, Tab } from '@mui/material';
 import styles from './index.module.scss';
 import styleConfig from '@/constants/styleConfig';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
-import TeamMembers from '@/widgets/team/members';
+import MembersTab from '@/widgets/team/MembersTab';
 import TeamRoles from '@/widgets/team/roles';
 import AboutUsTab from '@/widgets/team/AboutUsTab';
 
@@ -61,7 +61,7 @@ const Page = (): ReactElement => {
             marginTop: 2,
           }}
         >
-          <TeamMembers />
+          <MembersTab />
         </TabPanel>
         <TabPanel
           value="2"
