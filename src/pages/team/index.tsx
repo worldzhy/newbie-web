@@ -6,7 +6,7 @@ import styleConfig from '@/constants/styleConfig';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 import TeamMembers from '@/widgets/team/members';
 import TeamRoles from '@/widgets/team/roles';
-import TeamAboutUs from '@/widgets/team/aboutUs';
+import AboutUsTab from '@/widgets/team/AboutUsTab';
 
 const Page = (): ReactElement => {
   /**
@@ -81,7 +81,7 @@ const Page = (): ReactElement => {
             marginTop: 2,
           }}
         >
-          <TeamAboutUs />
+          <AboutUsTab />
         </TabPanel>
       </TabContext>
     </Box>
