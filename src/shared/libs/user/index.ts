@@ -17,7 +17,7 @@ export default class User {
     return res.data;
   }
 
-  public async add(payload: IAddUserPayload): Promise<IAddUserResponse> {
+  public async create(payload: IAddUserPayload): Promise<IAddUserResponse> {
     const { email, phone, username, password, roleIds } = payload;
     const url = this.baseUrl;
     const config = {

@@ -12,6 +12,8 @@ import { Stack } from '@mui/material';
 import ButtonCustom from '@/components/ButtonCustom';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
+import MultiSelectCustom from '@/components/MultiSelectCustom';
+import Role, { type IRole } from '@/shared/libs/role';
 
 /**
  * Types
@@ -42,6 +44,8 @@ const TeamMembers = (): ReactElement => {
   const [phone, setPhone] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [roles, setRoles] = useState<string[]>([]);
+  const [rolesList, setRolesList] = useState<IRole[]>([]);
 
   /**
    * Data Fetching
@@ -63,6 +67,9 @@ const TeamMembers = (): ReactElement => {
             }
           );
           setData(fetchedData);
+
+          const roles = await new Role().get();
+          setRolesList(roles);
         }
       } catch (err: unknown) {
         if (!ignore) {
@@ -89,10 +96,23 @@ const TeamMembers = (): ReactElement => {
    */
   const createRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      // To do: Add class method
+      const payload = {
+        email,
+        phone,
+        username,
+        password,
+        roleIds: rolesList
+          .filter((r) => roles.includes(r.name))
+          .map((r) => {
+            return {
+              id: r.id,
+            };
+          }),
+      };
+      await new User().create(payload);
     });
     setFetch(!fetch);
-    setModal(false);
+    setModal(false); // To do: If there is validation issue, do not close modal. Applicable to all modal.
   };
 
   return (
@@ -151,6 +171,12 @@ const TeamMembers = (): ReactElement => {
               setPassword(e.target.value);
             }}
           ></FormDialogInputCustom>
+          <MultiSelectCustom
+            label="Roles"
+            options={rolesList.map((r) => r.name)}
+            selected={roles}
+            setSelected={setRoles}
+          />
         </Stack>
       </FormDialogCustom>
     </>

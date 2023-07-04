@@ -65,7 +65,7 @@ export default class Permission {
         const { change, resource, resourceId, action, roleId } = data;
         if (change === 'add') {
           // eslint-disable-next-line @typescript-eslint/return-await
-          return this.add(resource, action, roleId);
+          return this.create(resource, action, roleId);
         } else {
           if (resourceId === null) {
             throw new Error('No resource id found.');
@@ -77,7 +77,7 @@ export default class Permission {
     );
   }
 
-  public async add(
+  public async create(
     resource: string,
     action: string,
     roleId: string
