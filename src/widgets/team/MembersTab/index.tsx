@@ -1,6 +1,5 @@
 import React, { useEffect, type ReactElement, useState } from 'react';
 import { useRouter } from 'next/router';
-import TableCustom from '@/components/TableCustom';
 import User from '@/shared/libs/user';
 import {
   delayExecute,
@@ -14,6 +13,9 @@ import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 import MultiSelectCustom from '@/components/MultiSelectCustom';
 import Role, { type IRole } from '@/shared/libs/role';
+import TableContainerCustom from '@/components/TableContainerCustom';
+import TableRowCustom from '@/components/TableRowCustom';
+import TableCellCustom from '@/components/TableCellCustom';
 
 /**
  * Types
@@ -126,11 +128,16 @@ const MembersTab = (): ReactElement => {
         >
           New member
         </ButtonCustom>
-        <TableCustom
-          headers={headers}
-          rows={data}
-          isLastColActions={false}
-        ></TableCustom>
+        <TableContainerCustom headers={headers}>
+          {data.map(({ name, email, phone, role }, rowKey) => (
+            <TableRowCustom key={rowKey}>
+              <TableCellCustom>{name}</TableCellCustom>
+              <TableCellCustom>{email}</TableCellCustom>
+              <TableCellCustom>{phone}</TableCellCustom>
+              <TableCellCustom>{role}</TableCellCustom>
+            </TableRowCustom>
+          ))}
+        </TableContainerCustom>
       </Stack>
       <FormDialogCustom
         open={modal}
