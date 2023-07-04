@@ -5,7 +5,7 @@ import styles from './index.module.scss';
 import styleConfig from '@/constants/styleConfig';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 import MembersTab from '@/widgets/team/MembersTab';
-import TeamRoles from '@/widgets/team/roles';
+import RolesTab from '@/widgets/team/RolesTab';
 import AboutUsTab from '@/widgets/team/AboutUsTab';
 
 const Page = (): ReactElement => {
@@ -71,7 +71,7 @@ const Page = (): ReactElement => {
             marginTop: 2,
           }}
         >
-          <TeamRoles />
+          <RolesTab />
         </TabPanel>
         <TabPanel
           value="3"

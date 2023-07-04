@@ -9,12 +9,12 @@ import {
   showError,
 } from '@/shared/libs/mixins';
 import Role from '@/shared/libs/role';
-import RolesPermissions from './permissionsList';
-import RolesTable from './rolesList';
+import RolesPermissions from '../roles/permissionsList';
+import RolesTable from '../roles/rolesList';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 
-const TeamRoles = (): ReactElement => {
+const RolesTab = (): ReactElement => {
   /**
    * Declarations
    */
@@ -128,4 +128,4 @@ const TeamRoles = (): ReactElement => {
   );
 };
 
-export default TeamRoles;
+export default RolesTab;
