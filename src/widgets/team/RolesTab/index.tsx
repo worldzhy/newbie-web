@@ -9,8 +9,8 @@ import {
   showError,
 } from '@/shared/libs/mixins';
 import Role from '@/shared/libs/role';
-import RolesPermissions from '../roles/permissionsList';
-import RolesTable from '../roles/rolesList';
+import RolesPermissionsModal from '../RolesPermisssionsModal';
+import RolesTable from '@/widgets/team/RolesTable';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 
@@ -119,7 +119,7 @@ const RolesTab = (): ReactElement => {
           }}
         ></FormDialogInputCustom>
       </FormDialogCustom>
-      <RolesPermissions
+      <RolesPermissionsModal
         activeRole={activeRole}
         setPermissionModal={setPermissionModal}
         permissionModal={permissionModal}

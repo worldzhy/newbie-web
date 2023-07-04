@@ -35,7 +35,7 @@ interface IPermissionByResource {
   }>;
 }
 
-const TablePermission: FC<Props> = ({
+const RolesPermisssionsTable: FC<Props> = ({
   data,
   onChangeHandler,
 }): ReactElement => {
@@ -85,4 +85,4 @@ const TablePermission: FC<Props> = ({
   return data.length === 0 ? skeleton : table;
 };
 
-export default TablePermission;
+export default RolesPermisssionsTable;

@@ -8,7 +8,7 @@ import {
   showError,
 } from '@/shared/libs/mixins';
 import FormDialogCustom from '@/components/FormDialogCustom';
-import TablePermission from './table';
+import TablePermission from '../RolesPermisssionsTable';
 
 /**
  *
@@ -49,7 +49,7 @@ interface IPermissionByResource {
   }>;
 }
 
-const RolesPermissions: FC<Props> = ({
+const RolesPermissionsModal: FC<Props> = ({
   activeRole,
   permissionModal,
   setPermissionModal,
@@ -162,4 +162,4 @@ const RolesPermissions: FC<Props> = ({
   );
 };
 
-export default RolesPermissions;
+export default RolesPermissionsModal;
