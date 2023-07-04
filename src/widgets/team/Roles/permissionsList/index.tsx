@@ -150,7 +150,7 @@ const RolesPermissions: FC<Props> = ({
   return (
     <FormDialogCustom
       open={permissionModal}
-      title={`Edit ${activeRole?.name as string} Permissions`}
+      title={`Edit Permissions for ${activeRole?.name as string}`}
       closeDialogHandler={() => {
         setPermissionModal(false);
       }}
