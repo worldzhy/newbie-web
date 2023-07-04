@@ -1,5 +1,12 @@
-import { FC, useState } from "react";
-import { Box, Modal } from "@mui/material";
+import { FC, useEffect, useState } from "react";
+import {
+  Box,
+  Modal,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 import { ModalStyle } from "@/constants/styleConfig";
 import RouteModal from "../RouteModal";
 import CloseIcon from "@mui/icons-material/Close";
@@ -13,7 +20,7 @@ const headers = ["View", "State", "Next View", "Actions"];
 // TODO: remove mock data
 const rows = [
   {
-    id: 1,
+    id: "1",
     startPoint: true,
     view: "view 1",
     viewId: "1",
@@ -24,7 +31,7 @@ const rows = [
     actions: [],
   },
   {
-    id: 2,
+    id: "2",
     startPoint: false,
     viewId: "2",
     view: "view 2",
@@ -38,8 +45,10 @@ const rows = [
 
 const Table: FC = () => {
   const [open, setOpen] = useState(false);
+  const [openStartPoint, setOpenStartPoint] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [values, setValues] = useState<any>();
+  const [startPointId, setStartPointId] = useState("");
 
   const actionsRender = (index: number) => (
     <>
@@ -68,15 +77,21 @@ const Table: FC = () => {
   const handleDelete = () => {
     // TODO: handle delete
   };
+  const handleUpdateStartPoint = () => {
+    // TODO: handle update start point
+  };
+
+  useEffect(() => {
+    setStartPointId(rows.find(({ startPoint }) => startPoint)?.id || "");
+  }, [rows]);
 
   return (
     <>
       <div className={styles.addContainer}>
-        {/* TODO: check if we need this button */}
         <ButtonCustom
           size="small"
           customColor="light"
-          onClick={() => {}}
+          onClick={() => setOpenStartPoint(true)}
           style={{ marginRight: 20 }}
         >
           Set Starting Point
@@ -90,8 +105,8 @@ const Table: FC = () => {
         </ButtonCustom>
       </div>
       <TableCustom
-        rows={rows.map(({ view, state, nextView, actions }) => ({
-          view,
+        rows={rows.map(({ startPoint, view, state, nextView, actions }) => ({
+          view: startPoint ? `(*) ${view}` : view,
           state,
           nextView,
           actions,
@@ -106,9 +121,7 @@ const Table: FC = () => {
           <div className={styles.container}>
             <CloseIcon
               className={styles.close}
-              onClick={() => {
-                setOpenDelete(false);
-              }}
+              onClick={() => setOpenDelete(false)}
             />
             <h3 style={{ marginBottom: 30 }}>
               Are you sure you want to delete {values?.view}
@@ -120,6 +133,41 @@ const Table: FC = () => {
               onClick={handleDelete}
             >
               Delete
+            </ButtonCustom>
+          </div>
+        </Box>
+      </Modal>
+      <Modal open={openStartPoint} onClose={() => setOpenStartPoint(false)}>
+        <Box sx={ModalStyle}>
+          <div className={styles.container}>
+            <CloseIcon
+              className={styles.close}
+              onClick={() => setOpenStartPoint(false)}
+            />
+            <h3 style={{ marginBottom: 30 }}>Choice Start Point</h3>
+            <FormControl style={{ marginBottom: 20 }}>
+              <InputLabel htmlFor="startPoint">Start Point</InputLabel>
+              <Select
+                id="startPoint"
+                labelId="startPoint"
+                value={startPointId}
+                label="Start Point"
+                onChange={(e) => setStartPointId(e.target.value)}
+              >
+                {rows.map(({ id, view }) => (
+                  <MenuItem value={id} key={id}>
+                    {view}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <ButtonCustom
+              size="small"
+              customColor="light"
+              className={styles.submit}
+              onClick={handleUpdateStartPoint}
+            >
+              Update
             </ButtonCustom>
           </div>
         </Box>

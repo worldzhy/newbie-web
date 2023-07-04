@@ -30,17 +30,15 @@ interface IProps {
   setOpen: (open: boolean) => void;
 }
 
-const RouteModal: FC<IProps> = ({
-  open,
-  setOpen,
-  values = {
-    id: undefined,
-    startPoint: false,
-    viewId: "",
-    stateId: "",
-    nextViewId: "",
-  },
-}) => {
+const defaultValues = {
+  id: undefined,
+  startPoint: false,
+  viewId: "",
+  stateId: "",
+  nextViewId: "",
+};
+
+const RouteModal: FC<IProps> = ({ open, setOpen, values = defaultValues }) => {
   const {
     id,
     startPoint: initStartPoint,
@@ -48,17 +46,22 @@ const RouteModal: FC<IProps> = ({
     stateId: initState,
     nextViewId: initNextView,
   } = values;
-  const [startPoint, setStartPotin] = useState(false);
-  const [view, setView] = useState("");
-  const [state, setState] = useState("");
-  const [nextView, setNextView] = useState("");
+  const [formValues, setFormValues] = useState<any>(defaultValues);
+  const { startPoint, viewId, stateId, nextViewId } = formValues;
 
+  const handleChange = (event: any) => {
+    const { name, value, checked } = event.target;
+    setFormValues({
+      ...formValues,
+      [name]: name === "startPoint" ? checked : value,
+    });
+  };
   const handleUpdate = (): void => {
     console.log(
       startPoint,
-      view,
-      state,
-      nextView,
+      viewId,
+      stateId,
+      nextViewId,
       "----> startPoint, view, state, nextView"
     );
     if (id) {
@@ -66,18 +69,17 @@ const RouteModal: FC<IProps> = ({
     } else {
       // TODO: do add
     }
-    setStartPotin(false);
-    setView("");
-    setState("");
-    setNextView("");
+    setFormValues(defaultValues);
     setOpen(false);
   };
 
   useEffect(() => {
-    setStartPotin(initStartPoint as boolean);
-    setView(initView);
-    setState(initState);
-    setNextView(initNextView);
+    setFormValues({
+      startPoint: initStartPoint,
+      viewId: initView,
+      stateId: initState,
+      nextViewId: initNextView,
+    });
   }, [initStartPoint, initView, initState, initNextView]);
 
   return (
@@ -88,12 +90,8 @@ const RouteModal: FC<IProps> = ({
           <h3 style={{ marginBottom: 30 }}>{!id ? "New" : "Edit"} Route</h3>
           <FormControlLabel
             label="Start Point"
-            control={
-              <Switch
-                checked={startPoint}
-                onChange={(e) => setStartPotin(e.target.checked)}
-              />
-            }
+            name="startPoint"
+            control={<Switch checked={startPoint} onChange={handleChange} />}
             style={{ marginBottom: 30 }}
           />
           <FormControl style={{ marginBottom: 20 }}>
@@ -101,9 +99,10 @@ const RouteModal: FC<IProps> = ({
             <Select
               id="view"
               labelId="view"
-              value={view}
+              name="viewId"
+              value={viewId}
               label="View"
-              onChange={(e) => setView(e.target.value)}
+              onChange={handleChange}
             >
               {views.map(({ id, name }) => (
                 <MenuItem value={id} key={id}>
@@ -117,9 +116,10 @@ const RouteModal: FC<IProps> = ({
             <Select
               id="state"
               labelId="state"
-              value={state}
+              name="stateId"
+              value={stateId}
               label="State"
-              onChange={(e) => setState(e.target.value)}
+              onChange={handleChange}
             >
               {states.map(({ id, name }) => (
                 <MenuItem value={id} key={id}>
@@ -133,9 +133,10 @@ const RouteModal: FC<IProps> = ({
             <Select
               id="nextView"
               labelId="nextView"
-              value={nextView}
+              name="nextViewId"
+              value={nextViewId}
               label="Next View"
-              onChange={(e) => setNextView(e.target.value)}
+              onChange={handleChange}
             >
               {views.map(({ id, name }) => (
                 <MenuItem value={id} key={id}>
