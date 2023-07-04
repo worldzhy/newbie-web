@@ -5,12 +5,12 @@ import {
   FormControl,
   ListItemText,
   Select,
-  Checkbox,
   Typography,
   Stack,
 } from '@mui/material';
 import { type SelectChangeEvent } from '@mui/material/Select';
 import styleConfig from '@/constants/styleConfig';
+import CheckboxCustom from '../CheckboxCustom';
 
 interface Props {
   label: string;
@@ -96,15 +96,7 @@ const MultiSelectCustom: FC<Props> = ({
                 },
               }}
             >
-              <Checkbox
-                checked={selected.includes(opt)}
-                sx={{
-                  color: `${styleConfig.color.primaryBlackColor}`,
-                  '&.Mui-checked': {
-                    color: `${styleConfig.color.primaryBlackColor}`,
-                  },
-                }}
-              />
+              <CheckboxCustom checked={selected.includes(opt)} />
               <ListItemText primary={opt} />
             </MenuItem>
           ))}

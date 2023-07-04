@@ -11,9 +11,9 @@ import {
   Stack,
   FormGroup,
   FormControlLabel,
-  Checkbox,
 } from '@mui/material';
 import styleConfig from '@/constants/styleConfig';
+import CheckboxCustom from '@/components/CheckboxCustom';
 
 /**
  *
@@ -110,14 +110,8 @@ const TablePermission: FC<Props> = ({
                       <FormControlLabel
                         key={key}
                         control={
-                          <Checkbox
+                          <CheckboxCustom
                             checked={p.allow}
-                            sx={{
-                              color: `${styleConfig.color.primaryBlackColor}`,
-                              '&.Mui-checked': {
-                                color: `${styleConfig.color.primaryBlackColor}`,
-                              },
-                            }}
                             onChange={() => {
                               onChangeHandler(resource, p.action, p.id);
                             }}
