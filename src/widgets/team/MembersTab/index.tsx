@@ -33,7 +33,7 @@ const MembersTab = (): ReactElement => {
    * Declarations
    */
   const router = useRouter();
-  const headers = ['Name', 'Email', 'Phone', 'Role'];
+  const headers = ['Name', 'Email', 'Phone', 'Role', 'Actions'];
 
   /**
    * States
@@ -135,6 +135,14 @@ const MembersTab = (): ReactElement => {
               <TableCellCustom>{email}</TableCellCustom>
               <TableCellCustom>{phone}</TableCellCustom>
               <TableCellCustom>{role}</TableCellCustom>
+              <TableCellCustom>
+                <ButtonCustom customColor="link" onClick={() => {}}>
+                  Edit
+                </ButtonCustom>
+                <ButtonCustom customColor="link" onClick={() => {}}>
+                  Delete
+                </ButtonCustom>
+              </TableCellCustom>
             </TableRowCustom>
           ))}
         </TableContainerCustom>
