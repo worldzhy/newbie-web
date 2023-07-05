@@ -1,8 +1,46 @@
-import { type ReactElement } from 'react';
-import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
+import { ReactElement } from "react";
+import { Card, CardActions, CardContent, Typography } from "@mui/material";
+import ButtonCustom from "@/components/ButtonCustom";
+import LayoutDashboard from "@/widgets/layout/LayoutDashboard";
+
+const mockStep = {
+  startPoint: true,
+  view: "View 1",
+  desc: "this is desc",
+  state: ["State 1", "State 2", "State 3"],
+};
 
 const Page = (): ReactElement => {
-  return <>this is run page</>;
+  const { startPoint, view, desc, state } = mockStep;
+
+  const handleNext = () => {
+    // TODO: handle next
+  };
+
+  return (
+    <Card sx={{ maxWidth: 345 }}>
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          {`${startPoint ? "(Start Point)" : ""} ${view}`}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {desc}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        {state.map((item, index) => (
+          <ButtonCustom
+            key={index}
+            customColor="link"
+            size="small"
+            onClick={handleNext}
+          >
+            {item}
+          </ButtonCustom>
+        ))}
+      </CardActions>
+    </Card>
+  );
 };
 
 export default Page;
