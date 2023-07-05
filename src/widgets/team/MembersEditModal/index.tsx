@@ -6,7 +6,7 @@ import React, {
   useReducer,
 } from 'react';
 import { useRouter } from 'next/router';
-import User, { type IUser } from '@/shared/libs/user';
+import { type IUser } from '@/shared/libs/user';
 import {
   delayExecute,
   isUnauthorized,
@@ -24,6 +24,7 @@ import Role, { type IRole } from '@/shared/libs/role';
  */
 
 interface Props {
+  activeMember: IUser | undefined;
   data: IUser[];
   setData: React.Dispatch<React.SetStateAction<IUser[]>>;
   modal: boolean;
@@ -35,9 +36,11 @@ interface INewMember {
   phone: string;
   username: string;
   password: string;
+  roles: string[];
 }
 
-const MembersCreateModal: FC<Props> = ({
+const MembersEditModal: FC<Props> = ({
+  activeMember,
   data,
   setData,
   modal,
@@ -53,7 +56,7 @@ const MembersCreateModal: FC<Props> = ({
    */
   const [isProcessing, setIsProcessing] = useState(false);
   const [rolesList, setRolesList] = useState<IRole[]>([]);
-  const [selectedRoleNames, setSelectedRoleNames] = useState<string[]>([]);
+  const [roles, setRoles] = useState<string[]>([]);
   const [newMember, updateNewMember] = useReducer(
     (prev: INewMember, next: Record<string, string | string[]>): INewMember => {
       return { ...prev, ...next };
@@ -63,6 +66,7 @@ const MembersCreateModal: FC<Props> = ({
       phone: '',
       username: '',
       password: '',
+      roles: [],
     }
   );
 
@@ -100,14 +104,9 @@ const MembersCreateModal: FC<Props> = ({
   /**
    * Handlers
    */
-  const createRole = async (): Promise<void> => {
+  const editRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      const roles = rolesList.filter(({ name }) =>
-        selectedRoleNames.includes(name)
-      );
-      const newMemberData = { ...newMember, roles };
-      const res = await new User().create(newMemberData);
-      setData([...data, { id: res.id, ...newMemberData }]);
+      // To do: Add edit role handler
       setModal(false); // To do: If there is validation issue, do not close modal. Applicable to all modal.
     });
   };
@@ -119,7 +118,7 @@ const MembersCreateModal: FC<Props> = ({
       closeDialogHandler={() => {
         setModal(false);
       }}
-      formSubmitHandler={createRole}
+      formSubmitHandler={editRole}
       isProcessing={isProcessing}
     >
       <Stack spacing={1}>
@@ -155,12 +154,12 @@ const MembersCreateModal: FC<Props> = ({
         <MultiSelectCustom
           label="Roles"
           options={rolesList.map((r) => r.name)}
-          selected={selectedRoleNames}
-          setSelected={setSelectedRoleNames}
+          selected={roles}
+          setSelected={setRoles}
         />
       </Stack>
     </FormDialogCustom>
   );
 };
 
-export default MembersCreateModal;
+export default MembersEditModal;

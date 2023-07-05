@@ -18,7 +18,7 @@ export default class User {
   }
 
   public async create(payload: IAddUserPayload): Promise<IAddUserResponse> {
-    const { email, phone, username, password, roleIds } = payload;
+    const { email, phone, username, password, roles } = payload;
     const url = this.baseUrl;
     const config = {
       headers: {
@@ -31,7 +31,7 @@ export default class User {
       username,
       password,
       status: 'ACTIVE',
-      roleIds,
+      roleIds: roles.map((r) => ({ id: r.id })),
     };
     const res = await axiosInstance.post(url, data, config);
     return res.data;
@@ -47,18 +47,21 @@ export interface IUser {
   email: string | null;
   phone: string | null;
   username: string;
-  status: string;
-  lastLoginAt: string;
-  createdAt: string;
-  updatedAt: string;
-  organizationId: null | string;
-  profiles: [];
-  locations: [];
   roles: IRole[];
 }
 
 interface IGetUserOutput {
-  records: IUser[];
+  records: Array<
+    IUser & {
+      status: string;
+      lastLoginAt: string;
+      createdAt: string;
+      updatedAt: string;
+      organizationId: null | string;
+      profiles: [];
+      locations: [];
+    }
+  >;
   pagination: {
     page: number;
     pageSize: number;
@@ -72,9 +75,7 @@ interface IAddUserPayload {
   phone: string;
   username: string;
   password: string;
-  roleIds: Array<{
-    id: string;
-  }>;
+  roles: IRole[];
 }
 
 interface IAddUserResponse {

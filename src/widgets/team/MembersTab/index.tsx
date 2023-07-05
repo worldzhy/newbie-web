@@ -1,6 +1,6 @@
 import React, { useEffect, type ReactElement, useState } from 'react';
 import { useRouter } from 'next/router';
-import User from '@/shared/libs/user';
+import User, { type IUser } from '@/shared/libs/user';
 import { delayExecute, isUnauthorized, showError } from '@/shared/libs/mixins';
 import { Stack } from '@mui/material';
 import ButtonCustom from '@/components/ButtonCustom';
@@ -8,18 +8,11 @@ import TableContainerCustom from '@/components/TableContainerCustom';
 import TableRowCustom from '@/components/TableRowCustom';
 import TableCellCustom from '@/components/TableCellCustom';
 import MembersCreateModal from '../MembersCreateModal';
+import MembersEditModal from '../MembersEditModal';
 
 /**
  * Types
  */
-
-export interface IMember {
-  id: string;
-  username: string;
-  email: string;
-  phone: string;
-  roleNames: string;
-}
 
 const MembersTab = (): ReactElement => {
   /**
@@ -31,11 +24,11 @@ const MembersTab = (): ReactElement => {
   /**
    * States
    */
-  const [data, setData] = useState<IMember[]>([]);
+  const [data, setData] = useState<IUser[]>([]);
   const [createModal, setCreateModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [activeMember, setActiveMember] = useState('');
+  const [activeMember, setActiveMember] = useState<IUser>();
 
   /**
    * Data Fetching
@@ -46,18 +39,7 @@ const MembersTab = (): ReactElement => {
         setData([]);
         if (!ignore) {
           const users = await new User().get();
-          const fetchedData = users.records.map(
-            ({ id, username, email, phone, roles }) => {
-              return {
-                id,
-                username: username ?? 'null',
-                email: email ?? 'null',
-                phone: phone ?? 'null',
-                roleNames: roles[0]?.name ?? 'null',
-              };
-            }
-          );
-          setData(fetchedData);
+          setData(users.records);
         }
       } catch (err: unknown) {
         if (!ignore) {
@@ -91,18 +73,20 @@ const MembersTab = (): ReactElement => {
           New member
         </ButtonCustom>
         <TableContainerCustom headers={headers}>
-          {data.map(({ id, username, email, phone, roleNames }, rowKey) => (
+          {data.map((d, rowKey) => (
             <TableRowCustom key={rowKey}>
-              <TableCellCustom>{username}</TableCellCustom>
-              <TableCellCustom>{email}</TableCellCustom>
-              <TableCellCustom>{phone}</TableCellCustom>
-              <TableCellCustom>{roleNames}</TableCellCustom>
+              <TableCellCustom>{d.username}</TableCellCustom>
+              <TableCellCustom>{d.email}</TableCellCustom>
+              <TableCellCustom>{d.phone}</TableCellCustom>
+              <TableCellCustom>
+                {d.roles.map((r) => r.name).join(', ')}
+              </TableCellCustom>
               <TableCellCustom>
                 <ButtonCustom
                   customColor="link"
                   onClick={() => {
                     setEditModal(true);
-                    setActiveMember(id);
+                    setActiveMember(d);
                   }}
                 >
                   Edit
@@ -111,7 +95,7 @@ const MembersTab = (): ReactElement => {
                   customColor="link"
                   onClick={() => {
                     setDeleteModal(true);
-                    setActiveMember(id);
+                    setActiveMember(d);
                   }}
                 >
                   Delete
@@ -126,6 +110,20 @@ const MembersTab = (): ReactElement => {
         setData={setData}
         modal={createModal}
         setModal={setCreateModal}
+      />
+      <MembersEditModal
+        activeMember={activeMember}
+        data={data}
+        setData={setData}
+        modal={editModal}
+        setModal={setEditModal}
+      />
+      <MembersEditModal
+        activeMember={activeMember}
+        data={data}
+        setData={setData}
+        modal={deleteModal}
+        setModal={setDeleteModal}
       />
     </>
   );
