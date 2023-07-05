@@ -14,7 +14,7 @@ import MembersAddModal from '../MembersAddModal';
  */
 
 export interface IMember {
-  name: string;
+  username: string;
   email: string;
   phone: string;
   role: string;
@@ -45,7 +45,7 @@ const MembersTab = (): ReactElement => {
           const fetchedData = users.records.map(
             ({ username, email, phone, roles }) => {
               return {
-                name: username,
+                username: username ?? 'null',
                 email: email ?? 'null',
                 phone: phone ?? 'null',
                 role: roles[0]?.name ?? 'null',
@@ -86,9 +86,9 @@ const MembersTab = (): ReactElement => {
           New member
         </ButtonCustom>
         <TableContainerCustom headers={headers}>
-          {data.map(({ name, email, phone, role }, rowKey) => (
+          {data.map(({ username, email, phone, role }, rowKey) => (
             <TableRowCustom key={rowKey}>
-              <TableCellCustom>{name}</TableCellCustom>
+              <TableCellCustom>{username}</TableCellCustom>
               <TableCellCustom>{email}</TableCellCustom>
               <TableCellCustom>{phone}</TableCellCustom>
               <TableCellCustom>{role}</TableCellCustom>

@@ -1,4 +1,10 @@
-import React, { useEffect, type ReactElement, useState, type FC } from 'react';
+import React, {
+  useEffect,
+  type ReactElement,
+  useState,
+  type FC,
+  useReducer,
+} from 'react';
 import { useRouter } from 'next/router';
 import User from '@/shared/libs/user';
 import {
@@ -25,6 +31,14 @@ interface Props {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+interface INewMember {
+  email: string;
+  phone: string;
+  username: string;
+  password: string;
+  roles: string[];
+}
+
 const MembersAddModal: FC<Props> = ({
   data,
   setData,
@@ -40,12 +54,20 @@ const MembersAddModal: FC<Props> = ({
    * States
    */
   const [isProcessing, setIsProcessing] = useState(false);
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [roles, setRoles] = useState<string[]>([]);
   const [rolesList, setRolesList] = useState<IRole[]>([]);
+  const [roles, setRoles] = useState<string[]>([]);
+  const [newMember, updateNewMember] = useReducer(
+    (prev: INewMember, next: Record<string, string | string[]>): INewMember => {
+      return { ...prev, ...next };
+    },
+    {
+      email: '',
+      phone: '',
+      username: '',
+      password: '',
+      roles: [],
+    }
+  );
 
   /**
    * Data Fetching
@@ -84,10 +106,10 @@ const MembersAddModal: FC<Props> = ({
   const createRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
       const payload = {
-        email,
-        phone,
-        username,
-        password,
+        username: newMember.username,
+        email: newMember.email,
+        phone: newMember.phone,
+        password: newMember.password,
         roleIds: rolesList
           .filter((r) => roles.includes(r.name))
           .map((r) => {
@@ -100,9 +122,9 @@ const MembersAddModal: FC<Props> = ({
       setData([
         ...data,
         {
-          name: username,
-          email,
-          phone,
+          username: newMember.username,
+          email: newMember.email,
+          phone: newMember.phone,
           role: roles.join(', '),
         },
       ]);
@@ -124,30 +146,30 @@ const MembersAddModal: FC<Props> = ({
         <FormDialogInputCustom
           label="Email"
           type="email"
-          value={email}
+          value={newMember.email}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setEmail(e.target.value);
+            updateNewMember({ email: e.target.value });
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
           label="Phone"
-          value={phone}
+          value={newMember.phone}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setPhone(e.target.value);
+            updateNewMember({ phone: e.target.value });
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
           label="Username"
-          value={username}
+          value={newMember.username}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setUsername(e.target.value);
+            updateNewMember({ username: e.target.value });
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
           label="Password"
-          value={password}
+          value={newMember.password}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setPassword(e.target.value);
+            updateNewMember({ password: e.target.value });
           }}
         ></FormDialogInputCustom>
         <MultiSelectCustom
