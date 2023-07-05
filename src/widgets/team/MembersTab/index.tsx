@@ -72,7 +72,7 @@ const MembersTab = (): ReactElement => {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [router]);
 
   return (
     <>
