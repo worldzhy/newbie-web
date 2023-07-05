@@ -13,7 +13,7 @@ import MembersAddModal from '../MembersAddModal';
  * Types
  */
 
-interface IData {
+export interface IMember {
   name: string;
   email: string;
   phone: string;
@@ -30,7 +30,7 @@ const MembersTab = (): ReactElement => {
   /**
    * States
    */
-  const [data, setData] = useState<IData[]>([]);
+  const [data, setData] = useState<IMember[]>([]);
   const [modal, setModal] = useState(false);
 
   /**

@@ -12,21 +12,15 @@ import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 import MultiSelectCustom from '@/components/MultiSelectCustom';
 import Role, { type IRole } from '@/shared/libs/role';
+import { type IMember } from '@/widgets/team/MembersTab';
 
 /**
  * Types
  */
 
-interface IData {
-  name: string;
-  email: string;
-  phone: string;
-  role: string;
-}
-
 interface Props {
-  data: IData[];
-  setData: React.Dispatch<React.SetStateAction<IData[]>>;
+  data: IMember[];
+  setData: React.Dispatch<React.SetStateAction<IMember[]>>;
   modal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
