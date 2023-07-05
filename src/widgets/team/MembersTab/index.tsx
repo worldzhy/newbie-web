@@ -9,6 +9,7 @@ import TableRowCustom from '@/components/TableRowCustom';
 import TableCellCustom from '@/components/TableCellCustom';
 import MembersCreateModal from '../MembersCreateModal';
 import MembersEditModal from '../MembersEditModal';
+import TableSkeletonCustom from '@/components/TableSkeletonCustom';
 
 /**
  * Types
@@ -25,6 +26,7 @@ const MembersTab = (): ReactElement => {
    * States
    */
   const [data, setData] = useState<IUser[]>([]);
+  const [dataFetch, setDataFetch] = useState(true);
   const [createModal, setCreateModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -40,6 +42,7 @@ const MembersTab = (): ReactElement => {
         if (!ignore) {
           const users = await new User().get();
           setData(users.records);
+          setDataFetch(false);
         }
       } catch (err: unknown) {
         if (!ignore) {
@@ -61,6 +64,44 @@ const MembersTab = (): ReactElement => {
     };
   }, [router]);
 
+  /**
+   * Components
+   */
+  const table = (
+    <TableContainerCustom headers={headers}>
+      {data.map((d, rowKey) => (
+        <TableRowCustom key={rowKey}>
+          <TableCellCustom>{d.username}</TableCellCustom>
+          <TableCellCustom>{d.email}</TableCellCustom>
+          <TableCellCustom>{d.phone}</TableCellCustom>
+          <TableCellCustom>
+            {d.roles.map((r) => r.name).join(', ')}
+          </TableCellCustom>
+          <TableCellCustom>
+            <ButtonCustom
+              customColor="link"
+              onClick={() => {
+                setEditModal(true);
+                setActiveMember(d);
+              }}
+            >
+              Edit
+            </ButtonCustom>
+            <ButtonCustom
+              customColor="link"
+              onClick={() => {
+                setDeleteModal(true);
+                setActiveMember(d);
+              }}
+            >
+              Delete
+            </ButtonCustom>
+          </TableCellCustom>
+        </TableRowCustom>
+      ))}
+    </TableContainerCustom>
+  );
+
   return (
     <>
       <Stack direction="column" spacing={2} alignItems="flex-end">
@@ -72,38 +113,7 @@ const MembersTab = (): ReactElement => {
         >
           New member
         </ButtonCustom>
-        <TableContainerCustom headers={headers}>
-          {data.map((d, rowKey) => (
-            <TableRowCustom key={rowKey}>
-              <TableCellCustom>{d.username}</TableCellCustom>
-              <TableCellCustom>{d.email}</TableCellCustom>
-              <TableCellCustom>{d.phone}</TableCellCustom>
-              <TableCellCustom>
-                {d.roles.map((r) => r.name).join(', ')}
-              </TableCellCustom>
-              <TableCellCustom>
-                <ButtonCustom
-                  customColor="link"
-                  onClick={() => {
-                    setEditModal(true);
-                    setActiveMember(d);
-                  }}
-                >
-                  Edit
-                </ButtonCustom>
-                <ButtonCustom
-                  customColor="link"
-                  onClick={() => {
-                    setDeleteModal(true);
-                    setActiveMember(d);
-                  }}
-                >
-                  Delete
-                </ButtonCustom>
-              </TableCellCustom>
-            </TableRowCustom>
-          ))}
-        </TableContainerCustom>
+        {dataFetch ? <TableSkeletonCustom /> : table}
       </Stack>
       <MembersCreateModal
         data={data}
