@@ -7,7 +7,7 @@ import ButtonCustom from '@/components/ButtonCustom';
 import TableContainerCustom from '@/components/TableContainerCustom';
 import TableRowCustom from '@/components/TableRowCustom';
 import TableCellCustom from '@/components/TableCellCustom';
-import MembersAddModal from '../MembersAddModal';
+import MembersCreateModal from '../MembersCreateModal';
 
 /**
  * Types
@@ -17,7 +17,7 @@ export interface IMember {
   username: string;
   email: string;
   phone: string;
-  role: string;
+  roleNames: string;
 }
 
 const MembersTab = (): ReactElement => {
@@ -48,7 +48,7 @@ const MembersTab = (): ReactElement => {
                 username: username ?? 'null',
                 email: email ?? 'null',
                 phone: phone ?? 'null',
-                role: roles[0]?.name ?? 'null',
+                roleNames: roles[0]?.name ?? 'null',
               };
             }
           );
@@ -86,12 +86,12 @@ const MembersTab = (): ReactElement => {
           New member
         </ButtonCustom>
         <TableContainerCustom headers={headers}>
-          {data.map(({ username, email, phone, role }, rowKey) => (
+          {data.map(({ username, email, phone, roleNames }, rowKey) => (
             <TableRowCustom key={rowKey}>
               <TableCellCustom>{username}</TableCellCustom>
               <TableCellCustom>{email}</TableCellCustom>
               <TableCellCustom>{phone}</TableCellCustom>
-              <TableCellCustom>{role}</TableCellCustom>
+              <TableCellCustom>{roleNames}</TableCellCustom>
               <TableCellCustom>
                 <ButtonCustom customColor="link" onClick={() => {}}>
                   Edit
@@ -104,7 +104,7 @@ const MembersTab = (): ReactElement => {
           ))}
         </TableContainerCustom>
       </Stack>
-      <MembersAddModal
+      <MembersCreateModal
         data={data}
         setData={setData}
         modal={modal}

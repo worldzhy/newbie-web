@@ -39,7 +39,7 @@ interface INewMember {
   roles: string[];
 }
 
-const MembersAddModal: FC<Props> = ({
+const MembersCreateModal: FC<Props> = ({
   data,
   setData,
   modal,
@@ -98,36 +98,20 @@ const MembersAddModal: FC<Props> = ({
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [router]);
 
   /**
    * Handlers
    */
   const createRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      const payload = {
-        username: newMember.username,
-        email: newMember.email,
-        phone: newMember.phone,
-        password: newMember.password,
-        roleIds: rolesList
-          .filter((r) => roles.includes(r.name))
-          .map((r) => {
-            return {
-              id: r.id,
-            };
-          }),
-      };
-      await new User().create(payload);
-      setData([
-        ...data,
-        {
-          username: newMember.username,
-          email: newMember.email,
-          phone: newMember.phone,
-          role: roles.join(', '),
-        },
-      ]);
+      const { username, email, phone, password } = newMember;
+      const roleIds = rolesList
+        .filter(({ name }) => roles.includes(name))
+        .map(({ id }) => ({ id }));
+      const roleNames = roles.join(', ');
+      await new User().create({ username, email, phone, password, roleIds });
+      setData([...data, { username, email, phone, roleNames }]);
       setModal(false); // To do: If there is validation issue, do not close modal. Applicable to all modal.
     });
   };
@@ -183,4 +167,4 @@ const MembersAddModal: FC<Props> = ({
   );
 };
 
-export default MembersAddModal;
+export default MembersCreateModal;
