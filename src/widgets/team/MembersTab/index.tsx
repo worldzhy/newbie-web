@@ -1,21 +1,13 @@
 import React, { useEffect, type ReactElement, useState } from 'react';
 import { useRouter } from 'next/router';
 import User from '@/shared/libs/user';
-import {
-  delayExecute,
-  isUnauthorized,
-  sendRequest,
-  showError,
-} from '@/shared/libs/mixins';
+import { delayExecute, isUnauthorized, showError } from '@/shared/libs/mixins';
 import { Stack } from '@mui/material';
 import ButtonCustom from '@/components/ButtonCustom';
-import FormDialogCustom from '@/components/FormDialogCustom';
-import FormDialogInputCustom from '@/components/FormDialogInputCustom';
-import MultiSelectCustom from '@/components/MultiSelectCustom';
-import Role, { type IRole } from '@/shared/libs/role';
 import TableContainerCustom from '@/components/TableContainerCustom';
 import TableRowCustom from '@/components/TableRowCustom';
 import TableCellCustom from '@/components/TableCellCustom';
+import MembersAddModal from '../MembersAddModal';
 
 /**
  * Types
@@ -40,14 +32,6 @@ const MembersTab = (): ReactElement => {
    */
   const [data, setData] = useState<IData[]>([]);
   const [modal, setModal] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [fetch, setFetch] = useState(false);
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [roles, setRoles] = useState<string[]>([]);
-  const [rolesList, setRolesList] = useState<IRole[]>([]);
 
   /**
    * Data Fetching
@@ -69,9 +53,6 @@ const MembersTab = (): ReactElement => {
             }
           );
           setData(fetchedData);
-
-          const roles = await new Role().get();
-          setRolesList(roles);
         }
       } catch (err: unknown) {
         if (!ignore) {
@@ -92,30 +73,6 @@ const MembersTab = (): ReactElement => {
       ignore = true;
     };
   }, []);
-
-  /**
-   * Handlers
-   */
-  const createRole = async (): Promise<void> => {
-    await sendRequest(setIsProcessing, async () => {
-      const payload = {
-        email,
-        phone,
-        username,
-        password,
-        roleIds: rolesList
-          .filter((r) => roles.includes(r.name))
-          .map((r) => {
-            return {
-              id: r.id,
-            };
-          }),
-      };
-      await new User().create(payload);
-    });
-    setFetch(!fetch);
-    setModal(false); // To do: If there is validation issue, do not close modal. Applicable to all modal.
-  };
 
   return (
     <>
@@ -147,53 +104,12 @@ const MembersTab = (): ReactElement => {
           ))}
         </TableContainerCustom>
       </Stack>
-      <FormDialogCustom
-        open={modal}
-        title="New member"
-        closeDialogHandler={() => {
-          setModal(false);
-        }}
-        formSubmitHandler={createRole}
-        isProcessing={isProcessing}
-      >
-        <Stack spacing={1}>
-          <FormDialogInputCustom
-            label="Email"
-            type="email"
-            value={email}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setEmail(e.target.value);
-            }}
-          ></FormDialogInputCustom>
-          <FormDialogInputCustom
-            label="Phone"
-            value={phone}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setPhone(e.target.value);
-            }}
-          ></FormDialogInputCustom>
-          <FormDialogInputCustom
-            label="Username"
-            value={username}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setUsername(e.target.value);
-            }}
-          ></FormDialogInputCustom>
-          <FormDialogInputCustom
-            label="Password"
-            value={password}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setPassword(e.target.value);
-            }}
-          ></FormDialogInputCustom>
-          <MultiSelectCustom
-            label="Roles"
-            options={rolesList.map((r) => r.name)}
-            selected={roles}
-            setSelected={setRoles}
-          />
-        </Stack>
-      </FormDialogCustom>
+      <MembersAddModal
+        data={data}
+        setData={setData}
+        modal={modal}
+        setModal={setModal}
+      />
     </>
   );
 };
