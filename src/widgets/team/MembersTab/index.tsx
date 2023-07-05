@@ -14,6 +14,7 @@ import MembersCreateModal from '../MembersCreateModal';
  */
 
 export interface IMember {
+  id: string;
   username: string;
   email: string;
   phone: string;
@@ -31,7 +32,10 @@ const MembersTab = (): ReactElement => {
    * States
    */
   const [data, setData] = useState<IMember[]>([]);
-  const [modal, setModal] = useState(false);
+  const [createModal, setCreateModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [activeMember, setActiveMember] = useState('');
 
   /**
    * Data Fetching
@@ -43,8 +47,9 @@ const MembersTab = (): ReactElement => {
         if (!ignore) {
           const users = await new User().get();
           const fetchedData = users.records.map(
-            ({ username, email, phone, roles }) => {
+            ({ id, username, email, phone, roles }) => {
               return {
+                id,
                 username: username ?? 'null',
                 email: email ?? 'null',
                 phone: phone ?? 'null',
@@ -80,23 +85,35 @@ const MembersTab = (): ReactElement => {
         <ButtonCustom
           customColor="dark"
           onClick={() => {
-            setModal(true);
+            setCreateModal(true);
           }}
         >
           New member
         </ButtonCustom>
         <TableContainerCustom headers={headers}>
-          {data.map(({ username, email, phone, roleNames }, rowKey) => (
+          {data.map(({ id, username, email, phone, roleNames }, rowKey) => (
             <TableRowCustom key={rowKey}>
               <TableCellCustom>{username}</TableCellCustom>
               <TableCellCustom>{email}</TableCellCustom>
               <TableCellCustom>{phone}</TableCellCustom>
               <TableCellCustom>{roleNames}</TableCellCustom>
               <TableCellCustom>
-                <ButtonCustom customColor="link" onClick={() => {}}>
+                <ButtonCustom
+                  customColor="link"
+                  onClick={() => {
+                    setEditModal(true);
+                    setActiveMember(id);
+                  }}
+                >
                   Edit
                 </ButtonCustom>
-                <ButtonCustom customColor="link" onClick={() => {}}>
+                <ButtonCustom
+                  customColor="link"
+                  onClick={() => {
+                    setDeleteModal(true);
+                    setActiveMember(id);
+                  }}
+                >
                   Delete
                 </ButtonCustom>
               </TableCellCustom>
@@ -107,8 +124,8 @@ const MembersTab = (): ReactElement => {
       <MembersCreateModal
         data={data}
         setData={setData}
-        modal={modal}
-        setModal={setModal}
+        modal={createModal}
+        setModal={setCreateModal}
       />
     </>
   );

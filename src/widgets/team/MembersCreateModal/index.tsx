@@ -110,8 +110,14 @@ const MembersCreateModal: FC<Props> = ({
         .filter(({ name }) => roles.includes(name))
         .map(({ id }) => ({ id }));
       const roleNames = roles.join(', ');
-      await new User().create({ username, email, phone, password, roleIds });
-      setData([...data, { username, email, phone, roleNames }]);
+      const res = await new User().create({
+        username,
+        email,
+        phone,
+        password,
+        roleIds,
+      });
+      setData([...data, { id: res.id, username, email, phone, roleNames }]);
       setModal(false); // To do: If there is validation issue, do not close modal. Applicable to all modal.
     });
   };
