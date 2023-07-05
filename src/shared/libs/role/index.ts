@@ -1,30 +1,18 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
-import { getCookie } from 'cookies-next';
+import axiosInstance from "@/shared/libs/axiosInstance";
 
 export default class Role {
-  private readonly baseUrl = `${process.env.BASE_URL ?? ''}/roles`;
-  private readonly accessToken = getCookie('token');
+  private readonly baseUrl = "/roles";
 
   public async get(): Promise<IRole[]> {
     const url = this.baseUrl;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${this.accessToken as string}`,
-      },
-    };
-    const res = await axiosInstance.get(url, config);
+    const res = await axiosInstance.get(url);
     return res.data;
   }
 
   public async create(name: string): Promise<IRole> {
     const url = this.baseUrl;
     const data = { name };
-    const config = {
-      headers: {
-        Authorization: `Bearer ${this.accessToken as string}`,
-      },
-    };
-    const res = await axiosInstance.post(url, data, config);
+    const res = await axiosInstance.post(url, data);
     return res.data;
   }
 }
