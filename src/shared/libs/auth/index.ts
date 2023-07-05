@@ -1,8 +1,8 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
-import { setCookie } from 'cookies-next';
+import axiosInstance from "@/shared/libs/axiosInstance";
+import { setCookie } from "cookies-next";
 
 export default class Auth {
-  private readonly baseUrl = `${process.env.BASE_URL ?? ''}/account`;
+  private readonly baseUrl = "/account";
 
   public async login(input: ILoginPayload): Promise<ILoginReturn> {
     const url = `${this.baseUrl}/login/password`;
@@ -11,7 +11,7 @@ export default class Auth {
       password: input.password,
     };
     const res = await axiosInstance.post(url, data);
-    setCookie('token', res.data.token);
+    setCookie("token", res.data.token);
     return res.data;
   }
 

@@ -1,9 +1,7 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
-import { getCookie } from 'cookies-next';
+import axiosInstance from "@/shared/libs/axiosInstance";
 
 export default class Permission {
-  private readonly baseUrl = `${process.env.BASE_URL ?? ''}/permissions`;
-  private readonly accessToken = getCookie('token');
+  private readonly baseUrl = "/permissions";
 
   public async get(roleId: string): Promise<IPermissionsByResources[]> {
     // Get list of all resources, actions, and permissions
@@ -21,13 +19,11 @@ export default class Permission {
       (resource) => {
         return {
           resource,
-          permissions: actions.map((action) => {
-            return {
-              id: null,
-              action,
-              allow: false,
-            };
-          }),
+          permissions: actions.map((action) => ({
+            id: null,
+            action,
+            allow: false,
+          })),
         };
       }
     );
@@ -35,24 +31,29 @@ export default class Permission {
     // Begin updating summary object
     for (const permission of permissions) {
       const { id, action, resource } = permission;
-
       const resourceIndex = permissionsByResources.findIndex(
         (p) => p.resource === resource
       );
+
       if (resourceIndex === -1) {
         continue;
       }
 
       const actionIndex = permissionsByResources[
         resourceIndex
-      ].permissions.findIndex((p) => p.action === action);
-      if (actionIndex === -1) {
+      ]?.permissions.findIndex((p) => p.action === action);
+
+      if (actionIndex === -1 || actionIndex === undefined) {
         continue;
       }
 
-      permissionsByResources[resourceIndex].permissions[actionIndex].allow =
-        true;
-      permissionsByResources[resourceIndex].permissions[actionIndex].id = id;
+      const { permissions } = permissionsByResources[resourceIndex] || {};
+      const actionPermissions = permissions && permissions[actionIndex];
+
+      if (actionPermissions) {
+        actionPermissions.allow = true;
+        actionPermissions.id = id;
+      }
     }
 
     return permissionsByResources;
@@ -63,12 +64,12 @@ export default class Permission {
     await Promise.all(
       reqsArray.map(async ([_, data]) => {
         const { change, resource, resourceId, action, roleId } = data;
-        if (change === 'add') {
+        if (change === "add") {
           // eslint-disable-next-line @typescript-eslint/return-await
           return this.create(resource, action, roleId);
         } else {
           if (resourceId === null) {
-            throw new Error('No resource id found.');
+            throw new Error("No resource id found.");
           }
           // eslint-disable-next-line @typescript-eslint/return-await
           return this.delete(resourceId);
@@ -82,57 +83,37 @@ export default class Permission {
     action: string,
     roleId: string
   ): Promise<string[]> {
-    const url = `${this.baseUrl}`;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${this.accessToken as string}`,
-      },
-    };
+    const url = this.baseUrl;
     const data = {
       resource,
       action,
       where: {
         state: {
-          in: ['StateA', 'StateB'],
+          in: ["StateA", "StateB"],
         },
       },
-      trustedEntityType: 'USER',
+      trustedEntityType: "USER",
       trustedEntityId: roleId,
     };
-    const res = await axiosInstance.post(url, data, config);
+    const res = await axiosInstance.post(url, data);
     return res.data;
   }
 
   public async delete(permissionId: number): Promise<string[]> {
     const url = `${this.baseUrl}/${permissionId}`;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${this.accessToken as string}`,
-      },
-    };
-    const res = await axiosInstance.delete(url, config);
+    const res = await axiosInstance.delete(url);
     return res.data;
   }
 
   private async getResources(): Promise<string[]> {
     const url = `${this.baseUrl}/resources`;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${this.accessToken as string}`,
-      },
-    };
-    const res = await axiosInstance.get(url, config);
+    const res = await axiosInstance.get(url);
     return res.data;
   }
 
   private async getActions(): Promise<string[]> {
     const url = `${this.baseUrl}/actions`;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${this.accessToken as string}`,
-      },
-    };
-    const res = await axiosInstance.get(url, config);
+    const res = await axiosInstance.get(url);
     return res.data;
   }
 
@@ -140,23 +121,13 @@ export default class Permission {
     resource: string
   ): Promise<IPermission[]> {
     const url = `${this.baseUrl}?resource=${resource}`;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${this.accessToken as string}`,
-      },
-    };
-    const res = await axiosInstance.get(url, config);
+    const res = await axiosInstance.get(url);
     return res.data;
   }
 
   private async getAllPermissions(): Promise<IPermission[]> {
     const url = this.baseUrl;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${this.accessToken as string}`,
-      },
-    };
-    const res = await axiosInstance.get(url, config);
+    const res = await axiosInstance.get(url);
     return res.data;
   }
 }
@@ -188,7 +159,7 @@ interface IPermissionsByResources {
 }
 
 interface Request {
-  change: 'add' | 'delete';
+  change: "add" | "delete";
   resourceId: number | null;
   resource: string;
   action: string;
