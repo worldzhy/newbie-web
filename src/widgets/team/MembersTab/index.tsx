@@ -29,7 +29,7 @@ const MembersTab = (): ReactElement => {
   const [dataFetch, setDataFetch] = useState(true);
   const [createModal, setCreateModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
+  // const [deleteModal, setDeleteModal] = useState(false);
   const [activeMember, setActiveMember] = useState<IUser>();
 
   /**
@@ -81,13 +81,13 @@ const MembersTab = (): ReactElement => {
             <ButtonCustom
               customColor="link"
               onClick={() => {
-                setEditModal(true);
                 setActiveMember(d);
+                setEditModal(true);
               }}
             >
               Edit
             </ButtonCustom>
-            <ButtonCustom
+            {/* <ButtonCustom
               customColor="link"
               onClick={() => {
                 setDeleteModal(true);
@@ -95,7 +95,7 @@ const MembersTab = (): ReactElement => {
               }}
             >
               Delete
-            </ButtonCustom>
+            </ButtonCustom> */}
           </TableCellCustom>
         </TableRowCustom>
       ))}
@@ -128,13 +128,13 @@ const MembersTab = (): ReactElement => {
         modal={editModal}
         setModal={setEditModal}
       />
-      <MembersEditModal
+      {/* <MembersEditModal
         activeMember={activeMember}
         data={data}
         setData={setData}
         modal={deleteModal}
         setModal={setDeleteModal}
-      />
+      /> */}
     </>
   );
 };

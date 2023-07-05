@@ -55,7 +55,7 @@ const MembersCreateModal: FC<Props> = ({
   const [rolesList, setRolesList] = useState<IRole[]>([]);
   const [selectedRoleNames, setSelectedRoleNames] = useState<string[]>([]);
   const [newMember, updateNewMember] = useReducer(
-    (prev: INewMember, next: Record<string, string | string[]>): INewMember => {
+    (prev: INewMember, next: Record<string, string>): INewMember => {
       return { ...prev, ...next };
     },
     {

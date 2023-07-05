@@ -36,7 +36,6 @@ interface INewMember {
   phone: string;
   username: string;
   password: string;
-  roles: string[];
 }
 
 const MembersEditModal: FC<Props> = ({
@@ -56,9 +55,9 @@ const MembersEditModal: FC<Props> = ({
    */
   const [isProcessing, setIsProcessing] = useState(false);
   const [rolesList, setRolesList] = useState<IRole[]>([]);
-  const [roles, setRoles] = useState<string[]>([]);
-  const [newMember, updateNewMember] = useReducer(
-    (prev: INewMember, next: Record<string, string | string[]>): INewMember => {
+  const [selectedRoleNames, setSelectedRoleNames] = useState<string[]>([]);
+  const [updatedActiveMember, setUpdatedActiveMember] = useReducer(
+    (prev: INewMember, next: Record<string, string>): INewMember => {
       return { ...prev, ...next };
     },
     {
@@ -66,7 +65,6 @@ const MembersEditModal: FC<Props> = ({
       phone: '',
       username: '',
       password: '',
-      roles: [],
     }
   );
 
@@ -78,6 +76,14 @@ const MembersEditModal: FC<Props> = ({
       try {
         setRolesList([]);
         if (!ignore) {
+          setSelectedRoleNames(activeMember?.roles.map((r) => r.name) ?? []);
+          setUpdatedActiveMember({
+            email: activeMember?.email ?? '',
+            phone: activeMember?.phone ?? '',
+            username: activeMember?.username ?? '',
+            password: '',
+          });
+
           const roles = await new Role().get();
           setRolesList(roles);
         }
@@ -99,7 +105,7 @@ const MembersEditModal: FC<Props> = ({
     return () => {
       ignore = true;
     };
-  }, [router]);
+  }, [router, activeMember]);
 
   /**
    * Handlers
@@ -125,37 +131,37 @@ const MembersEditModal: FC<Props> = ({
         <FormDialogInputCustom
           label="Email"
           type="email"
-          value={newMember.email}
+          value={updatedActiveMember.email}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            updateNewMember({ email: e.target.value });
+            setUpdatedActiveMember({ email: e.target.value });
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
           label="Phone"
-          value={newMember.phone}
+          value={updatedActiveMember.phone}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            updateNewMember({ phone: e.target.value });
+            setUpdatedActiveMember({ phone: e.target.value });
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
           label="Username"
-          value={newMember.username}
+          value={updatedActiveMember.username}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            updateNewMember({ username: e.target.value });
+            setUpdatedActiveMember({ username: e.target.value });
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
           label="Password"
-          value={newMember.password}
+          value={updatedActiveMember.password}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            updateNewMember({ password: e.target.value });
+            setUpdatedActiveMember({ password: e.target.value });
           }}
         ></FormDialogInputCustom>
         <MultiSelectCustom
           label="Roles"
           options={rolesList.map((r) => r.name)}
-          selected={roles}
-          setSelected={setRoles}
+          selected={selectedRoleNames}
+          setSelected={setSelectedRoleNames}
         />
       </Stack>
     </FormDialogCustom>
