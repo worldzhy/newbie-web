@@ -1,6 +1,12 @@
-import React, { type ReactElement, useState, type FC, useReducer } from "react";
+import React, {
+  type ReactElement,
+  useState,
+  type FC,
+  useReducer,
+  useEffect,
+} from "react";
 import { type IUser } from "@/shared/libs/user";
-import { sendRequest } from "@/shared/libs/mixins";
+import { sendRequest, showError } from "@/shared/libs/mixins";
 import { Stack } from "@mui/material";
 import FormDialogCustom from "@/components/FormDialogCustom";
 import FormDialogInputCustom from "@/components/FormDialogInputCustom";
@@ -51,6 +57,35 @@ const MembersEditModal: FC<Props> = ({
       password: "",
     }
   );
+
+  /**
+   * Data Fetching
+   */
+  useEffect(() => {
+    const startFetching = async (): Promise<void> => {
+      try {
+        if (!ignore) {
+          setSelectedRoleNames(activeMember?.roles.map((r) => r.name) ?? []);
+          setUpdatedActiveMember({
+            email: activeMember?.email ?? "",
+            phone: activeMember?.phone ?? "",
+            username: activeMember?.username ?? "",
+            password: "",
+          });
+        }
+      } catch (err: unknown) {
+        if (!ignore) {
+          showError(err);
+        }
+      }
+    };
+    let ignore = false;
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    startFetching();
+    return () => {
+      ignore = true;
+    };
+  }, [activeMember]);
 
   /**
    * Handlers
