@@ -122,7 +122,7 @@ const MembersEditModal: FC<Props> = ({
   return (
     <FormDialogCustom
       open={modal}
-      title="New member"
+      title={`Edit ${activeMember?.username ?? ""}`}
       closeDialogHandler={() => {
         setModal(false);
       }}
