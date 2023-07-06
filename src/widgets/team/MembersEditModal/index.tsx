@@ -153,6 +153,7 @@ const MembersEditModal: FC<Props> = ({
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
+          placeholder="********"
           label="Password"
           value={updatedActiveMember.password}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

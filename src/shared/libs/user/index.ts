@@ -35,8 +35,8 @@ export default class User {
       email,
       phone,
       username,
-      password,
       roleIds: roles.map((r) => ({ id: r.id })),
+      ...(password !== "" && { password }),
     };
     const res = await axiosInstance.patch(url, data);
     return res.data;

@@ -9,6 +9,7 @@ import styleConfig from "@/constants/styleConfig";
 
 interface Props {
   label: string;
+  placeholder?: string;
 }
 
 const FormDialogInputCustom: FC<Props & TextFieldProps> = ({
@@ -16,6 +17,7 @@ const FormDialogInputCustom: FC<Props & TextFieldProps> = ({
   type,
   onChange,
   value,
+  placeholder,
   ...props
 }): ReactElement => {
   return (
@@ -31,6 +33,7 @@ const FormDialogInputCustom: FC<Props & TextFieldProps> = ({
         {label}
       </Typography>
       <TextField
+        placeholder={placeholder}
         onChange={onChange}
         value={value}
         hiddenLabel
