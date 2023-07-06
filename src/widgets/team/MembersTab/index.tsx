@@ -16,6 +16,7 @@ import MembersCreateModal from "../MembersCreateModal";
 import MembersEditModal from "../MembersEditModal";
 import TableSkeletonCustom from "@/components/TableSkeletonCustom";
 import Role, { type IRole } from "@/shared/libs/role";
+import MembersDeleteModal from "../MembersDeleteModal";
 
 /**
  * Types
@@ -36,7 +37,7 @@ const MembersTab = (): ReactElement => {
   const [dataFetch, setDataFetch] = useState(true);
   const [createModal, setCreateModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  // const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [activeMember, setActiveMember] = useState<IUser>();
 
   /**
@@ -101,15 +102,15 @@ const MembersTab = (): ReactElement => {
               >
                 Edit
               </ButtonCustom>
-              {/* <ButtonCustom
-              customColor="link"
-              onClick={() => {
-                setDeleteModal(true);
-                setActiveMember(d);
-              }}
-            >
-              Delete
-            </ButtonCustom> */}
+              <ButtonCustom
+                customColor="link"
+                onClick={() => {
+                  setActiveMember(d);
+                  setDeleteModal(true);
+                }}
+              >
+                Delete
+              </ButtonCustom>
             </TableCellCustom>
           </TableRowCustom>
         ))}
@@ -144,13 +145,13 @@ const MembersTab = (): ReactElement => {
         setModal={setEditModal}
         rolesList={rolesList}
       />
-      {/* <MembersEditModal
+      <MembersDeleteModal
         activeMember={activeMember}
         data={data}
         setData={setData}
         modal={deleteModal}
         setModal={setDeleteModal}
-      /> */}
+      />
     </>
   );
 };
