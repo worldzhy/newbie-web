@@ -16,7 +16,8 @@
   },
   "plugins": ["react", "prettier"],
   "rules": {
-    "prettier/prettier": ["error", { "singleQuote": true }]
+    "prettier/prettier": ["error", { "singleQuote": false }],
+    "@typescript-eslint/strict-boolean-expressions": "off"
   },
   "settings": {
     "react": {
