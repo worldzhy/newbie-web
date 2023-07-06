@@ -24,6 +24,23 @@ export default class User {
     const res = await axiosInstance.post(url, data);
     return res.data;
   }
+
+  public async update(
+    userid: string,
+    payload: IUpdateUserPayload
+  ): Promise<IUpdateUserResponse> {
+    const { email, phone, username, password, roles } = payload;
+    const url = `${this.baseUrl}/${userid}`;
+    const data = {
+      email,
+      phone,
+      username,
+      password,
+      roleIds: roles.map((r) => ({ id: r.id })),
+    };
+    const res = await axiosInstance.patch(url, data);
+    return res.data;
+  }
 }
 
 /**
@@ -73,4 +90,25 @@ interface IAddUserResponse {
   username: string;
   status: string;
   profiles: [];
+}
+
+interface IUpdateUserPayload {
+  email: string;
+  phone: string;
+  username: string;
+  password: string;
+  roles: IRole[];
+}
+
+interface IUpdateUserResponse {
+  id: string;
+  email: string;
+  phone: string;
+  username: string;
+  password: string;
+  status: string;
+  lastLoginAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  organizationId: string | null;
 }

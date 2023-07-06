@@ -103,3 +103,10 @@ export const isUnauthorized = (err: unknown): boolean => {
 export const sortDate = (dateA: string, dateB: string): number => {
   return new Date(dateA).getTime() - new Date(dateB).getTime();
 };
+
+export const raise = <T>(val: T): NonNullable<T> => {
+  if (val === null || typeof val === "undefined") {
+    throw new Error("Value is null or undefined");
+  }
+  return val;
+};

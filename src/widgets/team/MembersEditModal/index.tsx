@@ -5,8 +5,8 @@ import React, {
   useReducer,
   useEffect,
 } from "react";
-import { type IUser } from "@/shared/libs/user";
-import { sendRequest, showError } from "@/shared/libs/mixins";
+import User, { type IUser } from "@/shared/libs/user";
+import { raise, sendRequest, showError } from "@/shared/libs/mixins";
 import { Stack } from "@mui/material";
 import FormDialogCustom from "@/components/FormDialogCustom";
 import FormDialogInputCustom from "@/components/FormDialogInputCustom";
@@ -92,7 +92,29 @@ const MembersEditModal: FC<Props> = ({
    */
   const editRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      // To do: Add edit role handler
+      const { email, phone, username, password } = updatedActiveMember;
+      const roles = rolesList.filter(({ name }) =>
+        selectedRoleNames.includes(name)
+      );
+      const payload = {
+        email,
+        phone,
+        username,
+        password,
+        roles,
+      };
+      await new User().update(raise(activeMember?.id), payload);
+      setData(
+        data.map((d) => {
+          if (d.id === activeMember?.id) {
+            return {
+              ...d,
+              ...payload,
+            };
+          }
+          return d;
+        })
+      );
       setModal(false); // To do: If there is validation issue, do not close modal. Applicable to all modal.
     });
   };
