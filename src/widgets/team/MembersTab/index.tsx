@@ -10,6 +10,7 @@ import TableCellCustom from "@/components/TableCellCustom";
 import MembersCreateModal from "../MembersCreateModal";
 import MembersEditModal from "../MembersEditModal";
 import TableSkeletonCustom from "@/components/TableSkeletonCustom";
+import Role, { type IRole } from "@/shared/libs/role";
 
 /**
  * Types
@@ -21,6 +22,7 @@ const MembersTab = (): ReactElement => {
    */
   const router = useRouter();
   const headers = ["Name", "Email", "Phone", "Role", "Actions"];
+  const [rolesList, setRolesList] = useState<IRole[]>([]);
 
   /**
    * States
@@ -39,9 +41,14 @@ const MembersTab = (): ReactElement => {
     const startFetching = async (): Promise<void> => {
       try {
         setData([]);
+        setRolesList([]);
         if (!ignore) {
           const users = await new User().get();
           setData(users.records);
+
+          const roles = await new Role().get();
+          setRolesList(roles);
+
           setDataFetch(false);
         }
       } catch (err: unknown) {
@@ -120,6 +127,7 @@ const MembersTab = (): ReactElement => {
         setData={setData}
         modal={createModal}
         setModal={setCreateModal}
+        rolesList={rolesList}
       />
       <MembersEditModal
         activeMember={activeMember}
@@ -127,6 +135,7 @@ const MembersTab = (): ReactElement => {
         setData={setData}
         modal={editModal}
         setModal={setEditModal}
+        rolesList={rolesList}
       />
       {/* <MembersEditModal
         activeMember={activeMember}

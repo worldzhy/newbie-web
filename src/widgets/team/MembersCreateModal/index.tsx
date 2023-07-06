@@ -1,23 +1,11 @@
-import React, {
-  useEffect,
-  type ReactElement,
-  useState,
-  type FC,
-  useReducer,
-} from "react";
-import { useRouter } from "next/router";
+import React, { type ReactElement, useState, type FC, useReducer } from "react";
 import User, { type IUser } from "@/shared/libs/user";
-import {
-  delayExecute,
-  isUnauthorized,
-  sendRequest,
-  showError,
-} from "@/shared/libs/mixins";
+import { sendRequest } from "@/shared/libs/mixins";
 import { Stack } from "@mui/material";
 import FormDialogCustom from "@/components/FormDialogCustom";
 import FormDialogInputCustom from "@/components/FormDialogInputCustom";
 import MultiSelectCustom from "@/components/MultiSelectCustom";
-import Role, { type IRole } from "@/shared/libs/role";
+import { type IRole } from "@/shared/libs/role";
 
 /**
  * Types
@@ -28,6 +16,7 @@ interface Props {
   setData: React.Dispatch<React.SetStateAction<IUser[]>>;
   modal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
+  rolesList: IRole[];
 }
 
 interface INewMember {
@@ -42,17 +31,12 @@ const MembersCreateModal: FC<Props> = ({
   setData,
   modal,
   setModal,
+  rolesList,
 }): ReactElement => {
-  /**
-   * Declarations
-   */
-  const router = useRouter();
-
   /**
    * States
    */
   const [isProcessing, setIsProcessing] = useState(false);
-  const [rolesList, setRolesList] = useState<IRole[]>([]);
   const [selectedRoleNames, setSelectedRoleNames] = useState<string[]>([]);
   const [newMember, updateNewMember] = useReducer(
     (prev: INewMember, next: Record<string, string>): INewMember => {
@@ -65,37 +49,6 @@ const MembersCreateModal: FC<Props> = ({
       password: "",
     }
   );
-
-  /**
-   * Data Fetching
-   */
-  useEffect(() => {
-    const startFetching = async (): Promise<void> => {
-      try {
-        setRolesList([]);
-        if (!ignore) {
-          const roles = await new Role().get();
-          setRolesList(roles);
-        }
-      } catch (err: unknown) {
-        if (!ignore) {
-          if (isUnauthorized(err)) {
-            delayExecute(() => {
-              void router.push("/");
-            }, 0);
-          } else {
-            showError(err);
-          }
-        }
-      }
-    };
-    let ignore = false;
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    startFetching();
-    return () => {
-      ignore = true;
-    };
-  }, [router]);
 
   /**
    * Handlers
