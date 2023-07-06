@@ -4,20 +4,20 @@ import React, {
   useState,
   type FC,
   useReducer,
-} from 'react';
-import { useRouter } from 'next/router';
-import { type IUser } from '@/shared/libs/user';
+} from "react";
+import { useRouter } from "next/router";
+import { type IUser } from "@/shared/libs/user";
 import {
   delayExecute,
   isUnauthorized,
   sendRequest,
   showError,
-} from '@/shared/libs/mixins';
-import { Stack } from '@mui/material';
-import FormDialogCustom from '@/components/FormDialogCustom';
-import FormDialogInputCustom from '@/components/FormDialogInputCustom';
-import MultiSelectCustom from '@/components/MultiSelectCustom';
-import Role, { type IRole } from '@/shared/libs/role';
+} from "@/shared/libs/mixins";
+import { Stack } from "@mui/material";
+import FormDialogCustom from "@/components/FormDialogCustom";
+import FormDialogInputCustom from "@/components/FormDialogInputCustom";
+import MultiSelectCustom from "@/components/MultiSelectCustom";
+import Role, { type IRole } from "@/shared/libs/role";
 
 /**
  * Types
@@ -61,10 +61,10 @@ const MembersEditModal: FC<Props> = ({
       return { ...prev, ...next };
     },
     {
-      email: '',
-      phone: '',
-      username: '',
-      password: '',
+      email: "",
+      phone: "",
+      username: "",
+      password: "",
     }
   );
 
@@ -78,10 +78,10 @@ const MembersEditModal: FC<Props> = ({
         if (!ignore) {
           setSelectedRoleNames(activeMember?.roles.map((r) => r.name) ?? []);
           setUpdatedActiveMember({
-            email: activeMember?.email ?? '',
-            phone: activeMember?.phone ?? '',
-            username: activeMember?.username ?? '',
-            password: '',
+            email: activeMember?.email ?? "",
+            phone: activeMember?.phone ?? "",
+            username: activeMember?.username ?? "",
+            password: "",
           });
 
           const roles = await new Role().get();
@@ -91,7 +91,7 @@ const MembersEditModal: FC<Props> = ({
         if (!ignore) {
           if (isUnauthorized(err)) {
             delayExecute(() => {
-              void router.push('/');
+              void router.push("/");
             }, 0);
           } else {
             showError(err);

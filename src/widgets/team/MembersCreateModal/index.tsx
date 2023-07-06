@@ -4,20 +4,20 @@ import React, {
   useState,
   type FC,
   useReducer,
-} from 'react';
-import { useRouter } from 'next/router';
-import User, { type IUser } from '@/shared/libs/user';
+} from "react";
+import { useRouter } from "next/router";
+import User, { type IUser } from "@/shared/libs/user";
 import {
   delayExecute,
   isUnauthorized,
   sendRequest,
   showError,
-} from '@/shared/libs/mixins';
-import { Stack } from '@mui/material';
-import FormDialogCustom from '@/components/FormDialogCustom';
-import FormDialogInputCustom from '@/components/FormDialogInputCustom';
-import MultiSelectCustom from '@/components/MultiSelectCustom';
-import Role, { type IRole } from '@/shared/libs/role';
+} from "@/shared/libs/mixins";
+import { Stack } from "@mui/material";
+import FormDialogCustom from "@/components/FormDialogCustom";
+import FormDialogInputCustom from "@/components/FormDialogInputCustom";
+import MultiSelectCustom from "@/components/MultiSelectCustom";
+import Role, { type IRole } from "@/shared/libs/role";
 
 /**
  * Types
@@ -59,10 +59,10 @@ const MembersCreateModal: FC<Props> = ({
       return { ...prev, ...next };
     },
     {
-      email: '',
-      phone: '',
-      username: '',
-      password: '',
+      email: "",
+      phone: "",
+      username: "",
+      password: "",
     }
   );
 
@@ -81,7 +81,7 @@ const MembersCreateModal: FC<Props> = ({
         if (!ignore) {
           if (isUnauthorized(err)) {
             delayExecute(() => {
-              void router.push('/');
+              void router.push("/");
             }, 0);
           } else {
             showError(err);
