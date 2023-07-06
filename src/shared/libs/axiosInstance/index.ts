@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { type AxiosInstance } from "axios";
 import { showToast } from "../mixins";
 import { getCookie } from "cookies-next";
 
@@ -16,7 +16,7 @@ axios.interceptors.response.use(
   }
 );
 
-const createAxiosInstance = () => {
+const createAxiosInstance = (): AxiosInstance => {
   const token = getCookie("token");
   const options = {
     baseURL: process.env.BASE_URL ?? "",
