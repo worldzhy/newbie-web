@@ -60,7 +60,15 @@ const MembersCreateModal: FC<Props> = ({
       );
       const newMemberData = { ...newMember, roles };
       const res = await new User().create(newMemberData);
-      setData([...data, { id: res.id, ...newMemberData }]);
+      setData([
+        ...data,
+        {
+          id: res.id,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          ...newMemberData,
+        },
+      ]);
       setModal(false); // To do: If there is validation issue, do not close modal. Applicable to all modal.
     });
   };

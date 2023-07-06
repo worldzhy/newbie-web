@@ -1,8 +1,8 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
-import { type IRole } from '@/shared/libs/role';
+import axiosInstance from "@/shared/libs/axiosInstance";
+import { type IRole } from "@/shared/libs/role";
 
 export default class User {
-  private readonly baseUrl = '/users';
+  private readonly baseUrl = "/users";
 
   public async get(): Promise<IGetUserOutput> {
     const url = `${this.baseUrl}?pageSize=100&page=1&roleId=1&name=1`;
@@ -18,7 +18,7 @@ export default class User {
       phone,
       username,
       password,
-      status: 'ACTIVE',
+      status: "ACTIVE",
       roleIds: roles.map((r) => ({ id: r.id })),
     };
     const res = await axiosInstance.post(url, data);
@@ -36,6 +36,8 @@ export interface IUser {
   phone: string | null;
   username: string;
   roles: IRole[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface IGetUserOutput {
@@ -43,8 +45,6 @@ interface IGetUserOutput {
     IUser & {
       status: string;
       lastLoginAt: string;
-      createdAt: string;
-      updatedAt: string;
       organizationId: null | string;
       profiles: [];
       locations: [];

@@ -99,3 +99,7 @@ export const isUnauthorized = (err: unknown): boolean => {
     err instanceof AxiosError && err.response?.data.message === "Unauthorized"
   );
 };
+
+export const sortDate = (dateA: string, dateB: string): number => {
+  return new Date(dateA).getTime() - new Date(dateB).getTime();
+};

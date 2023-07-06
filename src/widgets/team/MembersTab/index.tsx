@@ -1,7 +1,12 @@
 import React, { useEffect, type ReactElement, useState } from "react";
 import { useRouter } from "next/router";
 import User, { type IUser } from "@/shared/libs/user";
-import { delayExecute, isUnauthorized, showError } from "@/shared/libs/mixins";
+import {
+  delayExecute,
+  isUnauthorized,
+  showError,
+  sortDate,
+} from "@/shared/libs/mixins";
 import { Stack } from "@mui/material";
 import ButtonCustom from "@/components/ButtonCustom";
 import TableContainerCustom from "@/components/TableContainerCustom";
@@ -76,25 +81,27 @@ const MembersTab = (): ReactElement => {
    */
   const table = (
     <TableContainerCustom headers={headers}>
-      {data.map((d, rowKey) => (
-        <TableRowCustom key={rowKey}>
-          <TableCellCustom>{d.username}</TableCellCustom>
-          <TableCellCustom>{d.email}</TableCellCustom>
-          <TableCellCustom>{d.phone}</TableCellCustom>
-          <TableCellCustom>
-            {d.roles.map((r) => r.name).join(", ")}
-          </TableCellCustom>
-          <TableCellCustom>
-            <ButtonCustom
-              customColor="link"
-              onClick={() => {
-                setActiveMember(d);
-                setEditModal(true);
-              }}
-            >
-              Edit
-            </ButtonCustom>
-            {/* <ButtonCustom
+      {data
+        .sort((a, b) => sortDate(a.createdAt, b.createdAt))
+        .map((d, rowKey) => (
+          <TableRowCustom key={rowKey}>
+            <TableCellCustom>{d.username}</TableCellCustom>
+            <TableCellCustom>{d.email}</TableCellCustom>
+            <TableCellCustom>{d.phone}</TableCellCustom>
+            <TableCellCustom>
+              {d.roles.map((r) => r.name).join(", ")}
+            </TableCellCustom>
+            <TableCellCustom>
+              <ButtonCustom
+                customColor="link"
+                onClick={() => {
+                  setActiveMember(d);
+                  setEditModal(true);
+                }}
+              >
+                Edit
+              </ButtonCustom>
+              {/* <ButtonCustom
               customColor="link"
               onClick={() => {
                 setDeleteModal(true);
@@ -103,9 +110,9 @@ const MembersTab = (): ReactElement => {
             >
               Delete
             </ButtonCustom> */}
-          </TableCellCustom>
-        </TableRowCustom>
-      ))}
+            </TableCellCustom>
+          </TableRowCustom>
+        ))}
     </TableContainerCustom>
   );
 
