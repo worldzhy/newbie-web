@@ -8,7 +8,12 @@ import {
   showError,
 } from "@/shared/libs/mixins";
 import FormDialogCustom from "@/components/FormDialogCustom";
-import TablePermission from "../RolesPermisssionsTable";
+import TableSkeletonCustom from "@/components/TableSkeletonCustom";
+import TableContainerCustom from "@/components/TableContainerCustom";
+import TableRowCustom from "@/components/TableRowCustom";
+import TableCellCustom from "@/components/TableCellCustom";
+import { FormControlLabel, FormGroup } from "@mui/material";
+import CheckboxCustom from "@/components/CheckboxCustom";
 
 /**
  *
@@ -58,6 +63,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
    * Declarations
    */
   const router = useRouter();
+  const headers = ["Resouce", "Permission"];
 
   /**
    * States
@@ -147,6 +153,39 @@ const RolesSetPermisssionsModal: FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeRole, fetch]);
 
+  /**
+   * Components
+   */
+  const table = (
+    <TableContainerCustom headers={headers}>
+      {data
+        .sort((a, b) => a.resource.localeCompare(b.resource))
+        .map(({ resource, permissions }, key) => (
+          <TableRowCustom key={key}>
+            <TableCellCustom>{resource}</TableCellCustom>
+            <TableCellCustom>
+              <FormGroup row={true}>
+                {permissions.map((p, key: number) => (
+                  <FormControlLabel
+                    key={key}
+                    control={
+                      <CheckboxCustom
+                        checked={p.allow}
+                        onChange={() => {
+                          checkBoxOnChangeHandler(resource, p.action, p.id);
+                        }}
+                      />
+                    }
+                    label={p.action}
+                  />
+                ))}
+              </FormGroup>
+            </TableCellCustom>
+          </TableRowCustom>
+        ))}
+    </TableContainerCustom>
+  );
+
   return (
     <FormDialogCustom
       open={permissionModal}
@@ -157,7 +196,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
       formSubmitHandler={updatePermissions}
       isProcessing={isProcessing}
     >
-      <TablePermission data={data} onChangeHandler={checkBoxOnChangeHandler} />
+      {data.length === 0 ? <TableSkeletonCustom /> : table}
     </FormDialogCustom>
   );
 };
