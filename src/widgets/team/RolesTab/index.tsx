@@ -31,7 +31,6 @@ const RolesTab = (): ReactElement => {
   const [isFetching, setIsFetching] = useState(true);
   const [roleModal, setRoleModal] = useState(false);
   const [roleName, setRoleName] = useState("");
-  const [fetch, setFetch] = useState(false);
   const [permissionModal, setPermissionModal] = useState(false);
   const [activeRole, setActiveRole] = useState<{
     id?: string;
@@ -78,7 +77,7 @@ const RolesTab = (): ReactElement => {
     return () => {
       ignore = true;
     };
-  }, [fetch]);
+  }, [router]);
 
   /**
    * Handlers
@@ -87,7 +86,6 @@ const RolesTab = (): ReactElement => {
     await sendRequest(setIsProcessing, async () => {
       await new Role().create(roleName);
     });
-    setFetch(!fetch);
     setRoleModal(false);
   };
 
