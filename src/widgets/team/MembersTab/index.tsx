@@ -34,7 +34,7 @@ const MembersTab = (): ReactElement => {
    * States
    */
   const [data, setData] = useState<IUser[]>([]);
-  const [dataFetch, setDataFetch] = useState(true);
+  const [isFetching, setIsFetching] = useState(true);
   const [createModal, setCreateModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -55,7 +55,7 @@ const MembersTab = (): ReactElement => {
           const roles = await new Role().get();
           setRolesList(roles);
 
-          setDataFetch(false);
+          setIsFetching(false);
         }
       } catch (err: unknown) {
         if (!ignore) {
@@ -128,7 +128,7 @@ const MembersTab = (): ReactElement => {
         >
           New member
         </ButtonCustom>
-        {dataFetch ? <TableSkeletonCustom /> : table}
+        {isFetching ? <TableSkeletonCustom /> : table}
       </Stack>
       <MembersCreateModal
         data={data}
