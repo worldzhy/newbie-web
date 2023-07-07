@@ -79,15 +79,19 @@ const RolesSetPermisssionsModal: FC<Props> = ({
     action: string,
     id: number | null
   ): void => {
-    const updatedData = data.map((d) => {
-      // To do: Refactor data structure to make this operation simplier
-      if (d.resource === resource) {
-        const actionIndex = d.permissions.findIndex((p) => p.action === action);
-        d.permissions[actionIndex].allow = !d.permissions[actionIndex].allow;
-      }
-      return d;
-    });
-    setData(updatedData);
+    setData(
+      data.map((d) => {
+        if (d.resource === resource) {
+          d.permissions.map((p) => {
+            if (p.action === action) {
+              p.allow = !p.allow;
+            }
+            return d;
+          });
+        }
+        return d;
+      })
+    );
 
     const isAdd = data
       .find((d) => d.resource === resource)
