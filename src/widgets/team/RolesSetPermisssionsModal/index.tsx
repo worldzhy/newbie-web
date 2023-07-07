@@ -12,13 +12,13 @@ import {
   showError,
 } from "@/shared/libs/mixins";
 import FormDialogCustom from "@/components/FormDialogCustom";
-import SkeletonCustom from "@/components/SkeletonCustom";
 import TableContainerCustom from "@/components/TableContainerCustom";
 import TableRowCustom from "@/components/TableRowCustom";
 import TableCellCustom from "@/components/TableCellCustom";
 import { FormControlLabel, FormGroup } from "@mui/material";
 import CheckboxCustom from "@/components/CheckboxCustom";
 import { type IRole } from "@/shared/libs/role";
+import TableSkeletonCustom from "@/components/TableSkeletonCustom";
 
 /**
  * Types
@@ -147,23 +147,21 @@ const RolesSetPermisssionsModal: FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeRole]);
 
-  /**
-   * Components
-   */
-  const table = (
-    <TableContainerCustom headers={headers}>
-      {isFetching
-        ? Array.from(new Array(3)).map((_, key: number) => (
-            <TableRowCustom key={key}>
-              <TableCellCustom>
-                <SkeletonCustom numRows={1} />
-              </TableCellCustom>
-              <TableCellCustom>
-                <SkeletonCustom numRows={1} />
-              </TableCellCustom>
-            </TableRowCustom>
-          ))
-        : data
+  return (
+    <FormDialogCustom
+      open={modal}
+      title={`Edit Permissions for ${activeRole?.name ?? ""}`}
+      closeDialogHandler={() => {
+        setModal(false);
+      }}
+      formSubmitHandler={updatePermissions}
+      isProcessing={isProcessing}
+    >
+      <TableContainerCustom headers={headers}>
+        {isFetching ? (
+          <TableSkeletonCustom numCols={headers.length} />
+        ) : (
+          data
             .sort((a, b) => a.resource.localeCompare(b.resource))
             .map(({ resource, permissions }, key) => (
               <TableRowCustom key={key}>
@@ -187,21 +185,9 @@ const RolesSetPermisssionsModal: FC<Props> = ({
                   </FormGroup>
                 </TableCellCustom>
               </TableRowCustom>
-            ))}
-    </TableContainerCustom>
-  );
-
-  return (
-    <FormDialogCustom
-      open={modal}
-      title={`Edit Permissions for ${activeRole?.name ?? ""}`}
-      closeDialogHandler={() => {
-        setModal(false);
-      }}
-      formSubmitHandler={updatePermissions}
-      isProcessing={isProcessing}
-    >
-      {table}
+            ))
+        )}
+      </TableContainerCustom>
     </FormDialogCustom>
   );
 };
