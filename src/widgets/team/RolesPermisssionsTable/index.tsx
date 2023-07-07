@@ -1,10 +1,10 @@
-import React, { type ReactElement, type FC } from 'react';
-import { FormGroup, FormControlLabel } from '@mui/material';
-import CheckboxCustom from '@/components/CheckboxCustom';
-import TableContainerCustom from '@/components/TableContainerCustom';
-import TableRowCustom from '@/components/TableRowCustom';
-import TableCellCustom from '@/components/TableCellCustom';
-import TableSkeletonCustom from '@/components/TableSkeletonCustom';
+import React, { type ReactElement, type FC } from "react";
+import { FormGroup, FormControlLabel } from "@mui/material";
+import CheckboxCustom from "@/components/CheckboxCustom";
+import TableContainerCustom from "@/components/TableContainerCustom";
+import TableRowCustom from "@/components/TableRowCustom";
+import TableCellCustom from "@/components/TableCellCustom";
+import TableSkeletonCustom from "@/components/TableSkeletonCustom";
 
 /**
  *
@@ -43,7 +43,7 @@ const RolesPermisssionsTable: FC<Props> = ({
   /**
    * Declarations
    */
-  const headers = ['Resouce', 'Permission'];
+  const headers = ["Resouce", "Permission"];
 
   const table = (
     <TableContainerCustom headers={headers}>

@@ -1,9 +1,9 @@
-import React, { type ReactElement, type FC } from 'react';
-import ButtonCustom from '@/components/ButtonCustom';
-import TableSkeletonCustom from '@/components/TableSkeletonCustom';
-import TableContainerCustom from '@/components/TableContainerCustom';
-import TableRowCustom from '@/components/TableRowCustom';
-import TableCellCustom from '@/components/TableCellCustom';
+import React, { type ReactElement, type FC } from "react";
+import ButtonCustom from "@/components/ButtonCustom";
+import TableSkeletonCustom from "@/components/TableSkeletonCustom";
+import TableContainerCustom from "@/components/TableContainerCustom";
+import TableRowCustom from "@/components/TableRowCustom";
+import TableCellCustom from "@/components/TableCellCustom";
 
 interface Props {
   rows: Array<{
@@ -28,7 +28,7 @@ const RolesTable: FC<Props> = ({
   /**
    * Declarations
    */
-  const headers = ['Name', 'Description', 'Permissions'];
+  const headers = ["Name", "Description", "Permissions"];
 
   const table = (
     <TableContainerCustom headers={headers}>

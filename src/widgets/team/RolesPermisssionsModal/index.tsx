@@ -1,14 +1,14 @@
-import React, { type ReactElement, type FC, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import Permission from '@/shared/libs/permission';
+import React, { type ReactElement, type FC, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import Permission from "@/shared/libs/permission";
 import {
   delayExecute,
   isUnauthorized,
   sendRequest,
   showError,
-} from '@/shared/libs/mixins';
-import FormDialogCustom from '@/components/FormDialogCustom';
-import TablePermission from '../RolesPermisssionsTable';
+} from "@/shared/libs/mixins";
+import FormDialogCustom from "@/components/FormDialogCustom";
+import TablePermission from "../RolesPermisssionsTable";
 
 /**
  *
@@ -33,7 +33,7 @@ interface IActiveRole {
 }
 
 interface IRequest {
-  change: 'add' | 'delete';
+  change: "add" | "delete";
   resourceId: number | null;
   resource: string;
   action: string;
@@ -103,7 +103,7 @@ const RolesPermissionsModal: FC<Props> = ({
       requests.delete(requestId);
     } else {
       requests?.set(requestId, {
-        change: isAdd ? 'add' : 'delete',
+        change: isAdd ? "add" : "delete",
         resourceId: id,
         resource,
         action,
@@ -130,7 +130,7 @@ const RolesPermissionsModal: FC<Props> = ({
         if (!ignore) {
           if (isUnauthorized(err)) {
             delayExecute(() => {
-              void router.push('/');
+              void router.push("/");
             }, 0);
           } else {
             showError(err);

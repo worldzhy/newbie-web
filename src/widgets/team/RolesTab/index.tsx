@@ -1,18 +1,18 @@
-import React, { type ReactElement, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { Stack } from '@mui/material';
-import ButtonCustom from '@/components/ButtonCustom';
+import React, { type ReactElement, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { Stack } from "@mui/material";
+import ButtonCustom from "@/components/ButtonCustom";
 import {
   delayExecute,
   isUnauthorized,
   sendRequest,
   showError,
-} from '@/shared/libs/mixins';
-import Role from '@/shared/libs/role';
-import RolesPermissionsModal from '../RolesPermisssionsModal';
-import RolesTable from '@/widgets/team/RolesTable';
-import FormDialogCustom from '@/components/FormDialogCustom';
-import FormDialogInputCustom from '@/components/FormDialogInputCustom';
+} from "@/shared/libs/mixins";
+import Role from "@/shared/libs/role";
+import RolesPermissionsModal from "../RolesPermisssionsModal";
+import RolesTable from "@/widgets/team/RolesTable";
+import FormDialogCustom from "@/components/FormDialogCustom";
+import FormDialogInputCustom from "@/components/FormDialogInputCustom";
 
 const RolesTab = (): ReactElement => {
   /**
@@ -25,7 +25,7 @@ const RolesTab = (): ReactElement => {
    */
   const [isProcessing, setIsProcessing] = useState(false);
   const [roleModal, setRoleModal] = useState(false);
-  const [roleName, setRoleName] = useState('');
+  const [roleName, setRoleName] = useState("");
   const [fetch, setFetch] = useState(false);
   const [permissionModal, setPermissionModal] = useState(false);
   const [activeRole, setActiveRole] = useState<{
@@ -50,7 +50,7 @@ const RolesTab = (): ReactElement => {
         if (!ignore) {
           const roles = await new Role().get();
           const fetchedRows = roles.map(({ id, name, description }) => {
-            return { id, name, description: description ?? 'xxx' };
+            return { id, name, description: description ?? "xxx" };
           });
           setRows(fetchedRows);
         }
@@ -58,7 +58,7 @@ const RolesTab = (): ReactElement => {
         if (!ignore) {
           if (isUnauthorized(err)) {
             delayExecute(() => {
-              void router.push('/');
+              void router.push("/");
             }, 0);
           } else {
             showError(err);
