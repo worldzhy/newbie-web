@@ -76,7 +76,7 @@ const RolesTab = (): ReactElement => {
                 setPermissionModal(true);
               }}
             >
-              Edit
+              Edit Permissions
             </ButtonCustom>
           </TableCellCustom>
         </TableRowCustom>
