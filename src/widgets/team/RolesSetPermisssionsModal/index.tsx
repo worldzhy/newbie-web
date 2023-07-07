@@ -21,13 +21,6 @@ import CheckboxCustom from "@/components/CheckboxCustom";
 import { type IRole } from "@/shared/libs/role";
 
 /**
- *
- * Table responsible for showing the per role (as identified by roleId) permissions against resources.
- * This component is used in Team > Roles > Edit page.
- *
- **/
-
-/**
  * Types
  */
 
@@ -109,8 +102,8 @@ const RolesSetPermisssionsModal: FC<Props> = ({
     const startFetching = async (): Promise<void> => {
       try {
         setData([]);
-        const permissions = await new Permission().get(activeRole?.id ?? "");
         if (!ignore) {
+          const permissions = await new Permission().get(activeRole?.id ?? "");
           setData(permissions);
         }
       } catch (err: unknown) {
