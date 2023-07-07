@@ -53,9 +53,25 @@ const RolesSetPermisssionsModal: FC<Props> = ({
    */
   const updatePermissions = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      await new Permission().update(requests);
+      const res = await new Permission().update(requests);
+      res.forEach((r) => {
+        setData(
+          data.map((d) => {
+            if (d.resource === r.resource) {
+              d.permissions.map((p) => {
+                if (p.action === r.action) {
+                  p.id = r.change === "Delete" ? null : r.id;
+                }
+                return d;
+              });
+            }
+            return d;
+          })
+        );
+      });
+
+      setRequests(new Map());
     });
-    setRequests(new Map());
   };
 
   const checkBoxOnChangeHandler = (
@@ -64,6 +80,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
     id: number | null
   ): void => {
     const updatedData = data.map((d) => {
+      // To do: Refactor data structure to make this operation simplier
       if (d.resource === resource) {
         const actionIndex = d.permissions.findIndex((p) => p.action === action);
         d.permissions[actionIndex].allow = !d.permissions[actionIndex].allow;

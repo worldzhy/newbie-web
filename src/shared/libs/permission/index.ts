@@ -47,8 +47,8 @@ export default class Permission {
         continue;
       }
 
-      const { permissions } = permissionsByResources[resourceIndex] || {};
-      const actionPermissions = permissions && permissions[actionIndex];
+      const { permissions } = permissionsByResources[resourceIndex] ?? {};
+      const actionPermissions = permissions?.[actionIndex];
 
       if (actionPermissions) {
         actionPermissions.allow = true;
@@ -59,9 +59,11 @@ export default class Permission {
     return permissionsByResources;
   }
 
-  public async update(reqs: Map<string, IRequest>): Promise<void> {
+  public async update(
+    reqs: Map<string, IRequest>
+  ): Promise<Array<ICreateUserResponse | IDeleteUserResponse>> {
     const reqsArray = Array.from(reqs);
-    await Promise.all(
+    return await Promise.all(
       reqsArray.map(async ([_, data]) => {
         const { change, resource, resourceId, action, roleId } = data;
         if (change === "add") {
@@ -82,7 +84,7 @@ export default class Permission {
     resource: string,
     action: string,
     roleId: string
-  ): Promise<string[]> {
+  ): Promise<ICreateUserResponse> {
     const url = this.baseUrl;
     const data = {
       resource,
@@ -96,13 +98,13 @@ export default class Permission {
       trustedEntityId: roleId,
     };
     const res = await axiosInstance.post(url, data);
-    return res.data;
+    return { ...res.data, change: "Create" };
   }
 
-  public async delete(permissionId: number): Promise<string[]> {
+  public async delete(permissionId: number): Promise<IDeleteUserResponse> {
     const url = `${this.baseUrl}/${permissionId}`;
     const res = await axiosInstance.delete(url);
-    return res.data;
+    return { ...res.data, change: "Delete" };
   }
 
   private async getResources(): Promise<string[]> {
@@ -164,4 +166,12 @@ export interface IRequest {
   resource: string;
   action: string;
   roleId: string;
+}
+
+interface ICreateUserResponse extends Omit<IPermission, "where"> {
+  change: "Create";
+}
+
+interface IDeleteUserResponse extends Omit<IPermission, "where"> {
+  change: "Delete";
 }
