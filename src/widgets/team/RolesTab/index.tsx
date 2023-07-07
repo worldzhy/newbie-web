@@ -10,20 +10,25 @@ import {
 } from "@/shared/libs/mixins";
 import Role from "@/shared/libs/role";
 import RolesPermissionsModal from "../RolesPermisssionsModal";
-import RolesTable from "@/widgets/team/RolesTable";
 import FormDialogCustom from "@/components/FormDialogCustom";
 import FormDialogInputCustom from "@/components/FormDialogInputCustom";
+import TableContainerCustom from "@/components/TableContainerCustom";
+import TableRowCustom from "@/components/TableRowCustom";
+import TableCellCustom from "@/components/TableCellCustom";
+import TableSkeletonCustom from "@/components/TableSkeletonCustom";
 
 const RolesTab = (): ReactElement => {
   /**
    * Declarations
    */
   const router = useRouter();
+  const headers = ["Name", "Description", "Permissions"];
 
   /**
    * States
    */
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [roleModal, setRoleModal] = useState(false);
   const [roleName, setRoleName] = useState("");
   const [fetch, setFetch] = useState(false);
@@ -32,7 +37,7 @@ const RolesTab = (): ReactElement => {
     id?: string;
     name?: string;
   }>({});
-  const [rows, setRows] = useState<
+  const [data, setData] = useState<
     Array<{
       id: string;
       name: string;
@@ -46,13 +51,14 @@ const RolesTab = (): ReactElement => {
   useEffect(() => {
     const startFetching = async (): Promise<void> => {
       try {
-        setRows([]);
+        setData([]);
         if (!ignore) {
           const roles = await new Role().get();
-          const fetchedRows = roles.map(({ id, name, description }) => {
+          const fetcheddata = roles.map(({ id, name, description }) => {
             return { id, name, description: description ?? "xxx" };
           });
-          setRows(fetchedRows);
+          setData(fetcheddata);
+          setIsFetching(false);
         }
       } catch (err: unknown) {
         if (!ignore) {
@@ -85,6 +91,31 @@ const RolesTab = (): ReactElement => {
     setRoleModal(false);
   };
 
+  /**
+   * Components
+   */
+  const table = (
+    <TableContainerCustom headers={headers}>
+      {data.map((row, key) => (
+        <TableRowCustom key={key}>
+          <TableCellCustom>{row.name}</TableCellCustom>
+          <TableCellCustom>{row.description}</TableCellCustom>
+          <TableCellCustom>
+            <ButtonCustom
+              customColor="link"
+              onClick={() => {
+                setActiveRole({ id: row.id, name: row.name });
+                setPermissionModal(true);
+              }}
+            >
+              Edit
+            </ButtonCustom>
+          </TableCellCustom>
+        </TableRowCustom>
+      ))}
+    </TableContainerCustom>
+  );
+
   return (
     <>
       <Stack direction="column" spacing={2} alignItems="flex-end">
@@ -96,11 +127,7 @@ const RolesTab = (): ReactElement => {
         >
           New role
         </ButtonCustom>
-        <RolesTable
-          rows={rows}
-          setActiveRole={setActiveRole}
-          setPermissionModal={setPermissionModal}
-        />
+        {isFetching ? <TableSkeletonCustom /> : table}
       </Stack>
       <FormDialogCustom
         open={roleModal}
