@@ -47,7 +47,6 @@ const RolesSetPermisssionsModal: FC<Props> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [data, setData] = useState<IPermissionsByResources[]>([]);
   const [requests, setRequests] = useState<Map<string, IRequest>>(new Map());
-  const [fetch, setFetch] = useState(false);
 
   /**
    * Handlers
@@ -57,7 +56,6 @@ const RolesSetPermisssionsModal: FC<Props> = ({
       await new Permission().update(requests);
     });
     setRequests(new Map());
-    setFetch(!fetch);
   };
 
   const checkBoxOnChangeHandler = (
