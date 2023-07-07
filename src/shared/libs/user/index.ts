@@ -41,6 +41,12 @@ export default class User {
     const res = await axiosInstance.patch(url, data);
     return res.data;
   }
+
+  public async delete(userid: string): Promise<IDeleteUserResponse> {
+    const url = `${this.baseUrl}/${userid}`;
+    const res = await axiosInstance.delete(url);
+    return res.data;
+  }
 }
 
 /**
@@ -112,3 +118,5 @@ interface IUpdateUserResponse {
   updatedAt: string;
   organizationId: string | null;
 }
+
+interface IDeleteUserResponse extends IUpdateUserResponse {}

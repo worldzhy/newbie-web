@@ -1,6 +1,6 @@
 import React, { type ReactElement, useState, type FC } from "react";
-import { type IUser } from "@/shared/libs/user";
-import { sendRequest } from "@/shared/libs/mixins";
+import User, { type IUser } from "@/shared/libs/user";
+import { raise, sendRequest } from "@/shared/libs/mixins";
 import FormDialogCustom from "@/components/FormDialogCustom";
 
 /**
@@ -32,7 +32,8 @@ const MembersDeleteModal: FC<Props> = ({
    */
   const deleteRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      // To do: Handle delete
+      await new User().delete(raise(activeMember?.id));
+      setData(data.filter((d) => d.id !== activeMember?.id));
       setModal(false); // To do: If there is validation issue, do not close modal. Applicable to all modal.
     });
   };
