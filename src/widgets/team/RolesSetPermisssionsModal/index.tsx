@@ -49,7 +49,7 @@ interface IPermissionByResource {
   }>;
 }
 
-const RolesPermissionsModal: FC<Props> = ({
+const RolesSetPermisssionsModal: FC<Props> = ({
   activeRole,
   permissionModal,
   setPermissionModal,
@@ -162,4 +162,4 @@ const RolesPermissionsModal: FC<Props> = ({
   );
 };
 
-export default RolesPermissionsModal;
+export default RolesSetPermisssionsModal;

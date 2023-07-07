@@ -4,7 +4,7 @@ import { Stack } from "@mui/material";
 import ButtonCustom from "@/components/ButtonCustom";
 import { delayExecute, isUnauthorized, showError } from "@/shared/libs/mixins";
 import Role, { type IRole } from "@/shared/libs/role";
-import RolesPermissionsModal from "../RolesPermisssionsModal";
+import RolesSetPermisssionsModal from "../RolesSetPermisssionsModal";
 import TableCellCustom from "@/components/TableCellCustom";
 import TableSkeletonCustom from "@/components/TableSkeletonCustom";
 import RolesCreateModal from "../RolesCreateModal";
@@ -106,7 +106,7 @@ const RolesTab = (): ReactElement => {
         modal={createModal}
         setModal={setCreateModal}
       />
-      <RolesPermissionsModal
+      <RolesSetPermisssionsModal
         activeRole={activeRole}
         setPermissionModal={setPermissionModal}
         permissionModal={permissionModal}
