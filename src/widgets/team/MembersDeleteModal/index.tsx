@@ -34,7 +34,7 @@ const MembersDeleteModal: FC<Props> = ({
     await sendRequest(setIsProcessing, async () => {
       await new User().delete(raise(activeMember?.id));
       setData(data.filter((d) => d.id !== activeMember?.id));
-      setModal(false); // To do: If there is validation issue, do not close modal. Applicable to all modal.
+      setModal(false);
     });
   };
 

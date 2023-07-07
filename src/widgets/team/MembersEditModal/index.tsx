@@ -115,7 +115,7 @@ const MembersEditModal: FC<Props> = ({
           return d;
         })
       );
-      setModal(false); // To do: If there is validation issue, do not close modal. Applicable to all modal.
+      setModal(false);
     });
   };
 

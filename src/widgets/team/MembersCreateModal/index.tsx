@@ -69,7 +69,7 @@ const MembersCreateModal: FC<Props> = ({
           ...newMemberData,
         },
       ]);
-      setModal(false); // To do: If there is validation issue, do not close modal. Applicable to all modal.
+      setModal(false);
     });
   };
 
