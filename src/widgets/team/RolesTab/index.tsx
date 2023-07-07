@@ -67,15 +67,15 @@ const RolesTab = (): ReactElement => {
    */
   const table = (
     <TableContainerCustom headers={headers}>
-      {data.map((row, key) => (
+      {data.map((d, key) => (
         <TableRowCustom key={key}>
-          <TableCellCustom>{row.name}</TableCellCustom>
-          <TableCellCustom>{row.description}</TableCellCustom>
+          <TableCellCustom>{d.name}</TableCellCustom>
+          <TableCellCustom>{d.description}</TableCellCustom>
           <TableCellCustom>
             <ButtonCustom
               customColor="link"
               onClick={() => {
-                setActiveRole({ id: row.id, name: row.name });
+                setActiveRole(d);
                 setPermissionModal(true);
               }}
             >
