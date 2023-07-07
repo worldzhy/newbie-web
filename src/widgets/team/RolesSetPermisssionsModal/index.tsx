@@ -4,6 +4,7 @@ import Permission from "@/shared/libs/permission";
 import {
   delayExecute,
   isUnauthorized,
+  raise,
   sendRequest,
   showError,
 } from "@/shared/libs/mixins";
@@ -14,6 +15,7 @@ import TableRowCustom from "@/components/TableRowCustom";
 import TableCellCustom from "@/components/TableCellCustom";
 import { FormControlLabel, FormGroup } from "@mui/material";
 import CheckboxCustom from "@/components/CheckboxCustom";
+import { type IRole } from "@/shared/libs/role";
 
 /**
  *
@@ -27,14 +29,9 @@ import CheckboxCustom from "@/components/CheckboxCustom";
  */
 
 interface Props {
-  activeRole: IActiveRole;
+  activeRole: IRole | undefined;
   permissionModal: boolean;
   setPermissionModal: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-interface IActiveRole {
-  id?: string;
-  name?: string;
 }
 
 interface IRequest {
@@ -113,7 +110,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
         resourceId: id,
         resource,
         action,
-        roleId: activeRole?.id as string,
+        roleId: raise(activeRole?.id),
       });
     }
     setRequests(requests);
@@ -126,9 +123,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
     const startFetching = async (): Promise<void> => {
       try {
         setData([]);
-        const permissions = await new Permission().get(
-          activeRole?.id as string
-        );
+        const permissions = await new Permission().get(activeRole?.id ?? "");
         if (!ignore) {
           setData(permissions);
         }
@@ -189,7 +184,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
   return (
     <FormDialogCustom
       open={permissionModal}
-      title={`Edit Permissions for ${activeRole?.name as string}`}
+      title={`Edit Permissions for ${activeRole?.name ?? ""}`}
       closeDialogHandler={() => {
         setPermissionModal(false);
       }}
