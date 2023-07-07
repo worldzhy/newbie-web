@@ -24,10 +24,7 @@ const RolesTab = (): ReactElement => {
   const [isFetching, setIsFetching] = useState(true);
   const [createModal, setCreateModal] = useState(false);
   const [permissionModal, setPermissionModal] = useState(false);
-  const [activeRole, setActiveRole] = useState<{
-    id?: string;
-    name?: string;
-  }>({});
+  const [activeRole, setActiveRole] = useState<IRole>();
   const [data, setData] = useState<IRole[]>([]);
 
   /**
@@ -108,8 +105,8 @@ const RolesTab = (): ReactElement => {
       />
       <RolesSetPermisssionsModal
         activeRole={activeRole}
-        setPermissionModal={setPermissionModal}
-        permissionModal={permissionModal}
+        modal={permissionModal}
+        setModal={setPermissionModal}
       />
     </>
   );

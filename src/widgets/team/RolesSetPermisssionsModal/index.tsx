@@ -1,6 +1,9 @@
 import React, { type ReactElement, type FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Permission from "@/shared/libs/permission";
+import Permission, {
+  type IPermissionsByResources,
+  type IRequest,
+} from "@/shared/libs/permission";
 import {
   delayExecute,
   isUnauthorized,
@@ -30,31 +33,14 @@ import { type IRole } from "@/shared/libs/role";
 
 interface Props {
   activeRole: IRole | undefined;
-  permissionModal: boolean;
-  setPermissionModal: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-interface IRequest {
-  change: "add" | "delete";
-  resourceId: number | null;
-  resource: string;
-  action: string;
-  roleId: string;
-}
-
-interface IPermissionByResource {
-  resource: string;
-  permissions: Array<{
-    id: number | null;
-    action: string;
-    allow: boolean;
-  }>;
+  modal: boolean;
+  setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const RolesSetPermisssionsModal: FC<Props> = ({
   activeRole,
-  permissionModal,
-  setPermissionModal,
+  modal,
+  setModal,
 }): ReactElement => {
   /**
    * Declarations
@@ -65,8 +51,8 @@ const RolesSetPermisssionsModal: FC<Props> = ({
   /**
    * States
    */
-  const [data, setData] = useState<IPermissionByResource[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [data, setData] = useState<IPermissionsByResources[]>([]);
   const [requests, setRequests] = useState<Map<string, IRequest>>(new Map());
   const [fetch, setFetch] = useState(false);
 
@@ -183,10 +169,10 @@ const RolesSetPermisssionsModal: FC<Props> = ({
 
   return (
     <FormDialogCustom
-      open={permissionModal}
+      open={modal}
       title={`Edit Permissions for ${activeRole?.name ?? ""}`}
       closeDialogHandler={() => {
-        setPermissionModal(false);
+        setModal(false);
       }}
       formSubmitHandler={updatePermissions}
       isProcessing={isProcessing}

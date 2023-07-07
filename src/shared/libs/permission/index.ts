@@ -59,7 +59,7 @@ export default class Permission {
     return permissionsByResources;
   }
 
-  public async update(reqs: Map<string, Request>): Promise<void> {
+  public async update(reqs: Map<string, IRequest>): Promise<void> {
     const reqsArray = Array.from(reqs);
     await Promise.all(
       reqsArray.map(async ([_, data]) => {
@@ -149,7 +149,7 @@ interface IPermission {
   updatedAt: string;
 }
 
-interface IPermissionsByResources {
+export interface IPermissionsByResources {
   resource: string;
   permissions: Array<{
     id: number | null;
@@ -158,7 +158,7 @@ interface IPermissionsByResources {
   }>;
 }
 
-interface Request {
+export interface IRequest {
   change: "add" | "delete";
   resourceId: number | null;
   resource: string;
