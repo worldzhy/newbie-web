@@ -6,7 +6,7 @@ import { delayExecute, isUnauthorized, showError } from "@/shared/libs/mixins";
 import Role, { type IRole } from "@/shared/libs/role";
 import RolesSetPermisssionsModal from "../RolesSetPermisssionsModal";
 import TableCellCustom from "@/components/TableCellCustom";
-import TableSkeletonCustom from "@/components/TableSkeletonCustom";
+import SkeletonCustom from "@/components/SkeletonCustom";
 import RolesCreateModal from "../RolesCreateModal";
 import TableContainerCustom from "@/components/TableContainerCustom";
 import TableRowCustom from "@/components/TableRowCustom";
@@ -95,7 +95,7 @@ const RolesTab = (): ReactElement => {
         >
           New role
         </ButtonCustom>
-        {isFetching ? <TableSkeletonCustom /> : table}
+        {isFetching ? <SkeletonCustom /> : table}
       </Stack>
       <RolesCreateModal
         data={data}

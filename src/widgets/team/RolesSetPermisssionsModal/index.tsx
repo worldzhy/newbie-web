@@ -12,7 +12,7 @@ import {
   showError,
 } from "@/shared/libs/mixins";
 import FormDialogCustom from "@/components/FormDialogCustom";
-import TableSkeletonCustom from "@/components/TableSkeletonCustom";
+import SkeletonCustom from "@/components/SkeletonCustom";
 import TableContainerCustom from "@/components/TableContainerCustom";
 import TableRowCustom from "@/components/TableRowCustom";
 import TableCellCustom from "@/components/TableCellCustom";
@@ -152,31 +152,42 @@ const RolesSetPermisssionsModal: FC<Props> = ({
    */
   const table = (
     <TableContainerCustom headers={headers}>
-      {data
-        .sort((a, b) => a.resource.localeCompare(b.resource))
-        .map(({ resource, permissions }, key) => (
-          <TableRowCustom key={key}>
-            <TableCellCustom>{resource}</TableCellCustom>
-            <TableCellCustom>
-              <FormGroup row={true}>
-                {permissions.map((p, key: number) => (
-                  <FormControlLabel
-                    key={key}
-                    control={
-                      <CheckboxCustom
-                        checked={p.allow}
-                        onChange={() => {
-                          checkBoxOnChangeHandler(resource, p.action, p.id);
-                        }}
+      {isFetching
+        ? Array.from(new Array(3)).map((_, key: number) => (
+            <TableRowCustom key={key}>
+              <TableCellCustom>
+                <SkeletonCustom numRows={1} />
+              </TableCellCustom>
+              <TableCellCustom>
+                <SkeletonCustom numRows={1} />
+              </TableCellCustom>
+            </TableRowCustom>
+          ))
+        : data
+            .sort((a, b) => a.resource.localeCompare(b.resource))
+            .map(({ resource, permissions }, key) => (
+              <TableRowCustom key={key}>
+                <TableCellCustom>{resource}</TableCellCustom>
+                <TableCellCustom>
+                  <FormGroup row={true}>
+                    {permissions.map((p, key: number) => (
+                      <FormControlLabel
+                        key={key}
+                        control={
+                          <CheckboxCustom
+                            checked={p.allow}
+                            onChange={() => {
+                              checkBoxOnChangeHandler(resource, p.action, p.id);
+                            }}
+                          />
+                        }
+                        label={p.action}
                       />
-                    }
-                    label={p.action}
-                  />
-                ))}
-              </FormGroup>
-            </TableCellCustom>
-          </TableRowCustom>
-        ))}
+                    ))}
+                  </FormGroup>
+                </TableCellCustom>
+              </TableRowCustom>
+            ))}
     </TableContainerCustom>
   );
 
@@ -190,7 +201,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
       formSubmitHandler={updatePermissions}
       isProcessing={isProcessing}
     >
-      {isFetching ? <TableSkeletonCustom /> : table}
+      {table}
     </FormDialogCustom>
   );
 };

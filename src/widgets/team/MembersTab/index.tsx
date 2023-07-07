@@ -14,7 +14,7 @@ import TableRowCustom from "@/components/TableRowCustom";
 import TableCellCustom from "@/components/TableCellCustom";
 import MembersCreateModal from "../MembersCreateModal";
 import MembersEditModal from "../MembersEditModal";
-import TableSkeletonCustom from "@/components/TableSkeletonCustom";
+import SkeletonCustom from "@/components/SkeletonCustom";
 import Role, { type IRole } from "@/shared/libs/role";
 import MembersDeleteModal from "../MembersDeleteModal";
 
@@ -128,7 +128,7 @@ const MembersTab = (): ReactElement => {
         >
           New member
         </ButtonCustom>
-        {isFetching ? <TableSkeletonCustom /> : table}
+        {isFetching ? <SkeletonCustom /> : table}
       </Stack>
       <MembersCreateModal
         data={data}

@@ -1,12 +1,12 @@
-import { type FC, type ReactElement } from 'react';
-import { Skeleton, Stack } from '@mui/material';
-import styles from './index.module.scss';
+import { type FC, type ReactElement } from "react";
+import { Skeleton, Stack } from "@mui/material";
+import styles from "./index.module.scss";
 
 interface Props {
   numRows?: number;
 }
 
-const TableSkeletonCustom: FC<Props> = ({ numRows = 3 }): ReactElement => {
+const SkeletonCustom: FC<Props> = ({ numRows = 3 }): ReactElement => {
   return (
     <Stack direction="column" spacing={1} className={styles.skeleton}>
       {Array.from(new Array(numRows)).map((_, key: number) => (
@@ -16,4 +16,4 @@ const TableSkeletonCustom: FC<Props> = ({ numRows = 3 }): ReactElement => {
   );
 };
 
-export default TableSkeletonCustom;
+export default SkeletonCustom;
