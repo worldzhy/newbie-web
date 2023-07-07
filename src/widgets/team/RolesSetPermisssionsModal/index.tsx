@@ -44,6 +44,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
   /**
    * States
    */
+  const [isFetching, setIsFetching] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [data, setData] = useState<IPermissionsByResources[]>([]);
   const [requests, setRequests] = useState<Map<string, IRequest>>(new Map());
@@ -69,7 +70,6 @@ const RolesSetPermisssionsModal: FC<Props> = ({
           })
         );
       });
-
       setRequests(new Map());
     });
   };
@@ -92,7 +92,6 @@ const RolesSetPermisssionsModal: FC<Props> = ({
         return d;
       })
     );
-
     const isAdd = data
       .find((d) => d.resource === resource)
       ?.permissions.find((p) => p.action === action)?.allow;
@@ -124,6 +123,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
         if (!ignore) {
           const permissions = await new Permission().get(activeRole?.id ?? "");
           setData(permissions);
+          setIsFetching(false);
         }
       } catch (err: unknown) {
         if (!ignore) {
@@ -189,7 +189,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
       formSubmitHandler={updatePermissions}
       isProcessing={isProcessing}
     >
-      {data.length === 0 ? <TableSkeletonCustom /> : table}
+      {isFetching ? <TableSkeletonCustom /> : table}
     </FormDialogCustom>
   );
 };
