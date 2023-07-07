@@ -144,7 +144,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
       ignore = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeRole, fetch]);
+  }, [activeRole]);
 
   /**
    * Components
