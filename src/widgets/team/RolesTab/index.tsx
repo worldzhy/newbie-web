@@ -2,20 +2,14 @@ import React, { type ReactElement, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Stack } from "@mui/material";
 import ButtonCustom from "@/components/ButtonCustom";
-import {
-  delayExecute,
-  isUnauthorized,
-  sendRequest,
-  showError,
-} from "@/shared/libs/mixins";
-import Role from "@/shared/libs/role";
+import { delayExecute, isUnauthorized, showError } from "@/shared/libs/mixins";
+import Role, { type IRole } from "@/shared/libs/role";
 import RolesPermissionsModal from "../RolesPermisssionsModal";
-import FormDialogCustom from "@/components/FormDialogCustom";
-import FormDialogInputCustom from "@/components/FormDialogInputCustom";
-import TableContainerCustom from "@/components/TableContainerCustom";
-import TableRowCustom from "@/components/TableRowCustom";
 import TableCellCustom from "@/components/TableCellCustom";
 import TableSkeletonCustom from "@/components/TableSkeletonCustom";
+import RolesCreateModal from "../RolesCreateModal";
+import TableContainerCustom from "@/components/TableContainerCustom";
+import TableRowCustom from "@/components/TableRowCustom";
 
 const RolesTab = (): ReactElement => {
   /**
@@ -27,22 +21,14 @@ const RolesTab = (): ReactElement => {
   /**
    * States
    */
-  const [isProcessing, setIsProcessing] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
-  const [roleModal, setRoleModal] = useState(false);
-  const [roleName, setRoleName] = useState("");
+  const [createModal, setCreateModal] = useState(false);
   const [permissionModal, setPermissionModal] = useState(false);
   const [activeRole, setActiveRole] = useState<{
     id?: string;
     name?: string;
   }>({});
-  const [data, setData] = useState<
-    Array<{
-      id: string;
-      name: string;
-      description: string;
-    }>
-  >([]);
+  const [data, setData] = useState<IRole[]>([]);
 
   /**
    * Data Fetching
@@ -53,10 +39,7 @@ const RolesTab = (): ReactElement => {
         setData([]);
         if (!ignore) {
           const roles = await new Role().get();
-          const fetcheddata = roles.map(({ id, name, description }) => {
-            return { id, name, description: description ?? "xxx" };
-          });
-          setData(fetcheddata);
+          setData(roles);
           setIsFetching(false);
         }
       } catch (err: unknown) {
@@ -78,16 +61,6 @@ const RolesTab = (): ReactElement => {
       ignore = true;
     };
   }, [router]);
-
-  /**
-   * Handlers
-   */
-  const createRole = async (): Promise<void> => {
-    await sendRequest(setIsProcessing, async () => {
-      await new Role().create(roleName);
-    });
-    setRoleModal(false);
-  };
 
   /**
    * Components
@@ -120,30 +93,19 @@ const RolesTab = (): ReactElement => {
         <ButtonCustom
           customColor="dark"
           onClick={() => {
-            setRoleModal(true);
+            setCreateModal(true);
           }}
         >
           New role
         </ButtonCustom>
         {isFetching ? <TableSkeletonCustom /> : table}
       </Stack>
-      <FormDialogCustom
-        open={roleModal}
-        title="New role"
-        closeDialogHandler={() => {
-          setRoleModal(false);
-        }}
-        formSubmitHandler={createRole}
-        isProcessing={isProcessing}
-      >
-        <FormDialogInputCustom
-          label="Name"
-          value={roleName}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setRoleName(e.target.value);
-          }}
-        ></FormDialogInputCustom>
-      </FormDialogCustom>
+      <RolesCreateModal
+        data={data}
+        setData={setData}
+        modal={createModal}
+        setModal={setCreateModal}
+      />
       <RolesPermissionsModal
         activeRole={activeRole}
         setPermissionModal={setPermissionModal}
