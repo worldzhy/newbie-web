@@ -16,6 +16,7 @@ import RolesCreateModal from "../RolesCreateModal";
 import TableContainerCustom from "@/components/TableContainerCustom";
 import TableRowCustom from "@/components/TableRowCustom";
 import RolesEditModal from "../RolesEditModal";
+import RolesDeleteModal from "../RolesDeleteModal";
 
 const RolesTab = (): ReactElement => {
   /**
@@ -31,6 +32,7 @@ const RolesTab = (): ReactElement => {
   const [createModal, setCreateModal] = useState(false);
   const [permissionModal, setPermissionModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [activeRole, setActiveRole] = useState<IRole>();
   const [data, setData] = useState<IRole[]>([]);
 
@@ -91,6 +93,15 @@ const RolesTab = (): ReactElement => {
                 customColor="link"
                 onClick={() => {
                   setActiveRole(d);
+                  setDeleteModal(true);
+                }}
+              >
+                Delete
+              </ButtonCustom>
+              <ButtonCustom
+                customColor="link"
+                onClick={() => {
+                  setActiveRole(d);
                   setPermissionModal(true);
                 }}
               >
@@ -132,6 +143,13 @@ const RolesTab = (): ReactElement => {
         setData={setData}
         modal={editModal}
         setModal={setEditModal}
+      />
+      <RolesDeleteModal
+        activeRole={activeRole}
+        data={data}
+        setData={setData}
+        modal={deleteModal}
+        setModal={setDeleteModal}
       />
     </>
   );

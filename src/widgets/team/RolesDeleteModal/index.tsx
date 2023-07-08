@@ -1,22 +1,23 @@
 import React, { type ReactElement, useState, type FC } from "react";
-import User, { type IUser } from "@/shared/libs/user";
 import { raise, sendRequest } from "@/shared/libs/mixins";
+import { Stack } from "@mui/material";
 import FormDialogCustom from "@/components/FormDialogCustom";
+import Role, { type IRole } from "@/shared/libs/role";
 
 /**
  * Types
  */
 
 interface Props {
-  activeMember: IUser | undefined;
-  data: IUser[];
-  setData: React.Dispatch<React.SetStateAction<IUser[]>>;
+  activeRole: IRole | undefined;
+  data: IRole[];
+  setData: React.Dispatch<React.SetStateAction<IRole[]>>;
   modal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MembersDeleteModal: FC<Props> = ({
-  activeMember,
+const RolesDeleteModal: FC<Props> = ({
+  activeRole,
   data,
   setData,
   modal,
@@ -30,10 +31,10 @@ const MembersDeleteModal: FC<Props> = ({
   /**
    * Handlers
    */
-  const deleteMember = async (): Promise<void> => {
+  const deleteRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      await new User().delete(raise(activeMember?.id));
-      setData(data.filter((d) => d.id !== activeMember?.id));
+      await new Role().delete(raise(activeRole?.id));
+      setData(data.filter((d) => d.id !== activeRole?.id));
       setModal(false);
     });
   };
@@ -41,16 +42,16 @@ const MembersDeleteModal: FC<Props> = ({
   return (
     <FormDialogCustom
       open={modal}
-      title={`You are about to delete ${activeMember?.username ?? ""}`}
-      contentText="You cannot view this user in your list anymore if you delete. This will permanently delete the user. Are you sure?"
+      title={`You are about to delete ${activeRole?.name ?? ""}`}
+      contentText="You cannot view this role in your list anymore if you delete. This will permanently delete the role. Are you sure?"
       closeDialogHandler={() => {
         setModal(false);
       }}
-      formSubmitHandler={deleteMember}
+      formSubmitHandler={deleteRole}
       isProcessing={isProcessing}
       stretch={false}
     ></FormDialogCustom>
   );
 };
 
-export default MembersDeleteModal;
+export default RolesDeleteModal;

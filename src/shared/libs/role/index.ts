@@ -32,6 +32,12 @@ export default class Role {
     const res = await axiosInstance.patch(url, data);
     return res.data;
   }
+
+  public async delete(roleId: string): Promise<IRole> {
+    const url = `${this.baseUrl}/${roleId}`;
+    const res = await axiosInstance.delete(url);
+    return res.data;
+  }
 }
 
 /**
