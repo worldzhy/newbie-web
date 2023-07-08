@@ -15,10 +15,10 @@ const TableSkeletonCustom: FC<Props> = ({
   return (
     <>
       {Array.from(new Array(numRows)).map((_, keyi: number) => (
-        <TableRowCustom key={keyi}>
+        <TableRowCustom key={`rows-${keyi}`}>
           {Array.from(new Array(numCols)).map((_, keyj: number) => (
             <>
-              <TableCellCustom key={keyj}>
+              <TableCellCustom key={`cols-${keyj}`}>
                 <SkeletonCustom numRows={1} />
               </TableCellCustom>
             </>
