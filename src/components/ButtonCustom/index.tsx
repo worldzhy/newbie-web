@@ -47,7 +47,8 @@ const ButtonCustom: FC<Props & ButtonProps> = ({
       }),
       ...(customColor === "link" && {
         fontSize: "14px",
-        padding: "0",
+        paddingTop: "0",
+        paddingBottom: "0",
         color: `${styleConfig.color.primaryBlueColor}`,
         textDecoration: "underline",
         backgroundColor: "transparent",
