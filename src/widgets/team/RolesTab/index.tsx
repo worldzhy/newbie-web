@@ -93,19 +93,19 @@ const RolesTab = (): ReactElement => {
                 customColor="link"
                 onClick={() => {
                   setActiveRole(d);
-                  setDeleteModal(true);
+                  setPermissionModal(true);
                 }}
               >
-                Delete
+                Set Permissions
               </ButtonCustom>
               <ButtonCustom
                 customColor="link"
                 onClick={() => {
                   setActiveRole(d);
-                  setPermissionModal(true);
+                  setDeleteModal(true);
                 }}
               >
-                Edit Permissions
+                Delete
               </ButtonCustom>
             </TableCellCustom>
           </TableRowCustom>
@@ -132,17 +132,17 @@ const RolesTab = (): ReactElement => {
         modal={createModal}
         setModal={setCreateModal}
       />
-      <RolesSetPermisssionsModal
-        activeRole={activeRole}
-        modal={permissionModal}
-        setModal={setPermissionModal}
-      />
       <RolesEditModal
         activeRole={activeRole}
         data={data}
         setData={setData}
         modal={editModal}
         setModal={setEditModal}
+      />
+      <RolesSetPermisssionsModal
+        activeRole={activeRole}
+        modal={permissionModal}
+        setModal={setPermissionModal}
       />
       <RolesDeleteModal
         activeRole={activeRole}
