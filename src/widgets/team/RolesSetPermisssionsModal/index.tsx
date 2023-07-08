@@ -122,7 +122,8 @@ const RolesSetPermisssionsModal: FC<Props> = ({
         setData([]);
         if (!ignore) {
           setIsFetching(true);
-          const permissions = await new Permission().get(activeRole?.id ?? "");
+          if (!activeRole?.id) return;
+          const permissions = await new Permission().get(activeRole?.id);
           setData(permissions);
           setIsFetching(false);
         }
