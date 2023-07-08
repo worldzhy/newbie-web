@@ -1,4 +1,4 @@
-import React, { type FC } from 'react';
+import React, { type FC } from "react";
 import {
   MenuItem,
   OutlinedInput,
@@ -7,10 +7,10 @@ import {
   Select,
   Typography,
   Stack,
-} from '@mui/material';
-import { type SelectChangeEvent } from '@mui/material/Select';
-import styleConfig from '@/constants/styleConfig';
-import CheckboxCustom from '../CheckboxCustom';
+} from "@mui/material";
+import { type SelectChangeEvent } from "@mui/material/Select";
+import styleConfig from "@/constants/styleConfig";
+import CheckboxCustom from "../CheckboxCustom";
 
 interface Props {
   label: string;
@@ -46,22 +46,23 @@ const MultiSelectCustom: FC<Props> = ({
     const {
       target: { value },
     } = event;
-    setSelected(typeof value === 'string' ? value.split(',') : value);
+    setSelected(typeof value === "string" ? value.split(",") : value);
   };
 
   return (
     <Stack
-      direction={{ xs: 'column', sm: 'row' }}
-      alignItems={{ xs: 'flex-start', sm: 'center' }}
+      direction={{ xs: "column", sm: "row" }}
+      alignItems={{ xs: "flex-start" }}
+      spacing={{ xs: 1 }}
     >
       <Typography
         sx={{
-          width: '150px',
+          width: "150px",
         }}
       >
         {label}
       </Typography>
-      <FormControl sx={{ m: 0, width: '100%' }}>
+      <FormControl sx={{ m: 0, width: "100%" }}>
         <Select
           multiple
           value={selected}
@@ -69,19 +70,19 @@ const MultiSelectCustom: FC<Props> = ({
           input={
             <OutlinedInput
               sx={{
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
               }}
             />
           }
-          renderValue={(selected) => selected.join(', ')}
+          renderValue={(selected) => selected.join(", ")}
           MenuProps={MenuProps}
           variant="outlined"
           size="small"
           sx={{
             border: `2px solid ${styleConfig.color.primaryBlackColor}`,
-            position: 'unset',
-            '& .MuiSelect-icon': {
+            position: "unset",
+            "& .MuiSelect-icon": {
               color: `${styleConfig.color.primaryBlackColor}`,
             },
           }}
@@ -91,7 +92,7 @@ const MultiSelectCustom: FC<Props> = ({
               key={opt}
               value={opt}
               sx={{
-                '&.Mui-selected': {
+                "&.Mui-selected": {
                   background: `${styleConfig.color.primaryGrayColorLight}`,
                 },
               }}

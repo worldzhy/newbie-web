@@ -83,7 +83,7 @@ const MembersCreateModal: FC<Props> = ({
       formSubmitHandler={createRole}
       isProcessing={isProcessing}
     >
-      <Stack spacing={1}>
+      <Stack spacing={{ xs: 2, sm: 1 }}>
         <FormDialogInputCustom
           label="Email"
           type="email"

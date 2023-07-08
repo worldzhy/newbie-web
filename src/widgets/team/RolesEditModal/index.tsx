@@ -57,9 +57,11 @@ const RolesEditModal: FC<Props> = ({
       try {
         if (!ignore) {
           if (!activeRole?.id) return;
-          const res = await new Role().get(activeRole?.id);
-          const { name, description } = res;
-          setUpdatedActiveRole({ name, description: description ?? "" });
+          const { name, description } = activeRole;
+          setUpdatedActiveRole({
+            name,
+            description: description ?? "",
+          });
         }
       } catch (err: unknown) {
         if (!ignore) {
@@ -108,10 +110,10 @@ const RolesEditModal: FC<Props> = ({
       formSubmitHandler={updateRole}
       isProcessing={isProcessing}
     >
-      <Stack spacing={1}>
+      <Stack spacing={{ xs: 2, sm: 1 }}>
         <FormDialogInputCustom
           label="Name"
-          value={activeRole?.name}
+          value={updatedActiveRole.name}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setUpdatedActiveRole({ name: e.target.value });
           }}
@@ -120,7 +122,7 @@ const RolesEditModal: FC<Props> = ({
           label="Description"
           multiline={true}
           rows={3}
-          value={activeRole?.description}
+          value={updatedActiveRole.description}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setUpdatedActiveRole({ description: e.target.value });
           }}

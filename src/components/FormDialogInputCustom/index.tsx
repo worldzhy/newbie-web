@@ -27,7 +27,8 @@ const FormDialogInputCustom: FC<Props & TextFieldProps> = ({
   return (
     <Stack
       direction={{ xs: "column", sm: "row" }}
-      alignItems={{ xs: "flex-start", sm: "center" }}
+      alignItems={{ xs: "flex-start" }}
+      spacing={{ xs: 1 }}
     >
       <Typography
         sx={{
