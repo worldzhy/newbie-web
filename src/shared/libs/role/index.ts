@@ -3,8 +3,14 @@ import axiosInstance from "@/shared/libs/axiosInstance";
 export default class Role {
   private readonly baseUrl = "/roles";
 
-  public async get(): Promise<IRole[]> {
+  public async getAll(): Promise<IRole[]> {
     const url = this.baseUrl;
+    const res = await axiosInstance.get(url);
+    return res.data;
+  }
+
+  public async get(roleId: string): Promise<IRole> {
+    const url = `${this.baseUrl}/${roleId}`;
     const res = await axiosInstance.get(url);
     return res.data;
   }
@@ -13,6 +19,17 @@ export default class Role {
     const url = this.baseUrl;
     const data = { name };
     const res = await axiosInstance.post(url, data);
+    return res.data;
+  }
+
+  public async update(
+    roleId: string,
+    payload: IUpdateRolePayload
+  ): Promise<IRole> {
+    const { name, description } = payload;
+    const url = `${this.baseUrl}/${roleId}`;
+    const data = { name, description };
+    const res = await axiosInstance.patch(url, data);
     return res.data;
   }
 }
@@ -28,4 +45,9 @@ export interface IRole {
   createdAt: string;
   updatedAt: string;
   organizationId: string | null;
+}
+
+interface IUpdateRolePayload {
+  name: string;
+  description: string;
 }

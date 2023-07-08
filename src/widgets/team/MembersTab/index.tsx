@@ -52,7 +52,7 @@ const MembersTab = (): ReactElement => {
           const users = await new User().get();
           setData(users.records);
 
-          const roles = await new Role().get();
+          const roles = await new Role().getAll();
           setRolesList(roles);
 
           setIsFetching(false);

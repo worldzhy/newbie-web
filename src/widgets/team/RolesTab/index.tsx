@@ -10,6 +10,7 @@ import SkeletonCustom from "@/components/SkeletonCustom";
 import RolesCreateModal from "../RolesCreateModal";
 import TableContainerCustom from "@/components/TableContainerCustom";
 import TableRowCustom from "@/components/TableRowCustom";
+import RolesEditModal from "../RolesEditModal";
 
 const RolesTab = (): ReactElement => {
   /**
@@ -24,6 +25,7 @@ const RolesTab = (): ReactElement => {
   const [isFetching, setIsFetching] = useState(true);
   const [createModal, setCreateModal] = useState(false);
   const [permissionModal, setPermissionModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
   const [activeRole, setActiveRole] = useState<IRole>();
   const [data, setData] = useState<IRole[]>([]);
 
@@ -35,7 +37,7 @@ const RolesTab = (): ReactElement => {
       try {
         setData([]);
         if (!ignore) {
-          const roles = await new Role().get();
+          const roles = await new Role().getAll();
           setData(roles);
           setIsFetching(false);
         }
@@ -69,6 +71,15 @@ const RolesTab = (): ReactElement => {
           <TableCellCustom>{d.name}</TableCellCustom>
           <TableCellCustom>{d.description}</TableCellCustom>
           <TableCellCustom>
+            <ButtonCustom
+              customColor="link"
+              onClick={() => {
+                setActiveRole(d);
+                setEditModal(true);
+              }}
+            >
+              Edit
+            </ButtonCustom>
             <ButtonCustom
               customColor="link"
               onClick={() => {
@@ -107,6 +118,13 @@ const RolesTab = (): ReactElement => {
         activeRole={activeRole}
         modal={permissionModal}
         setModal={setPermissionModal}
+      />
+      <RolesEditModal
+        activeRole={activeRole}
+        data={data}
+        setData={setData}
+        modal={editModal}
+        setModal={setEditModal}
       />
     </>
   );
