@@ -10,6 +10,8 @@ import styleConfig from "@/constants/styleConfig";
 interface Props {
   label: string;
   placeholder?: string;
+  multiline?: boolean;
+  rows?: number;
 }
 
 const FormDialogInputCustom: FC<Props & TextFieldProps> = ({
@@ -18,6 +20,8 @@ const FormDialogInputCustom: FC<Props & TextFieldProps> = ({
   onChange,
   value,
   placeholder,
+  multiline = false,
+  rows = 0,
   ...props
 }): ReactElement => {
   return (
@@ -36,6 +40,8 @@ const FormDialogInputCustom: FC<Props & TextFieldProps> = ({
         placeholder={placeholder}
         onChange={onChange}
         value={value}
+        multiline={multiline}
+        rows={rows}
         hiddenLabel
         variant="outlined"
         size="small"

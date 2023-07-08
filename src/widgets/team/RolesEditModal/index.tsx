@@ -118,6 +118,8 @@ const RolesEditModal: FC<Props> = ({
         ></FormDialogInputCustom>
         <FormDialogInputCustom
           label="Description"
+          multiline={true}
+          rows={3}
           value={activeRole?.description}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setUpdatedActiveRole({ description: e.target.value });
