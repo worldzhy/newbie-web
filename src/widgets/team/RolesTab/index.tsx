@@ -2,7 +2,12 @@ import React, { type ReactElement, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Stack } from "@mui/material";
 import ButtonCustom from "@/components/ButtonCustom";
-import { delayExecute, isUnauthorized, showError } from "@/shared/libs/mixins";
+import {
+  delayExecute,
+  isUnauthorized,
+  showError,
+  sortDate,
+} from "@/shared/libs/mixins";
 import Role, { type IRole } from "@/shared/libs/role";
 import RolesSetPermisssionsModal from "../RolesSetPermisssionsModal";
 import TableCellCustom from "@/components/TableCellCustom";
@@ -66,32 +71,34 @@ const RolesTab = (): ReactElement => {
    */
   const table = (
     <TableContainerCustom headers={headers}>
-      {data.map((d, key) => (
-        <TableRowCustom key={key}>
-          <TableCellCustom>{d.name}</TableCellCustom>
-          <TableCellCustom>{d.description}</TableCellCustom>
-          <TableCellCustom>
-            <ButtonCustom
-              customColor="link"
-              onClick={() => {
-                setActiveRole(d);
-                setEditModal(true);
-              }}
-            >
-              Edit
-            </ButtonCustom>
-            <ButtonCustom
-              customColor="link"
-              onClick={() => {
-                setActiveRole(d);
-                setPermissionModal(true);
-              }}
-            >
-              Edit Permissions
-            </ButtonCustom>
-          </TableCellCustom>
-        </TableRowCustom>
-      ))}
+      {data
+        .sort((a, b) => sortDate(a.createdAt, b.createdAt))
+        .map((d, key) => (
+          <TableRowCustom key={key}>
+            <TableCellCustom>{d.name}</TableCellCustom>
+            <TableCellCustom>{d.description}</TableCellCustom>
+            <TableCellCustom>
+              <ButtonCustom
+                customColor="link"
+                onClick={() => {
+                  setActiveRole(d);
+                  setEditModal(true);
+                }}
+              >
+                Edit
+              </ButtonCustom>
+              <ButtonCustom
+                customColor="link"
+                onClick={() => {
+                  setActiveRole(d);
+                  setPermissionModal(true);
+                }}
+              >
+                Edit Permissions
+              </ButtonCustom>
+            </TableCellCustom>
+          </TableRowCustom>
+        ))}
     </TableContainerCustom>
   );
 
