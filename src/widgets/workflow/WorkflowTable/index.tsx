@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { useRouter } from "next/router";
 import { Box, Modal } from "@mui/material";
 import { ModalStyle } from "@/constants/styleConfig";
+import Workflow, { WorkflowItem } from "@/shared/libs/workflow";
 import EditModal from "../EditModal";
 import CloseIcon from "@mui/icons-material/Close";
 import TableCustom from "@/components/TableCustom";
@@ -9,19 +10,19 @@ import ButtonCustom from "@/components/ButtonCustom";
 
 import styles from "./index.module.scss";
 
+type IProps = {
+  rows: WorkflowItem[];
+  refreshData?: () => void;
+};
+
 const headers = ["Workflow", "Description", "Actions"];
 
-// TODO: remove mock data
-const rows = [
-  { id: 1, name: "Workflow 1", desc: "Description 1", Actions: [] },
-  { id: 2, name: "Workflow 2", desc: "Description 2", Actions: [] },
-];
-
-const Table: FC = () => {
+const Table: FC<IProps> = ({ rows, refreshData }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [values, setValues] = useState<any>();
+  const workflowService = new Workflow();
 
   const actionsRender = (index: number) => (
     <>
@@ -41,7 +42,7 @@ const Table: FC = () => {
         onClick={() =>
           router.push({
             pathname: "/workflow/manage",
-            query: { id: "1" },
+            query: { id: rows[index]?.id },
           })
         }
       >
@@ -53,7 +54,7 @@ const Table: FC = () => {
         onClick={() =>
           router.push({
             pathname: "/workflow/run",
-            query: { id: "1" },
+            query: { id: rows[index]?.id },
           })
         }
       >
@@ -71,8 +72,10 @@ const Table: FC = () => {
       </ButtonCustom>
     </>
   );
-  const handleDelete = () => {
-    // TODO: handle delete
+  const handleDelete = async () => {
+    await workflowService.deleteWorkflow(values.id);
+    refreshData && refreshData();
+    setOpenDelete(false);
   };
 
   return (
@@ -88,6 +91,7 @@ const Table: FC = () => {
         open={open}
         values={values}
         setOpen={setOpen}
+        refreshData={refreshData}
       />
       <Modal open={openDelete} onClose={() => setOpenDelete(false)}>
         <Box sx={ModalStyle}>

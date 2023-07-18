@@ -1,4 +1,6 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
+import { EMPTY_PLACEHOLDER } from "@/constants";
+import Workflow, { WorkflowItem } from "@/shared/libs/workflow";
 import EditModal from "@/widgets/workflow/EditModal";
 import ButtonCustom from "@/components/ButtonCustom";
 import WorkflowTable from "@/widgets/workflow/WorkflowTable";
@@ -8,6 +10,24 @@ import styles from "./index.module.scss";
 
 const Page = (): ReactElement => {
   const [open, setOpen] = useState(false);
+  const [rows, setRows] = useState<WorkflowItem[]>([]);
+  const workflowService = new Workflow();
+
+  const getAllWorkflows = async () => {
+    const data = await workflowService.getWorkflows();
+    setRows(
+      data.map(({ id, name, description }) => ({
+        id,
+        name,
+        description: description || EMPTY_PLACEHOLDER,
+        Actions: [],
+      }))
+    );
+  };
+
+  useEffect(() => {
+    getAllWorkflows();
+  }, []);
 
   return (
     <>
@@ -20,8 +40,13 @@ const Page = (): ReactElement => {
           New Workflow
         </ButtonCustom>
       </div>
-      <WorkflowTable />
-      <EditModal type="workflow" open={open} setOpen={setOpen} />
+      <WorkflowTable rows={rows} refreshData={getAllWorkflows} />
+      <EditModal
+        type="workflow"
+        open={open}
+        setOpen={setOpen}
+        refreshData={getAllWorkflows}
+      />
     </>
   );
 };

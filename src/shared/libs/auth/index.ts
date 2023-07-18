@@ -5,7 +5,7 @@ export default class Auth {
   private readonly baseUrl = "/account";
 
   public async login(input: ILoginPayload): Promise<ILoginReturn> {
-    const url = `${this.baseUrl}/login/password`;
+    const url = `${this.baseUrl}/login-by-password`;
     const data = {
       account: input.account,
       password: input.password,

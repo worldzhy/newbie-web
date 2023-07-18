@@ -1,6 +1,7 @@
 import { FC, useState, useEffect } from "react";
 import { ModalStyle } from "@/constants/styleConfig";
 import { Box, FormControl, Input, InputLabel, Modal } from "@mui/material";
+import Workflow from "@/shared/libs/workflow";
 import CloseIcon from "@mui/icons-material/Close";
 import ButtonCustom from "@/components/ButtonCustom";
 
@@ -11,24 +12,35 @@ interface IProps {
   open: boolean;
   values?: Record<string, string>;
   setOpen: (open: boolean) => void;
+  refreshData?: () => void;
 }
 
 const EditModal: FC<IProps> = ({
   type,
   open,
   setOpen,
-  values = { id: undefined, name: "", desc: "" },
+  refreshData,
+  values = { id: undefined, name: "", description: "" },
 }) => {
-  const { id, name: initName, desc: initDesc } = values;
+  const { id, name: initName, description: initDesc } = values;
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
+  const workflowService = new Workflow();
 
-  const handleUpdate = (): void => {
+  const handleUpdate = async () => {
     console.log(type, name, desc, "----> type name desc");
     if (id) {
       // TODO: do update
+      if (type === "workflow") {
+        await workflowService.updateWorkflows({ id, name, description: desc });
+        refreshData && refreshData();
+      }
     } else {
       // TODO: do add
+      if (type === "workflow") {
+        await workflowService.createWorkflows({ name, description: desc });
+        refreshData && refreshData();
+      }
     }
     setName("");
     setDesc("");
