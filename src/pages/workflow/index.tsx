@@ -1,5 +1,4 @@
 import { ReactElement, useEffect, useState } from "react";
-import { EMPTY_PLACEHOLDER } from "@/constants";
 import Workflow, { WorkflowItem } from "@/shared/libs/workflow";
 import EditModal from "@/widgets/workflow/EditModal";
 import ButtonCustom from "@/components/ButtonCustom";
@@ -19,7 +18,7 @@ const Page = (): ReactElement => {
       data.map(({ id, name, description }) => ({
         id,
         name,
-        description: description || EMPTY_PLACEHOLDER,
+        description,
         Actions: [],
       }))
     );

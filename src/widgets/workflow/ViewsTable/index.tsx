@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { Box, Modal } from "@mui/material";
 import { ModalStyle } from "@/constants/styleConfig";
+import ViewsService, { ViewItem } from "@/shared/libs/workflow-views";
 import EditModal from "../EditModal";
 import CloseIcon from "@mui/icons-material/Close";
 import TableCustom from "@/components/TableCustom";
@@ -8,18 +9,18 @@ import ButtonCustom from "@/components/ButtonCustom";
 
 import styles from "./index.module.scss";
 
+type IProps = {
+  rows: ViewItem[];
+  refreshData: () => void;
+};
+
 const headers = ["Name", "Description", "Actions"];
 
-// TODO: remove mock data
-const rows = [
-  { id: 1, name: "View 1", desc: "Description 1", Actions: [] },
-  { id: 2, name: "View 2", desc: "Description 2", Actions: [] },
-];
-
-const Table: FC = () => {
+const Table: FC<IProps> = ({ rows, refreshData }) => {
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [values, setValues] = useState<any>();
+  const service = new ViewsService();
 
   const actionsRender = (index: number) => (
     <>
@@ -45,8 +46,10 @@ const Table: FC = () => {
       </ButtonCustom>
     </>
   );
-  const handleDelete = () => {
-    // TODO: handle delete
+  const handleDelete = async () => {
+    await service.deleteView(values.id);
+    refreshData();
+    setOpenDelete(false);
   };
 
   return (
@@ -61,12 +64,21 @@ const Table: FC = () => {
         </ButtonCustom>
       </div>
       <TableCustom
-        rows={rows.map(({ id, ...rest }) => rest)}
+        rows={rows.map(({ id, workflowId, ...rest }) => ({
+          ...rest,
+          Actions: [],
+        }))}
         headers={headers}
         isLastColActions={true}
         children={actionsRender}
       />
-      <EditModal type="view" open={open} setOpen={setOpen} values={values} />
+      <EditModal
+        type="view"
+        open={open}
+        setOpen={setOpen}
+        values={values}
+        refreshData={refreshData}
+      />
       <Modal open={openDelete} onClose={() => setOpenDelete(false)}>
         <Box sx={ModalStyle}>
           <div className={styles.container}>

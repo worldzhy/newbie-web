@@ -1,9 +1,11 @@
 import { FC, useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { ModalStyle } from "@/constants/styleConfig";
 import { Box, FormControl, Input, InputLabel, Modal } from "@mui/material";
 import Workflow from "@/shared/libs/workflow";
 import CloseIcon from "@mui/icons-material/Close";
 import ButtonCustom from "@/components/ButtonCustom";
+import ViewsService from "@/shared/libs/workflow-views";
 
 import styles from "./index.module.scss";
 
@@ -22,10 +24,13 @@ const EditModal: FC<IProps> = ({
   refreshData,
   values = { id: undefined, name: "", description: "" },
 }) => {
+  const router = useRouter();
+  const { id: workflowId } = router.query as { id: string };
   const { id, name: initName, description: initDesc } = values;
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const workflowService = new Workflow();
+  const viewService = new ViewsService();
 
   const handleUpdate = async () => {
     console.log(type, name, desc, "----> type name desc");
@@ -33,18 +38,21 @@ const EditModal: FC<IProps> = ({
       // TODO: do update
       if (type === "workflow") {
         await workflowService.updateWorkflows({ id, name, description: desc });
-        refreshData && refreshData();
+      } else if (type === "view") {
+        await viewService.updateView({ id, name, description: desc });
       }
     } else {
       // TODO: do add
       if (type === "workflow") {
         await workflowService.createWorkflows({ name, description: desc });
-        refreshData && refreshData();
+      } else if (type === "view") {
+        await viewService.createView({ workflowId, name, description: desc });
       }
     }
     setName("");
     setDesc("");
     setOpen(false);
+    refreshData && refreshData();
   };
 
   useEffect(() => {

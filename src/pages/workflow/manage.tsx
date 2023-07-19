@@ -1,26 +1,62 @@
-import { ReactElement, SyntheticEvent, useState } from "react";
+import { ReactElement, SyntheticEvent, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { Box, Tab } from "@mui/material";
+import { ViewItem } from "@/shared/libs/workflow-views";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
+import Workflow from "@/shared/libs/workflow";
 import styleConfig from "@/constants/styleConfig";
 import ViewsTable from "@/widgets/workflow/ViewsTable";
-import StatesTable from "@/widgets/workflow/StatesTable";
 import RoutesTable from "@/widgets/workflow/RoutesTable";
+import StatesTable from "@/widgets/workflow/StatesTable";
 import LayoutDashboard from "@/widgets/layout/LayoutDashboard";
 
 import styles from "./index.module.scss";
 
-const Page = (): ReactElement => {
-  /**
-   * States
-   */
-  const [value, setValue] = useState("1");
+enum TabState {
+  Views = "Views",
+  States = "States",
+  Routes = "Routes",
+}
 
-  /**
-   * Handlers
-   */
-  const handleChange = (event: SyntheticEvent, newValue: string): void => {
+type Data = {
+  description: string | null;
+  id: string;
+  name: string;
+  views: ViewItem[];
+  states: any[];
+  routes: any[];
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+const Page = (): ReactElement => {
+  const router = useRouter();
+  const [value, setValue] = useState(TabState.Views);
+  const [data, setData] = useState<Data>();
+  const workflowService = new Workflow();
+  const { id } = router.query;
+
+  const handleChange = (_: SyntheticEvent, newValue: TabState): void => {
     setValue(newValue);
   };
+
+  const getData = async () => {
+    if (typeof id !== "string" || !id) return;
+    const data: Data = await workflowService.getWorkflowData(id);
+
+    data.views = data.views.map(({ id, workflowId, name, description }) => ({
+      id,
+      workflowId,
+      name,
+      description,
+    }));
+    // TODO: mapper states and routes
+    setData(data);
+  };
+
+  useEffect(() => {
+    getData();
+  }, [id]);
 
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
@@ -36,13 +72,13 @@ const Page = (): ReactElement => {
             variant="scrollable"
             scrollButtons="auto"
           >
-            {["Views", "States", "Routes"].map(
-              (label: string, index: number) => (
+            {[TabState.Views, TabState.States, TabState.States].map(
+              (label: string) => (
                 <Tab
                   key={label}
                   className={styles.tabItems}
                   label={label}
-                  value={(index + 1).toString()}
+                  value={label}
                   sx={{
                     "&.Mui-selected": {
                       color: styleConfig.color.primaryWhiteColor,
@@ -55,17 +91,17 @@ const Page = (): ReactElement => {
           </TabList>
         </Box>
         <TabPanel
-          value="1"
+          value={TabState.Views}
           sx={{
             border: 2,
             borderColor: styleConfig.color.primaryGrayColor,
             marginTop: 2,
           }}
         >
-          <ViewsTable />
+          <ViewsTable rows={data?.views || []} refreshData={getData} />
         </TabPanel>
         <TabPanel
-          value="2"
+          value={TabState.States}
           sx={{
             border: 2,
             borderColor: styleConfig.color.primaryGrayColor,
@@ -75,7 +111,7 @@ const Page = (): ReactElement => {
           <StatesTable />
         </TabPanel>
         <TabPanel
-          value="3"
+          value={TabState.Routes}
           sx={{
             border: 2,
             borderColor: styleConfig.color.primaryGrayColor,

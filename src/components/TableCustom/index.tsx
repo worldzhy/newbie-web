@@ -1,14 +1,15 @@
 import React, { type ReactElement, type FC, type ReactNode } from "react";
+import { EMPTY_PLACEHOLDER } from "@/constants";
 import {
   Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
+  Stack,
   Paper,
   Skeleton,
-  Stack,
+  TableRow,
+  TableCell,
+  TableBody,
+  TableHead,
+  TableContainer,
 } from "@mui/material";
 import styleConfig from "@/constants/styleConfig";
 import styles from "./index.module.scss";
@@ -83,7 +84,7 @@ const TableCustom: FC<Props> = ({
                 }
                 return (
                   <TableCell key={key} align="center">
-                    {row[field]}
+                    {row[field] || EMPTY_PLACEHOLDER}
                   </TableCell>
                 );
               })}
