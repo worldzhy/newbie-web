@@ -1,12 +1,11 @@
 /** @type {import('next').NextConfig} */
 const path = require('path');
 
-const { DEPLOY_ENV, BASE_URL } = process.env;
+const { BASE_URL } = process.env;
 
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    DEPLOY_ENV,
     BASE_URL,
   },
   sassOptions: {
