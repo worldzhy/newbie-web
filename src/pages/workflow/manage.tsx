@@ -1,7 +1,7 @@
 import { ReactElement, SyntheticEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Box, Tab } from "@mui/material";
-import { ViewItem } from "@/shared/libs/workflow-views";
+import { ViewItem } from "@/shared/libs/workflow-view";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Workflow from "@/shared/libs/workflow";
 import styleConfig from "@/constants/styleConfig";
@@ -50,7 +50,13 @@ const Page = (): ReactElement => {
       name,
       description,
     }));
-    // TODO: mapper states and routes
+    data.states = data.states.map(({ id, workflowId, name, description }) => ({
+      id,
+      workflowId,
+      name,
+      description,
+    }));
+    // TODO: mapper and routes
     setData(data);
   };
 
@@ -72,7 +78,7 @@ const Page = (): ReactElement => {
             variant="scrollable"
             scrollButtons="auto"
           >
-            {[TabState.Views, TabState.States, TabState.States].map(
+            {[TabState.Views, TabState.States, TabState.Routes].map(
               (label: string) => (
                 <Tab
                   key={label}
@@ -108,7 +114,7 @@ const Page = (): ReactElement => {
             marginTop: 2,
           }}
         >
-          <StatesTable />
+          <StatesTable rows={data?.states || []} refreshData={getData} />
         </TabPanel>
         <TabPanel
           value={TabState.Routes}

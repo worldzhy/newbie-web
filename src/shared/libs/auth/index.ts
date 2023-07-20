@@ -2,10 +2,10 @@ import axiosInstance from "@/shared/libs/axiosInstance";
 import { setCookie } from "cookies-next";
 
 export default class Auth {
-  private readonly baseUrl = "/account";
+  private readonly url = "/account";
 
   public async login(input: ILoginPayload): Promise<ILoginReturn> {
-    const url = `${this.baseUrl}/login-by-password`;
+    const url = `${this.url}/login-by-password`;
     const data = {
       account: input.account,
       password: input.password,
@@ -16,7 +16,7 @@ export default class Auth {
   }
 
   public async sendVerificationCode(email: string): Promise<boolean> {
-    const url = `${this.baseUrl}/reset-password/verification-code/email/${email}`;
+    const url = `${this.url}/reset-password/verification-code/email/${email}`;
     const res = await axiosInstance.get(url);
     return res.data;
   }
@@ -25,7 +25,7 @@ export default class Auth {
     payload: IForgotPasswordPayload
   ): Promise<IForgotPasswordReturn> {
     const { email, verificationCode, newPassword } = payload;
-    const url = `${this.baseUrl}/reset-password`;
+    const url = `${this.url}/reset-password`;
     const data = {
       email,
       verificationCode,

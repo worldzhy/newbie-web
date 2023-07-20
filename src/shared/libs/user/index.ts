@@ -2,17 +2,17 @@ import axiosInstance from "@/shared/libs/axiosInstance";
 import { type IRole } from "@/shared/libs/role";
 
 export default class User {
-  private readonly baseUrl = "/users";
+  private readonly url = "/users";
 
   public async get(): Promise<IGetUserOutput> {
-    const url = `${this.baseUrl}?pageSize=100&page=1&roleId=1&name=1`;
+    const url = `${this.url}?pageSize=100&page=1&roleId=1&name=1`;
     const res = await axiosInstance.get(url);
     return res.data;
   }
 
   public async create(payload: IAddUserPayload): Promise<IAddUserResponse> {
     const { email, phone, username, password, roles } = payload;
-    const url = this.baseUrl;
+    const url = this.url;
     const data = {
       email,
       phone,
@@ -30,7 +30,7 @@ export default class User {
     payload: IUpdateUserPayload
   ): Promise<IUpdateUserResponse> {
     const { email, phone, username, password, roles } = payload;
-    const url = `${this.baseUrl}/${userid}`;
+    const url = `${this.url}/${userid}`;
     const data = {
       email,
       phone,
@@ -43,7 +43,7 @@ export default class User {
   }
 
   public async delete(userid: string): Promise<IDeleteUserResponse> {
-    const url = `${this.baseUrl}/${userid}`;
+    const url = `${this.url}/${userid}`;
     const res = await axiosInstance.delete(url);
     return res.data;
   }

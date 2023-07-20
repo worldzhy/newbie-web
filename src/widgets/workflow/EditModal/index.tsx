@@ -5,7 +5,8 @@ import { Box, FormControl, Input, InputLabel, Modal } from "@mui/material";
 import Workflow from "@/shared/libs/workflow";
 import CloseIcon from "@mui/icons-material/Close";
 import ButtonCustom from "@/components/ButtonCustom";
-import ViewsService from "@/shared/libs/workflow-views";
+import ViewsService from "@/shared/libs/workflow-view";
+import StatesService from "@/shared/libs/workflow-state";
 
 import styles from "./index.module.scss";
 
@@ -31,15 +32,18 @@ const EditModal: FC<IProps> = ({
   const [desc, setDesc] = useState("");
   const workflowService = new Workflow();
   const viewService = new ViewsService();
+  const stateService = new StatesService();
 
   const handleUpdate = async () => {
     console.log(type, name, desc, "----> type name desc");
     if (id) {
       // TODO: do update
       if (type === "workflow") {
-        await workflowService.updateWorkflows({ id, name, description: desc });
+        await workflowService.updateWorkflow({ id, name, description: desc });
       } else if (type === "view") {
         await viewService.updateView({ id, name, description: desc });
+      } else if (type === "state") {
+        await stateService.updateState({ id, name, description: desc });
       }
     } else {
       // TODO: do add
@@ -47,6 +51,8 @@ const EditModal: FC<IProps> = ({
         await workflowService.createWorkflows({ name, description: desc });
       } else if (type === "view") {
         await viewService.createView({ workflowId, name, description: desc });
+      } else if (type === "state") {
+        await stateService.createState({ workflowId, name, description: desc });
       }
     }
     setName("");

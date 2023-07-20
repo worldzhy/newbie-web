@@ -1,7 +1,7 @@
 import axiosInstance from "@/shared/libs/axiosInstance";
 
 export default class Permission {
-  private readonly baseUrl = "/permissions";
+  private readonly url = "/permissions";
 
   public async get(roleId: string): Promise<IPermissionsByResources[]> {
     // Get list of all resources, actions, and permissions
@@ -85,7 +85,7 @@ export default class Permission {
     action: string,
     roleId: string
   ): Promise<ICreateUserResponse> {
-    const url = this.baseUrl;
+    const url = this.url;
     const data = {
       resource,
       action,
@@ -102,19 +102,19 @@ export default class Permission {
   }
 
   public async delete(permissionId: number): Promise<IDeleteUserResponse> {
-    const url = `${this.baseUrl}/${permissionId}`;
+    const url = `${this.url}/${permissionId}`;
     const res = await axiosInstance.delete(url);
     return { ...res.data, change: "Delete" };
   }
 
   private async getResources(): Promise<string[]> {
-    const url = `${this.baseUrl}/resources`;
+    const url = `${this.url}/resources`;
     const res = await axiosInstance.get(url);
     return res.data;
   }
 
   private async getActions(): Promise<string[]> {
-    const url = `${this.baseUrl}/actions`;
+    const url = `${this.url}/actions`;
     const res = await axiosInstance.get(url);
     return res.data;
   }
@@ -122,13 +122,13 @@ export default class Permission {
   private async getPermissionOfResource(
     resource: string
   ): Promise<IPermission[]> {
-    const url = `${this.baseUrl}?resource=${resource}`;
+    const url = `${this.url}?resource=${resource}`;
     const res = await axiosInstance.get(url);
     return res.data;
   }
 
   private async getAllPermissions(): Promise<IPermission[]> {
-    const url = this.baseUrl;
+    const url = this.url;
     const res = await axiosInstance.get(url);
     return res.data;
   }

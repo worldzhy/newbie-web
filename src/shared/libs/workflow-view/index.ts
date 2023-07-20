@@ -1,17 +1,20 @@
 import axiosInstance from "@/shared/libs/axiosInstance";
 
-export type WorkflowItem = {
+export type ViewItem = {
   id: string;
+  workflowId: string;
   name: string;
+  startSign?: boolean;
   description: string | null;
   createdAt?: string;
   updatedAt?: string;
 };
 
-export default class Workflow {
-  private readonly url = "/workflows";
+export default class WorkflowView {
+  private readonly url = "/workflow-views";
 
-  public async createWorkflows(data: {
+  public async createView(data: {
+    workflowId: string;
     name: string;
     description: string;
   }): Promise<any> {
@@ -19,24 +22,19 @@ export default class Workflow {
     return res.data;
   }
 
-  public async updateWorkflow({ id, ...data }: any) {
+  public async updateView({ id, ...data }: any) {
     const url = `${this.url}/${id}`;
     const res = await axiosInstance.patch(url, data);
     return res.data;
   }
 
-  public async getWorkflows(): Promise<WorkflowItem[]> {
-    const res = await axiosInstance.get(this.url);
-    return res.data;
-  }
-
-  public async getWorkflowData(id: string): Promise<any> {
+  public async getView(id: string): Promise<ViewItem[]> {
     const url = `${this.url}/${id}`;
-    const res = await axiosInstance.get(url);
-    return res.data;
+    const { data } = await axiosInstance.get(url);
+    return Array.isArray(data) ? data : [];
   }
 
-  public async deleteWorkflow(id: string): Promise<any> {
+  public async deleteView(id: string): Promise<any> {
     const url = `${this.url}/${id}`;
     const res = await axiosInstance.delete(url);
     return res.data;

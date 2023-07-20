@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { Box, Modal } from "@mui/material";
 import { ModalStyle } from "@/constants/styleConfig";
-import ViewsService, { ViewItem } from "@/shared/libs/workflow-views";
+import ViewsService, { ViewItem } from "@/shared/libs/workflow-view";
 import EditModal from "../EditModal";
 import CloseIcon from "@mui/icons-material/Close";
 import TableCustom from "@/components/TableCustom";
@@ -46,6 +46,10 @@ const Table: FC<IProps> = ({ rows, refreshData }) => {
       </ButtonCustom>
     </>
   );
+  const handleCreate = () => {
+    setValues(undefined);
+    setOpen(true);
+  };
   const handleDelete = async () => {
     await service.deleteView(values.id);
     refreshData();
@@ -55,11 +59,7 @@ const Table: FC<IProps> = ({ rows, refreshData }) => {
   return (
     <>
       <div className={styles.addContainer}>
-        <ButtonCustom
-          size="small"
-          customColor="dark"
-          onClick={() => setOpen(true)}
-        >
+        <ButtonCustom size="small" customColor="dark" onClick={handleCreate}>
           New View
         </ButtonCustom>
       </div>

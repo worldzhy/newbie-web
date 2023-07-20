@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { Box, Modal } from "@mui/material";
 import { ModalStyle } from "@/constants/styleConfig";
+import StatesService, { StateItem } from "@/shared/libs/workflow-state";
 import EditModal from "../EditModal";
 import CloseIcon from "@mui/icons-material/Close";
 import TableCustom from "@/components/TableCustom";
@@ -8,18 +9,18 @@ import ButtonCustom from "@/components/ButtonCustom";
 
 import styles from "./index.module.scss";
 
+type IProps = {
+  rows: StateItem[];
+  refreshData: () => void;
+};
+
 const headers = ["Name", "Description", "Actions"];
 
-// TODO: remove mock data
-const rows = [
-  { id: 1, name: "State 1", desc: "Description 1", Actions: [] },
-  { id: 2, name: "State 2", desc: "Description 2", Actions: [] },
-];
-
-const Table: FC = () => {
+const Table: FC<IProps> = ({ rows, refreshData }) => {
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [values, setValues] = useState<any>();
+  const service = new StatesService();
 
   const actionsRender = (index: number) => (
     <>
@@ -45,28 +46,39 @@ const Table: FC = () => {
       </ButtonCustom>
     </>
   );
-  const handleDelete = () => {
-    // TODO: handle delete
+  const handleCreate = () => {
+    setValues(undefined);
+    setOpen(true);
+  };
+  const handleDelete = async () => {
+    await service.deleteState(values.id);
+    refreshData();
+    setOpenDelete(false);
   };
 
   return (
     <>
       <div className={styles.addContainer}>
-        <ButtonCustom
-          size="small"
-          customColor="dark"
-          onClick={() => setOpen(true)}
-        >
+        <ButtonCustom size="small" customColor="dark" onClick={handleCreate}>
           New State
         </ButtonCustom>
       </div>
       <TableCustom
-        rows={rows.map(({ id, ...rest }) => rest)}
+        rows={rows.map(({ id, workflowId, ...rest }) => ({
+          ...rest,
+          Actions: [],
+        }))}
         headers={headers}
         isLastColActions={true}
         children={actionsRender}
       />
-      <EditModal type="state" open={open} setOpen={setOpen} values={values} />
+      <EditModal
+        type="state"
+        open={open}
+        setOpen={setOpen}
+        values={values}
+        refreshData={refreshData}
+      />
       <Modal open={openDelete} onClose={() => setOpenDelete(false)}>
         <Box sx={ModalStyle}>
           <div className={styles.container}>
