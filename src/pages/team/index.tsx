@@ -1,6 +1,6 @@
-import React, { type ReactElement, type SyntheticEvent } from 'react';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Tab } from '@mui/material';
+import React, {type ReactElement, type SyntheticEvent} from 'react';
+import {TabContext, TabList, TabPanel} from '@mui/lab';
+import {Box, Tab} from '@mui/material';
 import styles from './index.module.scss';
 import styleConfig from '@/constants/styleConfig';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
@@ -22,15 +22,15 @@ const Page = (): ReactElement => {
   };
 
   return (
-    <Box sx={{ width: '100%', typography: 'body1' }}>
+    <Box sx={{width: '100%', typography: 'body1'}}>
       <TabContext value={value}>
         <Box>
           <TabList
             onChange={handleChange}
             aria-label="lab API tabs example"
             sx={{
-              '& .MuiTabs-flexContainer': { gap: 2 },
-              '& .MuiTabs-indicator': { display: 'none' },
+              '& .MuiTabs-flexContainer': {gap: 2},
+              '& .MuiTabs-indicator': {display: 'none'},
             }}
             variant="scrollable"
             scrollButtons="auto"

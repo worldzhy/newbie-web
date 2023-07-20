@@ -1,6 +1,6 @@
-import React, { type ReactElement } from 'react';
+import React, {type ReactElement} from 'react';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
-import { Typography } from '@mui/material';
+import {Typography} from '@mui/material';
 
 const Page = (): ReactElement => {
   return <Typography variant="h1">Projects</Typography>;

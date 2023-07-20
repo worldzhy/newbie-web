@@ -1,11 +1,11 @@
-import { ReactElement, useEffect, useState } from "react";
-import Workflow, { WorkflowItem } from "@/shared/libs/workflow";
-import EditModal from "@/widgets/workflow/EditModal";
-import ButtonCustom from "@/components/ButtonCustom";
-import WorkflowTable from "@/widgets/workflow/WorkflowTable";
-import LayoutDashboard from "@/widgets/layout/LayoutDashboard";
+import {ReactElement, useEffect, useState} from 'react';
+import Workflow, {WorkflowItem} from '@/shared/libs/workflow';
+import EditModal from '@/widgets/workflow/EditModal';
+import ButtonCustom from '@/components/ButtonCustom';
+import WorkflowTable from '@/widgets/workflow/WorkflowTable';
+import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 
-import styles from "./index.module.scss";
+import styles from './index.module.scss';
 
 const Page = (): ReactElement => {
   const [open, setOpen] = useState(false);
@@ -15,7 +15,7 @@ const Page = (): ReactElement => {
   const getAllWorkflows = async () => {
     const data = await workflowService.getWorkflows();
     setRows(
-      data.map(({ id, name, description }) => ({
+      data.map(({id, name, description}) => ({
         id,
         name,
         description,

@@ -1,7 +1,7 @@
-import { type FC, type ReactElement } from "react";
-import TableRowCustom from "../TableRowCustom";
-import TableCellCustom from "../TableCellCustom";
-import SkeletonCustom from "../SkeletonCustom";
+import {type FC, type ReactElement} from 'react';
+import TableRowCustom from '../TableRowCustom';
+import TableCellCustom from '../TableCellCustom';
+import SkeletonCustom from '../SkeletonCustom';
 
 interface Props {
   numCols: number;

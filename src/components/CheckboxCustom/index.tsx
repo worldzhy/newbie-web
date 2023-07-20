@@ -1,5 +1,5 @@
-import React, { type ReactElement, type FC } from 'react';
-import { Checkbox, type CheckboxProps } from '@mui/material';
+import React, {type ReactElement, type FC} from 'react';
+import {Checkbox, type CheckboxProps} from '@mui/material';
 import styleConfig from '@/constants/styleConfig';
 
 const CheckboxCustom: FC<CheckboxProps> = ({

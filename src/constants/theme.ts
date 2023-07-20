@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import {createTheme} from '@mui/material/styles';
 import '@fontsource/rubik/latin-400.css';
 import '@fontsource/rubik/latin-500.css';
 import '@fontsource/rubik/latin-700.css';
@@ -13,4 +13,4 @@ const theme = createTheme({
     },
   },
 });
-export { theme };
+export {theme};

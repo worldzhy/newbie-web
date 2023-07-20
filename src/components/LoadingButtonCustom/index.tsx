@@ -1,5 +1,5 @@
-import React, { type ReactNode, type FC } from 'react';
-import { LoadingButton, type LoadingButtonProps } from '@mui/lab';
+import React, {type ReactNode, type FC} from 'react';
+import {LoadingButton, type LoadingButtonProps} from '@mui/lab';
 import styleConfig from '@/constants/styleConfig';
 
 interface Props extends LoadingButtonProps {

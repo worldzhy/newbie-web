@@ -1,4 +1,4 @@
-import React, { type ReactElement, type ReactNode, type FC } from "react";
+import React, {type ReactElement, type ReactNode, type FC} from 'react';
 import {
   Dialog,
   DialogActions,
@@ -6,10 +6,10 @@ import {
   DialogContentText,
   DialogTitle,
   type DialogProps,
-} from "@mui/material";
-import LoadingButtonCustom from "../LoadingButtonCustom";
-import ButtonCustom from "../ButtonCustom";
-import styleConfig from "@/constants/styleConfig";
+} from '@mui/material';
+import LoadingButtonCustom from '../LoadingButtonCustom';
+import ButtonCustom from '../ButtonCustom';
+import styleConfig from '@/constants/styleConfig';
 
 interface Props {
   open: boolean;
@@ -39,22 +39,22 @@ const FormDialogCustom: FC<Props & DialogProps> = ({
       maxWidth={stretch ? false : undefined}
       onClose={closeDialogHandler}
       sx={{
-        ".MuiDialog-paper": {
+        '.MuiDialog-paper': {
           border: `2px solid ${styleConfig.color.primaryBlackColor}`,
-          padding: { xs: "0px", sm: "10px" },
+          padding: {xs: '0px', sm: '10px'},
         },
       }}
     >
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         {contentText !== undefined && (
-          <DialogContentText sx={{ paddingBottom: "12px" }}>
+          <DialogContentText sx={{paddingBottom: '12px'}}>
             {contentText}
           </DialogContentText>
         )}
         {children}
       </DialogContent>
-      <DialogActions sx={{ padding: "16px 24px" }}>
+      <DialogActions sx={{padding: '16px 24px'}}>
         <LoadingButtonCustom
           customColor="dark"
           loading={isProcessing}

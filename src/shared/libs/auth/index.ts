@@ -1,8 +1,8 @@
-import axiosInstance from "@/shared/libs/axiosInstance";
-import { setCookie } from "cookies-next";
+import axiosInstance from '@/shared/libs/axiosInstance';
+import {setCookie} from 'cookies-next';
 
 export default class Auth {
-  private readonly url = "/account";
+  private readonly url = '/account';
 
   public async login(input: ILoginPayload): Promise<ILoginReturn> {
     const url = `${this.url}/login-by-password`;
@@ -11,7 +11,7 @@ export default class Auth {
       password: input.password,
     };
     const res = await axiosInstance.post(url, data);
-    setCookie("token", res.data.token);
+    setCookie('token', res.data.token);
     return res.data;
   }
 
@@ -24,7 +24,7 @@ export default class Auth {
   public async forgotPassword(
     payload: IForgotPasswordPayload
   ): Promise<IForgotPasswordReturn> {
-    const { email, verificationCode, newPassword } = payload;
+    const {email, verificationCode, newPassword} = payload;
     const url = `${this.url}/reset-password`;
     const data = {
       email,

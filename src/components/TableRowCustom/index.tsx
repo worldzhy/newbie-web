@@ -1,5 +1,5 @@
-import React, { type ReactElement, type FC, type ReactNode } from 'react';
-import { TableRow } from '@mui/material';
+import React, {type ReactElement, type FC, type ReactNode} from 'react';
+import {TableRow} from '@mui/material';
 import styleConfig from '@/constants/styleConfig';
 
 interface Props {
@@ -7,10 +7,7 @@ interface Props {
   type?: 'header' | 'body';
 }
 
-const TableRowCustom: FC<Props> = ({
-  children,
-  type = 'body',
-}): ReactElement => {
+const TableRowCustom: FC<Props> = ({children, type = 'body'}): ReactElement => {
   return (
     <TableRow
       sx={{

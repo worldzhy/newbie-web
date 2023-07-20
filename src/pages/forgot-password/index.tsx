@@ -1,12 +1,12 @@
-import React, { useState, type ReactElement } from 'react';
-import { useRouter } from 'next/router';
-import { Typography, Container, Grid } from '@mui/material';
+import React, {useState, type ReactElement} from 'react';
+import {useRouter} from 'next/router';
+import {Typography, Container, Grid} from '@mui/material';
 import styles from './index.module.scss';
 import ButtonCustom from '@/components/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom';
 import LinkCustom from '@/components/LinkCustom';
 import Auth from '@/shared/libs/auth';
-import { delayExecute, sendRequest, showToast } from '@/shared/libs/mixins';
+import {delayExecute, sendRequest, showToast} from '@/shared/libs/mixins';
 import Pre from '@/widgets/shared/Pre';
 
 const Page = (): ReactElement => {
@@ -36,7 +36,7 @@ const Page = (): ReactElement => {
 
   const forgotPasswordHandler = async (): Promise<void> => {
     await sendRequest(setIsLoading, async () => {
-      await auth.forgotPassword({ email, verificationCode, newPassword });
+      await auth.forgotPassword({email, verificationCode, newPassword});
       showToast('success', 'Password successfully updated');
       delayExecute(() => {
         void router.push('/');

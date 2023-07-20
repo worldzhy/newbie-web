@@ -1,11 +1,6 @@
-import React, { type ReactElement, type FC } from "react";
-import {
-  Stack,
-  TextField,
-  Typography,
-  type TextFieldProps,
-} from "@mui/material";
-import styleConfig from "@/constants/styleConfig";
+import React, {type ReactElement, type FC} from 'react';
+import {Stack, TextField, Typography, type TextFieldProps} from '@mui/material';
+import styleConfig from '@/constants/styleConfig';
 
 interface Props {
   label: string;
@@ -26,13 +21,13 @@ const FormDialogInputCustom: FC<Props & TextFieldProps> = ({
 }): ReactElement => {
   return (
     <Stack
-      direction={{ xs: "column", sm: "row" }}
-      alignItems={{ xs: "flex-start" }}
-      spacing={{ xs: 1 }}
+      direction={{xs: 'column', sm: 'row'}}
+      alignItems={{xs: 'flex-start'}}
+      spacing={{xs: 1}}
     >
       <Typography
         sx={{
-          width: "150px",
+          width: '150px',
         }}
       >
         {label}
@@ -46,13 +41,13 @@ const FormDialogInputCustom: FC<Props & TextFieldProps> = ({
         hiddenLabel
         variant="outlined"
         size="small"
-        type={type ?? "string"}
+        type={type ?? 'string'}
         sx={{
-          width: "100%",
-          "& fieldset": {
+          width: '100%',
+          '& fieldset': {
             border: `2px solid ${styleConfig.color.primaryBlackColor}`,
           },
-          "& label": {
+          '& label': {
             fontWeight: 400,
             color: `${styleConfig.color.primaryBlackColor}`,
           },

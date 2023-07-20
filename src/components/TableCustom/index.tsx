@@ -1,5 +1,5 @@
-import React, { type ReactElement, type FC, type ReactNode } from "react";
-import { EMPTY_PLACEHOLDER } from "@/constants";
+import React, {type ReactElement, type FC, type ReactNode} from 'react';
+import {EMPTY_PLACEHOLDER} from '@/constants';
 import {
   Table,
   Stack,
@@ -10,9 +10,9 @@ import {
   TableBody,
   TableHead,
   TableContainer,
-} from "@mui/material";
-import styleConfig from "@/constants/styleConfig";
-import styles from "./index.module.scss";
+} from '@mui/material';
+import styleConfig from '@/constants/styleConfig';
+import styles from './index.module.scss';
 
 interface Props {
   headers: string[];
@@ -37,18 +37,18 @@ const TableCustom: FC<Props> = ({
 
   const table = (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{minWidth: 650}} aria-label="simple table">
         <TableHead>
           <TableRow
             sx={{
               backgroundColor: `${styleConfig.color.primaryGrayColor}`,
-              "& td, & th": {
+              '& td, & th': {
                 border: `2px solid ${styleConfig.color.primaryBlackColor}`,
               },
-              "& th": {
+              '& th': {
                 color: `${styleConfig.color.primaryWhiteColor}`,
-                fontSize: "14px",
-                fontWeight: "700",
+                fontSize: '14px',
+                fontWeight: '700',
               },
             }}
           >
@@ -64,13 +64,13 @@ const TableCustom: FC<Props> = ({
             <TableRow
               key={rowKey}
               sx={{
-                "& td, & th": {
+                '& td, & th': {
                   border: `2px solid ${styleConfig.color.primaryBlackColor}`,
                 },
-                "& th": {
+                '& th': {
                   color: `${styleConfig.color.primaryGrayColor}`,
-                  fontSize: "14px",
-                  fontWeight: "400",
+                  fontSize: '14px',
+                  fontWeight: '400',
                 },
               }}
             >
