@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react';
+import {type ReactElement} from 'react';
 import styles from './index.module.scss';
 
 const Loading = (): ReactElement => {

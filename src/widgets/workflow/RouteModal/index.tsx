@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import {FC, useState, useEffect} from 'react';
 import {
   Box,
   Modal,
@@ -8,93 +8,102 @@ import {
   InputLabel,
   FormControl,
   FormControlLabel,
-} from "@mui/material";
-import { ModalStyle } from "@/constants/styleConfig";
-import CloseIcon from "@mui/icons-material/Close";
-import ButtonCustom from "@/components/ButtonCustom";
+} from '@mui/material';
+import {useRouter} from 'next/router';
+import {ModalStyle} from '@/constants/styleConfig';
+import {ViewItem} from '@/shared/libs/workflow-view';
+import {StateItem} from '@/shared/libs/workflow-state';
+import CloseIcon from '@mui/icons-material/Close';
+import RouteService from '@/shared/libs/workflow-route';
+import ButtonCustom from '@/components/ButtonCustom';
 
-import styles from "./index.module.scss";
-
-const states = [
-  { id: 1, name: "State 1", desc: "Description 1", Actions: [] },
-  { id: 2, name: "State 2", desc: "Description 2", Actions: [] },
-];
-const views = [
-  { id: 1, name: "View 1", desc: "Description 1", Actions: [] },
-  { id: 2, name: "View 2", desc: "Description 2", Actions: [] },
-];
+import styles from './index.module.scss';
 
 interface IProps {
+  views: ViewItem[];
+  states: StateItem[];
   open: boolean;
   values?: Record<string, string>;
   setOpen: (open: boolean) => void;
+  refreshData: () => void;
 }
 
 const defaultValues = {
   id: undefined,
-  startPoint: false,
-  viewId: "",
-  stateId: "",
-  nextViewId: "",
+  startSign: false,
+  viewId: '',
+  stateId: '',
+  nextViewId: '',
 };
 
-const RouteModal: FC<IProps> = ({ open, setOpen, values = defaultValues }) => {
+const RouteModal: FC<IProps> = ({
+  views,
+  states,
+  open,
+  setOpen,
+  values = defaultValues,
+  refreshData,
+}) => {
   const {
     id,
-    startPoint: initStartPoint,
     viewId: initView,
     stateId: initState,
     nextViewId: initNextView,
+    startSign: initStartSign,
   } = values;
+  const router = useRouter();
+  const {id: workflowId} = router.query as {id: string};
   const [formValues, setFormValues] = useState<any>(defaultValues);
-  const { startPoint, viewId, stateId, nextViewId } = formValues;
+  const {startSign, viewId, stateId, nextViewId} = formValues;
+  const service = new RouteService();
 
   const handleChange = (event: any) => {
-    const { name, value, checked } = event.target;
+    const {name, value, checked} = event.target;
     setFormValues({
       ...formValues,
-      [name]: name === "startPoint" ? checked : value,
+      [name]: name === 'startSign' ? checked : value,
     });
   };
-  const handleUpdate = (): void => {
-    console.log(
-      startPoint,
+  const handleUpdate = async () => {
+    const params = {
+      workflowId,
+      startSign,
       viewId,
       stateId,
       nextViewId,
-      "----> startPoint, view, state, nextView"
-    );
+    };
     if (id) {
-      // TODO: do update
+      await service.updateRoute({id, ...params});
     } else {
-      // TODO: do add
+      await service.createRoute(params);
     }
     setFormValues(defaultValues);
     setOpen(false);
+    refreshData();
   };
 
   useEffect(() => {
     setFormValues({
-      startPoint: initStartPoint,
+      startSign: initStartSign,
       viewId: initView,
       stateId: initState,
       nextViewId: initNextView,
     });
-  }, [initStartPoint, initView, initState, initNextView]);
+  }, [initStartSign, initView, initState, initNextView]);
 
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
       <Box sx={ModalStyle}>
         <div className={styles.container}>
           <CloseIcon className={styles.close} onClick={() => setOpen(false)} />
-          <h3 style={{ marginBottom: 30 }}>{!id ? "New" : "Edit"} Route</h3>
+          <h3 style={{marginBottom: 30}}>{!id ? 'New' : 'Edit'} Route</h3>
           <FormControlLabel
             label="Start Point"
-            name="startPoint"
-            control={<Switch checked={startPoint} onChange={handleChange} />}
-            style={{ marginBottom: 30 }}
+            name="startSign"
+            control={<Switch checked={startSign} onChange={handleChange} />}
+            style={{marginBottom: 30}}
           />
-          <FormControl style={{ marginBottom: 20 }}>
+          <FormControl style={{marginBottom: 20}}>
             <InputLabel htmlFor="view">View</InputLabel>
             <Select
               id="view"
@@ -104,14 +113,14 @@ const RouteModal: FC<IProps> = ({ open, setOpen, values = defaultValues }) => {
               label="View"
               onChange={handleChange}
             >
-              {views.map(({ id, name }) => (
+              {views.map(({id, name}) => (
                 <MenuItem value={id} key={id}>
                   {name}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-          <FormControl style={{ marginBottom: 20 }}>
+          <FormControl style={{marginBottom: 20}}>
             <InputLabel htmlFor="state">State</InputLabel>
             <Select
               id="state"
@@ -121,14 +130,14 @@ const RouteModal: FC<IProps> = ({ open, setOpen, values = defaultValues }) => {
               label="State"
               onChange={handleChange}
             >
-              {states.map(({ id, name }) => (
+              {states.map(({id, name}) => (
                 <MenuItem value={id} key={id}>
                   {name}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-          <FormControl style={{ marginBottom: 20 }}>
+          <FormControl style={{marginBottom: 20}}>
             <InputLabel htmlFor="nextView">Next View</InputLabel>
             <Select
               id="nextView"
@@ -138,7 +147,7 @@ const RouteModal: FC<IProps> = ({ open, setOpen, values = defaultValues }) => {
               label="Next View"
               onChange={handleChange}
             >
-              {views.map(({ id, name }) => (
+              {views.map(({id, name}) => (
                 <MenuItem value={id} key={id}>
                   {name}
                 </MenuItem>
@@ -151,7 +160,7 @@ const RouteModal: FC<IProps> = ({ open, setOpen, values = defaultValues }) => {
             className={styles.submit}
             onClick={handleUpdate}
           >
-            {!id ? "Create" : "Update"}
+            {!id ? 'Create' : 'Update'}
           </ButtonCustom>
         </div>
       </Box>

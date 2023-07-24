@@ -1,11 +1,11 @@
-import React, { type ReactElement, useState, type FC, useReducer } from "react";
-import User, { type IUser } from "@/shared/libs/user";
-import { sendRequest } from "@/shared/libs/mixins";
-import { Stack } from "@mui/material";
-import FormDialogCustom from "@/components/FormDialogCustom";
-import FormDialogInputCustom from "@/components/FormDialogInputCustom";
-import MultiSelectCustom from "@/components/MultiSelectCustom";
-import { type IRole } from "@/shared/libs/role";
+import React, {type ReactElement, useState, type FC, useReducer} from 'react';
+import User, {type IUser} from '@/shared/libs/user';
+import {sendRequest} from '@/shared/libs/mixins';
+import {Stack} from '@mui/material';
+import FormDialogCustom from '@/components/FormDialogCustom';
+import FormDialogInputCustom from '@/components/FormDialogInputCustom';
+import MultiSelectCustom from '@/components/MultiSelectCustom';
+import {type IRole} from '@/shared/libs/role';
 
 /**
  * Types
@@ -40,13 +40,13 @@ const MembersCreateModal: FC<Props> = ({
   const [selectedRoleNames, setSelectedRoleNames] = useState<string[]>([]);
   const [newMember, updateNewMember] = useReducer(
     (prev: INewMember, next: Record<string, string>): INewMember => {
-      return { ...prev, ...next };
+      return {...prev, ...next};
     },
     {
-      email: "",
-      phone: "",
-      username: "",
-      password: "",
+      email: '',
+      phone: '',
+      username: '',
+      password: '',
     }
   );
 
@@ -55,10 +55,10 @@ const MembersCreateModal: FC<Props> = ({
    */
   const createRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      const roles = rolesList.filter(({ name }) =>
+      const roles = rolesList.filter(({name}) =>
         selectedRoleNames.includes(name)
       );
-      const newMemberData = { ...newMember, roles };
+      const newMemberData = {...newMember, roles};
       const res = await new User().create(newMemberData);
       setData([
         ...data,
@@ -83,39 +83,39 @@ const MembersCreateModal: FC<Props> = ({
       formSubmitHandler={createRole}
       isProcessing={isProcessing}
     >
-      <Stack spacing={{ xs: 2, sm: 1 }}>
+      <Stack spacing={{xs: 2, sm: 1}}>
         <FormDialogInputCustom
           label="Email"
           type="email"
           value={newMember.email}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            updateNewMember({ email: e.target.value });
+            updateNewMember({email: e.target.value});
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
           label="Phone"
           value={newMember.phone}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            updateNewMember({ phone: e.target.value });
+            updateNewMember({phone: e.target.value});
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
           label="Username"
           value={newMember.username}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            updateNewMember({ username: e.target.value });
+            updateNewMember({username: e.target.value});
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
           label="Password"
           value={newMember.password}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            updateNewMember({ password: e.target.value });
+            updateNewMember({password: e.target.value});
           }}
         ></FormDialogInputCustom>
         <MultiSelectCustom
           label="Roles"
-          options={rolesList.map((r) => r.name)}
+          options={rolesList.map(r => r.name)}
           selected={selectedRoleNames}
           setSelected={setSelectedRoleNames}
         />

@@ -1,7 +1,7 @@
-import axiosInstance from "@/shared/libs/axiosInstance";
+import axiosInstance from '@/shared/libs/axiosInstance';
 
 export default class Role {
-  private readonly url = "/roles";
+  private readonly url = '/roles';
 
   public async getAll(): Promise<IRole[]> {
     const url = this.url;
@@ -17,7 +17,7 @@ export default class Role {
 
   public async create(name: string): Promise<IRole> {
     const url = this.url;
-    const data = { name };
+    const data = {name};
     const res = await axiosInstance.post(url, data);
     return res.data;
   }
@@ -26,9 +26,9 @@ export default class Role {
     roleId: string,
     payload: IUpdateRolePayload
   ): Promise<IRole> {
-    const { name, description } = payload;
+    const {name, description} = payload;
     const url = `${this.url}/${roleId}`;
-    const data = { name, description };
+    const data = {name, description};
     const res = await axiosInstance.patch(url, data);
     return res.data;
   }

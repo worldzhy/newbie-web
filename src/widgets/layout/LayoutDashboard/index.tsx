@@ -1,4 +1,4 @@
-import React, { type ReactElement, useState } from 'react';
+import React, {type ReactElement, useState} from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -32,7 +32,7 @@ interface Props {
   active: 'Projects' | 'Services' | 'Wiki' | 'Team' | 'My space' | 'Workflow';
 }
 
-const LayoutDashboard = ({ window, children, active }: Props): ReactElement => {
+const LayoutDashboard = ({window, children, active}: Props): ReactElement => {
   /**
    * Declarations
    */
@@ -87,14 +87,14 @@ const LayoutDashboard = ({ window, children, active }: Props): ReactElement => {
   return (
     <>
       <Pre title={active} isLoading={false} />
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{display: 'flex'}}>
         <CssBaseline />
         <AppBar
           position="fixed"
           className={styles.header}
           sx={{
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-            ml: { sm: `${drawerWidth}px` },
+            width: {sm: `calc(100% - ${drawerWidth}px)`},
+            ml: {sm: `${drawerWidth}px`},
           }}
         >
           <Toolbar className={styles.toolbar}>
@@ -103,7 +103,7 @@ const LayoutDashboard = ({ window, children, active }: Props): ReactElement => {
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: 'none' } }}
+              sx={{mr: 2, display: {sm: 'none'}}}
             >
               <MenuIcon />
             </IconButton>
@@ -126,7 +126,7 @@ const LayoutDashboard = ({ window, children, active }: Props): ReactElement => {
         </AppBar>
         <Box
           component="nav"
-          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          sx={{width: {sm: drawerWidth}, flexShrink: {sm: 0}}}
           aria-label="mailbox folders"
         >
           <Drawer
@@ -138,7 +138,7 @@ const LayoutDashboard = ({ window, children, active }: Props): ReactElement => {
               keepMounted: true,
             }}
             sx={{
-              display: { xs: 'block', sm: 'none' },
+              display: {xs: 'block', sm: 'none'},
               '& .MuiDrawer-paper': {
                 boxSizing: 'border-box',
                 width: drawerWidth,
@@ -151,7 +151,7 @@ const LayoutDashboard = ({ window, children, active }: Props): ReactElement => {
           <Drawer
             variant="permanent"
             sx={{
-              display: { xs: 'none', sm: 'block' },
+              display: {xs: 'none', sm: 'block'},
               '& .MuiDrawer-paper': {
                 boxSizing: 'border-box',
                 width: drawerWidth,
@@ -168,7 +168,7 @@ const LayoutDashboard = ({ window, children, active }: Props): ReactElement => {
           sx={{
             flexGrow: 1,
             p: 3,
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            width: {sm: `calc(100% - ${drawerWidth}px)`},
           }}
         >
           <Toolbar />

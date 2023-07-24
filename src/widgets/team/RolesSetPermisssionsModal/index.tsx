@@ -1,24 +1,24 @@
-import React, { type ReactElement, type FC, useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import React, {type ReactElement, type FC, useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
 import Permission, {
   type IPermissionsByResources,
   type IRequest,
-} from "@/shared/libs/permission";
+} from '@/shared/libs/permission';
 import {
   delayExecute,
   isUnauthorized,
   raise,
   sendRequest,
   showError,
-} from "@/shared/libs/mixins";
-import FormDialogCustom from "@/components/FormDialogCustom";
-import TableContainerCustom from "@/components/TableContainerCustom";
-import TableRowCustom from "@/components/TableRowCustom";
-import TableCellCustom from "@/components/TableCellCustom";
-import { FormControlLabel, FormGroup } from "@mui/material";
-import CheckboxCustom from "@/components/CheckboxCustom";
-import { type IRole } from "@/shared/libs/role";
-import TableSkeletonCustom from "@/components/TableSkeletonCustom";
+} from '@/shared/libs/mixins';
+import FormDialogCustom from '@/components/FormDialogCustom';
+import TableContainerCustom from '@/components/TableContainerCustom';
+import TableRowCustom from '@/components/TableRowCustom';
+import TableCellCustom from '@/components/TableCellCustom';
+import {FormControlLabel, FormGroup} from '@mui/material';
+import CheckboxCustom from '@/components/CheckboxCustom';
+import {type IRole} from '@/shared/libs/role';
+import TableSkeletonCustom from '@/components/TableSkeletonCustom';
 
 /**
  * Types
@@ -39,7 +39,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
    * Declarations
    */
   const router = useRouter();
-  const headers = ["Resouce", "Permission"];
+  const headers = ['Resouce', 'Permission'];
 
   /**
    * States
@@ -55,13 +55,13 @@ const RolesSetPermisssionsModal: FC<Props> = ({
   const updatePermissions = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
       const res = await new Permission().update(requests);
-      res.forEach((r) => {
+      res.forEach(r => {
         setData(
-          data.map((d) => {
+          data.map(d => {
             if (d.resource === r.resource) {
-              d.permissions.map((p) => {
+              d.permissions.map(p => {
                 if (p.action === r.action) {
-                  p.id = r.change === "Delete" ? null : r.id;
+                  p.id = r.change === 'Delete' ? null : r.id;
                 }
                 return d;
               });
@@ -80,9 +80,9 @@ const RolesSetPermisssionsModal: FC<Props> = ({
     id: number | null
   ): void => {
     setData(
-      data.map((d) => {
+      data.map(d => {
         if (d.resource === resource) {
-          d.permissions.map((p) => {
+          d.permissions.map(p => {
             if (p.action === action) {
               p.allow = !p.allow;
             }
@@ -93,8 +93,8 @@ const RolesSetPermisssionsModal: FC<Props> = ({
       })
     );
     const isAdd = data
-      .find((d) => d.resource === resource)
-      ?.permissions.find((p) => p.action === action)?.allow;
+      .find(d => d.resource === resource)
+      ?.permissions.find(p => p.action === action)?.allow;
     if (isAdd === undefined) {
       return;
     }
@@ -103,7 +103,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
       requests.delete(requestId);
     } else {
       requests?.set(requestId, {
-        change: isAdd ? "add" : "delete",
+        change: isAdd ? 'add' : 'delete',
         resourceId: id,
         resource,
         action,
@@ -131,7 +131,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
         if (!ignore) {
           if (isUnauthorized(err)) {
             delayExecute(() => {
-              void router.push("/");
+              void router.push('/');
             }, 0);
           } else {
             showError(err);
@@ -151,7 +151,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
   return (
     <FormDialogCustom
       open={modal}
-      title={`Edit Permissions for ${activeRole?.name ?? ""}`}
+      title={`Edit Permissions for ${activeRole?.name ?? ''}`}
       closeDialogHandler={() => {
         setModal(false);
       }}
@@ -164,7 +164,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
         ) : (
           data
             .sort((a, b) => a.resource.localeCompare(b.resource))
-            .map(({ resource, permissions }, key) => (
+            .map(({resource, permissions}, key) => (
               <TableRowCustom key={key}>
                 <TableCellCustom>{resource}</TableCellCustom>
                 <TableCellCustom>

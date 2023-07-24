@@ -1,6 +1,6 @@
-import React, { type ReactElement } from 'react';
+import React, {type ReactElement} from 'react';
 import Link from 'next/link';
-import { Typography } from '@mui/material';
+import {Typography} from '@mui/material';
 import styles from './index.module.scss';
 
 const Logo = (): ReactElement => {

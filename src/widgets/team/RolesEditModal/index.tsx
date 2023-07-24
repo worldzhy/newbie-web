@@ -4,12 +4,12 @@ import React, {
   type FC,
   useReducer,
   useEffect,
-} from "react";
-import { raise, sendRequest, showError } from "@/shared/libs/mixins";
-import { Stack } from "@mui/material";
-import FormDialogCustom from "@/components/FormDialogCustom";
-import FormDialogInputCustom from "@/components/FormDialogInputCustom";
-import Role, { type IRole } from "@/shared/libs/role";
+} from 'react';
+import {raise, sendRequest, showError} from '@/shared/libs/mixins';
+import {Stack} from '@mui/material';
+import FormDialogCustom from '@/components/FormDialogCustom';
+import FormDialogInputCustom from '@/components/FormDialogInputCustom';
+import Role, {type IRole} from '@/shared/libs/role';
 
 /**
  * Types
@@ -41,11 +41,11 @@ const RolesEditModal: FC<Props> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [updatedActiveRole, setUpdatedActiveRole] = useReducer(
     (prev: INewRole, next: Record<string, string>): INewRole => {
-      return { ...prev, ...next };
+      return {...prev, ...next};
     },
     {
-      name: "",
-      description: "",
+      name: '',
+      description: '',
     }
   );
 
@@ -57,10 +57,10 @@ const RolesEditModal: FC<Props> = ({
       try {
         if (!ignore) {
           if (!activeRole?.id) return;
-          const { name, description } = activeRole;
+          const {name, description} = activeRole;
           setUpdatedActiveRole({
             name,
-            description: description ?? "",
+            description: description ?? '',
           });
         }
       } catch (err: unknown) {
@@ -82,11 +82,11 @@ const RolesEditModal: FC<Props> = ({
    */
   const updateRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      const { name, description } = updatedActiveRole;
-      const payload = { name, description };
+      const {name, description} = updatedActiveRole;
+      const payload = {name, description};
       await new Role().update(raise(activeRole?.id), payload);
       setData(
-        data.map((d) => {
+        data.map(d => {
           if (d.id === activeRole?.id) {
             return {
               ...d,
@@ -103,19 +103,19 @@ const RolesEditModal: FC<Props> = ({
   return (
     <FormDialogCustom
       open={modal}
-      title={`Edit ${activeRole?.name ?? ""}`}
+      title={`Edit ${activeRole?.name ?? ''}`}
       closeDialogHandler={() => {
         setModal(false);
       }}
       formSubmitHandler={updateRole}
       isProcessing={isProcessing}
     >
-      <Stack spacing={{ xs: 2, sm: 1 }}>
+      <Stack spacing={{xs: 2, sm: 1}}>
         <FormDialogInputCustom
           label="Name"
           value={updatedActiveRole.name}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setUpdatedActiveRole({ name: e.target.value });
+            setUpdatedActiveRole({name: e.target.value});
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
@@ -124,7 +124,7 @@ const RolesEditModal: FC<Props> = ({
           rows={3}
           value={updatedActiveRole.description}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setUpdatedActiveRole({ description: e.target.value });
+            setUpdatedActiveRole({description: e.target.value});
           }}
         ></FormDialogInputCustom>
       </Stack>

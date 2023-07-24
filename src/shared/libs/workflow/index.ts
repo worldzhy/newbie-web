@@ -1,4 +1,4 @@
-import axiosInstance from "@/shared/libs/axiosInstance";
+import axiosInstance from '@/shared/libs/axiosInstance';
 
 export type WorkflowItem = {
   id: string;
@@ -9,7 +9,7 @@ export type WorkflowItem = {
 };
 
 export default class Workflow {
-  private readonly url = "/workflows";
+  private readonly url = '/workflows';
 
   public async createWorkflows(data: {
     name: string;
@@ -19,7 +19,7 @@ export default class Workflow {
     return res.data;
   }
 
-  public async updateWorkflow({ id, ...data }: any) {
+  public async updateWorkflow({id, ...data}: any) {
     const url = `${this.url}/${id}`;
     const res = await axiosInstance.patch(url, data);
     return res.data;

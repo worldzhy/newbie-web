@@ -1,7 +1,7 @@
-import axiosInstance from "@/shared/libs/axiosInstance";
+import axiosInstance from '@/shared/libs/axiosInstance';
 
 export default class Permission {
-  private readonly url = "/permissions";
+  private readonly url = '/permissions';
 
   public async get(roleId: string): Promise<IPermissionsByResources[]> {
     // Get list of all resources, actions, and permissions
@@ -11,15 +11,15 @@ export default class Permission {
       this.getAllPermissions(),
     ]);
     const permissions = permissionsAll.filter(
-      (p) => p.trustedEntityId === roleId
+      p => p.trustedEntityId === roleId
     );
 
     // Construct base summary object which contains summary of permissions by resources
     const permissionsByResources: IPermissionsByResources[] = resources.map(
-      (resource) => {
+      resource => {
         return {
           resource,
-          permissions: actions.map((action) => ({
+          permissions: actions.map(action => ({
             id: null,
             action,
             allow: false,
@@ -30,9 +30,9 @@ export default class Permission {
 
     // Begin updating summary object
     for (const permission of permissions) {
-      const { id, action, resource } = permission;
+      const {id, action, resource} = permission;
       const resourceIndex = permissionsByResources.findIndex(
-        (p) => p.resource === resource
+        p => p.resource === resource
       );
 
       if (resourceIndex === -1) {
@@ -41,13 +41,13 @@ export default class Permission {
 
       const actionIndex = permissionsByResources[
         resourceIndex
-      ]?.permissions.findIndex((p) => p.action === action);
+      ]?.permissions.findIndex(p => p.action === action);
 
       if (actionIndex === -1 || actionIndex === undefined) {
         continue;
       }
 
-      const { permissions } = permissionsByResources[resourceIndex] ?? {};
+      const {permissions} = permissionsByResources[resourceIndex] ?? {};
       const actionPermissions = permissions?.[actionIndex];
 
       if (actionPermissions) {
@@ -65,13 +65,13 @@ export default class Permission {
     const reqsArray = Array.from(reqs);
     return await Promise.all(
       reqsArray.map(async ([_, data]) => {
-        const { change, resource, resourceId, action, roleId } = data;
-        if (change === "add") {
+        const {change, resource, resourceId, action, roleId} = data;
+        if (change === 'add') {
           // eslint-disable-next-line @typescript-eslint/return-await
           return this.create(resource, action, roleId);
         } else {
           if (resourceId === null) {
-            throw new Error("No resource id found.");
+            throw new Error('No resource id found.');
           }
           // eslint-disable-next-line @typescript-eslint/return-await
           return this.delete(resourceId);
@@ -91,20 +91,20 @@ export default class Permission {
       action,
       where: {
         state: {
-          in: ["StateA", "StateB"],
+          in: ['StateA', 'StateB'],
         },
       },
-      trustedEntityType: "USER",
+      trustedEntityType: 'USER',
       trustedEntityId: roleId,
     };
     const res = await axiosInstance.post(url, data);
-    return { ...res.data, change: "Create" };
+    return {...res.data, change: 'Create'};
   }
 
   public async delete(permissionId: number): Promise<IDeleteUserResponse> {
     const url = `${this.url}/${permissionId}`;
     const res = await axiosInstance.delete(url);
-    return { ...res.data, change: "Delete" };
+    return {...res.data, change: 'Delete'};
   }
 
   private async getResources(): Promise<string[]> {
@@ -161,17 +161,17 @@ export interface IPermissionsByResources {
 }
 
 export interface IRequest {
-  change: "add" | "delete";
+  change: 'add' | 'delete';
   resourceId: number | null;
   resource: string;
   action: string;
   roleId: string;
 }
 
-interface ICreateUserResponse extends Omit<IPermission, "where"> {
-  change: "Create";
+interface ICreateUserResponse extends Omit<IPermission, 'where'> {
+  change: 'Create';
 }
 
-interface IDeleteUserResponse extends Omit<IPermission, "where"> {
-  change: "Delete";
+interface IDeleteUserResponse extends Omit<IPermission, 'where'> {
+  change: 'Delete';
 }

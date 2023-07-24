@@ -1,7 +1,7 @@
-import React, { type ReactElement, useState, type FC } from "react";
-import { raise, sendRequest } from "@/shared/libs/mixins";
-import FormDialogCustom from "@/components/FormDialogCustom";
-import Role, { type IRole } from "@/shared/libs/role";
+import React, {type ReactElement, useState, type FC} from 'react';
+import {raise, sendRequest} from '@/shared/libs/mixins';
+import FormDialogCustom from '@/components/FormDialogCustom';
+import Role, {type IRole} from '@/shared/libs/role';
 
 /**
  * Types
@@ -33,7 +33,7 @@ const RolesDeleteModal: FC<Props> = ({
   const deleteRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
       await new Role().delete(raise(activeRole?.id));
-      setData(data.filter((d) => d.id !== activeRole?.id));
+      setData(data.filter(d => d.id !== activeRole?.id));
       setModal(false);
     });
   };
@@ -41,7 +41,7 @@ const RolesDeleteModal: FC<Props> = ({
   return (
     <FormDialogCustom
       open={modal}
-      title={`You are about to delete ${activeRole?.name ?? ""}`}
+      title={`You are about to delete ${activeRole?.name ?? ''}`}
       contentText="You cannot view this role in your list anymore if you delete. This will permanently delete the role. Are you sure?"
       closeDialogHandler={() => {
         setModal(false);

@@ -1,23 +1,23 @@
-import { FC, useState } from "react";
-import { useRouter } from "next/router";
-import { Box, Modal } from "@mui/material";
-import { ModalStyle } from "@/constants/styleConfig";
-import Workflow, { WorkflowItem } from "@/shared/libs/workflow";
-import EditModal from "../EditModal";
-import CloseIcon from "@mui/icons-material/Close";
-import TableCustom from "@/components/TableCustom";
-import ButtonCustom from "@/components/ButtonCustom";
+import {FC, useState} from 'react';
+import {useRouter} from 'next/router';
+import {Box, Modal} from '@mui/material';
+import {ModalStyle} from '@/constants/styleConfig';
+import Workflow, {WorkflowItem} from '@/shared/libs/workflow';
+import EditModal from '../EditModal';
+import CloseIcon from '@mui/icons-material/Close';
+import TableCustom from '@/components/TableCustom';
+import ButtonCustom from '@/components/ButtonCustom';
 
-import styles from "./index.module.scss";
+import styles from './index.module.scss';
 
 type IProps = {
   rows: WorkflowItem[];
   refreshData?: () => void;
 };
 
-const headers = ["Workflow", "Description", "Actions"];
+const headers = ['Workflow', 'Description', 'Actions'];
 
-const Table: FC<IProps> = ({ rows, refreshData }) => {
+const Table: FC<IProps> = ({rows, refreshData}) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -41,8 +41,8 @@ const Table: FC<IProps> = ({ rows, refreshData }) => {
         size="small"
         onClick={() =>
           router.push({
-            pathname: "/workflow/manage",
-            query: { id: rows[index]?.id },
+            pathname: '/workflow/manage',
+            query: {id: rows[index]?.id},
           })
         }
       >
@@ -53,8 +53,8 @@ const Table: FC<IProps> = ({ rows, refreshData }) => {
         size="small"
         onClick={() =>
           router.push({
-            pathname: "/workflow/run",
-            query: { id: rows[index]?.id },
+            pathname: '/workflow/run',
+            query: {id: rows[index]?.id},
           })
         }
       >
@@ -81,7 +81,7 @@ const Table: FC<IProps> = ({ rows, refreshData }) => {
   return (
     <>
       <TableCustom
-        rows={rows.map(({ id, ...rest }) => rest)}
+        rows={rows.map(({id, ...rest}) => rest)}
         headers={headers}
         isLastColActions={true}
         children={actionsRender}
@@ -102,7 +102,7 @@ const Table: FC<IProps> = ({ rows, refreshData }) => {
                 setOpenDelete(false);
               }}
             />
-            <h3 style={{ marginBottom: 30 }}>
+            <h3 style={{marginBottom: 30}}>
               Are you sure you want to delete {values?.name}
             </h3>
             <ButtonCustom

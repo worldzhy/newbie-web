@@ -1,29 +1,29 @@
-import React, { type ReactElement, useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { Stack } from "@mui/material";
-import ButtonCustom from "@/components/ButtonCustom";
+import React, {type ReactElement, useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
+import {Stack} from '@mui/material';
+import ButtonCustom from '@/components/ButtonCustom';
 import {
   delayExecute,
   isUnauthorized,
   showError,
   sortDate,
-} from "@/shared/libs/mixins";
-import Role, { type IRole } from "@/shared/libs/role";
-import RolesSetPermisssionsModal from "../RolesSetPermisssionsModal";
-import TableCellCustom from "@/components/TableCellCustom";
-import SkeletonCustom from "@/components/SkeletonCustom";
-import RolesCreateModal from "../RolesCreateModal";
-import TableContainerCustom from "@/components/TableContainerCustom";
-import TableRowCustom from "@/components/TableRowCustom";
-import RolesEditModal from "../RolesEditModal";
-import RolesDeleteModal from "../RolesDeleteModal";
+} from '@/shared/libs/mixins';
+import Role, {type IRole} from '@/shared/libs/role';
+import RolesSetPermisssionsModal from '../RolesSetPermisssionsModal';
+import TableCellCustom from '@/components/TableCellCustom';
+import SkeletonCustom from '@/components/SkeletonCustom';
+import RolesCreateModal from '../RolesCreateModal';
+import TableContainerCustom from '@/components/TableContainerCustom';
+import TableRowCustom from '@/components/TableRowCustom';
+import RolesEditModal from '../RolesEditModal';
+import RolesDeleteModal from '../RolesDeleteModal';
 
 const RolesTab = (): ReactElement => {
   /**
    * Declarations
    */
   const router = useRouter();
-  const headers = ["Name", "Description", "Permissions"];
+  const headers = ['Name', 'Description', 'Permissions'];
 
   /**
    * States
@@ -52,7 +52,7 @@ const RolesTab = (): ReactElement => {
         if (!ignore) {
           if (isUnauthorized(err)) {
             delayExecute(() => {
-              void router.push("/");
+              void router.push('/');
             }, 0);
           } else {
             showError(err);

@@ -1,22 +1,22 @@
-import { FC, useState } from "react";
-import { Box, Modal } from "@mui/material";
-import { ModalStyle } from "@/constants/styleConfig";
-import StatesService, { StateItem } from "@/shared/libs/workflow-state";
-import EditModal from "../EditModal";
-import CloseIcon from "@mui/icons-material/Close";
-import TableCustom from "@/components/TableCustom";
-import ButtonCustom from "@/components/ButtonCustom";
+import {FC, useState} from 'react';
+import {Box, Modal} from '@mui/material';
+import {ModalStyle} from '@/constants/styleConfig';
+import StatesService, {StateItem} from '@/shared/libs/workflow-state';
+import EditModal from '../EditModal';
+import CloseIcon from '@mui/icons-material/Close';
+import TableCustom from '@/components/TableCustom';
+import ButtonCustom from '@/components/ButtonCustom';
 
-import styles from "./index.module.scss";
+import styles from './index.module.scss';
 
 type IProps = {
   rows: StateItem[];
   refreshData: () => void;
 };
 
-const headers = ["Name", "Description", "Actions"];
+const headers = ['Name', 'Description', 'Actions'];
 
-const Table: FC<IProps> = ({ rows, refreshData }) => {
+const Table: FC<IProps> = ({rows, refreshData}) => {
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [values, setValues] = useState<any>();
@@ -64,7 +64,7 @@ const Table: FC<IProps> = ({ rows, refreshData }) => {
         </ButtonCustom>
       </div>
       <TableCustom
-        rows={rows.map(({ id, workflowId, ...rest }) => ({
+        rows={rows.map(({id, workflowId, ...rest}) => ({
           ...rest,
           Actions: [],
         }))}
@@ -88,7 +88,7 @@ const Table: FC<IProps> = ({ rows, refreshData }) => {
                 setOpenDelete(false);
               }}
             />
-            <h3 style={{ marginBottom: 30 }}>
+            <h3 style={{marginBottom: 30}}>
               Are you sure you want to delete {values?.name}
             </h3>
             <ButtonCustom

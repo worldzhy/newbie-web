@@ -1,8 +1,8 @@
-import axiosInstance from "@/shared/libs/axiosInstance";
-import { type IRole } from "@/shared/libs/role";
+import axiosInstance from '@/shared/libs/axiosInstance';
+import {type IRole} from '@/shared/libs/role';
 
 export default class User {
-  private readonly url = "/users";
+  private readonly url = '/users';
 
   public async get(): Promise<IGetUserOutput> {
     const url = `${this.url}?pageSize=100&page=1&roleId=1&name=1`;
@@ -11,15 +11,15 @@ export default class User {
   }
 
   public async create(payload: IAddUserPayload): Promise<IAddUserResponse> {
-    const { email, phone, username, password, roles } = payload;
+    const {email, phone, username, password, roles} = payload;
     const url = this.url;
     const data = {
       email,
       phone,
       username,
       password,
-      status: "ACTIVE",
-      roleIds: roles.map((r) => ({ id: r.id })),
+      status: 'ACTIVE',
+      roleIds: roles.map(r => ({id: r.id})),
     };
     const res = await axiosInstance.post(url, data);
     return res.data;
@@ -29,14 +29,14 @@ export default class User {
     userid: string,
     payload: IUpdateUserPayload
   ): Promise<IUpdateUserResponse> {
-    const { email, phone, username, password, roles } = payload;
+    const {email, phone, username, password, roles} = payload;
     const url = `${this.url}/${userid}`;
     const data = {
       email,
       phone,
       username,
-      roleIds: roles.map((r) => ({ id: r.id })),
-      ...(password !== "" && { password }),
+      roleIds: roles.map(r => ({id: r.id})),
+      ...(password !== '' && {password}),
     };
     const res = await axiosInstance.patch(url, data);
     return res.data;

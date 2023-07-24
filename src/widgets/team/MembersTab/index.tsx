@@ -1,22 +1,22 @@
-import React, { useEffect, type ReactElement, useState } from "react";
-import { useRouter } from "next/router";
-import User, { type IUser } from "@/shared/libs/user";
+import React, {useEffect, type ReactElement, useState} from 'react';
+import {useRouter} from 'next/router';
+import User, {type IUser} from '@/shared/libs/user';
 import {
   delayExecute,
   isUnauthorized,
   showError,
   sortDate,
-} from "@/shared/libs/mixins";
-import { Stack } from "@mui/material";
-import ButtonCustom from "@/components/ButtonCustom";
-import TableContainerCustom from "@/components/TableContainerCustom";
-import TableRowCustom from "@/components/TableRowCustom";
-import TableCellCustom from "@/components/TableCellCustom";
-import MembersCreateModal from "../MembersCreateModal";
-import MembersEditModal from "../MembersEditModal";
-import SkeletonCustom from "@/components/SkeletonCustom";
-import Role, { type IRole } from "@/shared/libs/role";
-import MembersDeleteModal from "../MembersDeleteModal";
+} from '@/shared/libs/mixins';
+import {Stack} from '@mui/material';
+import ButtonCustom from '@/components/ButtonCustom';
+import TableContainerCustom from '@/components/TableContainerCustom';
+import TableRowCustom from '@/components/TableRowCustom';
+import TableCellCustom from '@/components/TableCellCustom';
+import MembersCreateModal from '../MembersCreateModal';
+import MembersEditModal from '../MembersEditModal';
+import SkeletonCustom from '@/components/SkeletonCustom';
+import Role, {type IRole} from '@/shared/libs/role';
+import MembersDeleteModal from '../MembersDeleteModal';
 
 /**
  * Types
@@ -27,7 +27,7 @@ const MembersTab = (): ReactElement => {
    * Declarations
    */
   const router = useRouter();
-  const headers = ["Name", "Email", "Phone", "Role", "Actions"];
+  const headers = ['Name', 'Email', 'Phone', 'Role', 'Actions'];
   const [rolesList, setRolesList] = useState<IRole[]>([]);
 
   /**
@@ -61,7 +61,7 @@ const MembersTab = (): ReactElement => {
         if (!ignore) {
           if (isUnauthorized(err)) {
             delayExecute(() => {
-              void router.push("/");
+              void router.push('/');
             }, 0);
           } else {
             showError(err);
@@ -90,7 +90,7 @@ const MembersTab = (): ReactElement => {
             <TableCellCustom>{d.email}</TableCellCustom>
             <TableCellCustom>{d.phone}</TableCellCustom>
             <TableCellCustom>
-              {d.roles.map((r) => r.name).join(", ")}
+              {d.roles.map(r => r.name).join(', ')}
             </TableCellCustom>
             <TableCellCustom>
               <ButtonCustom

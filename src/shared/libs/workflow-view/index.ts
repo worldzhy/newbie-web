@@ -1,7 +1,7 @@
-import axiosInstance from "@/shared/libs/axiosInstance";
+import axiosInstance from '@/shared/libs/axiosInstance';
 
 export type ViewItem = {
-  id: string;
+  id: number;
   workflowId: string;
   name: string;
   startSign?: boolean;
@@ -11,18 +11,18 @@ export type ViewItem = {
 };
 
 export default class WorkflowView {
-  private readonly url = "/workflow-views";
+  private readonly url = '/workflow-views';
 
   public async createView(data: {
     workflowId: string;
     name: string;
     description: string;
-  }): Promise<any> {
+  }): Promise<ViewItem> {
     const res = await axiosInstance.post(this.url, data);
     return res.data;
   }
 
-  public async updateView({ id, ...data }: any) {
+  public async updateView({id, ...data}: any) {
     const url = `${this.url}/${id}`;
     const res = await axiosInstance.patch(url, data);
     return res.data;
@@ -30,7 +30,7 @@ export default class WorkflowView {
 
   public async getView(id: string): Promise<ViewItem[]> {
     const url = `${this.url}/${id}`;
-    const { data } = await axiosInstance.get(url);
+    const {data} = await axiosInstance.get(url);
     return Array.isArray(data) ? data : [];
   }
 

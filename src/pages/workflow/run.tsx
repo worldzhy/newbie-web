@@ -4,14 +4,14 @@ import ButtonCustom from '@/components/ButtonCustom';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 
 const mockStep = {
-  startPoint: true,
+  startSign: true,
   view: 'View 1',
   desc: 'this is desc',
   state: ['State 1', 'State 2', 'State 3'],
 };
 
 const Page = (): ReactElement => {
-  const {startPoint, view, desc, state} = mockStep;
+  const {startSign, view, desc, state} = mockStep;
 
   const handleNext = () => {
     // TODO: handle next
@@ -21,7 +21,7 @@ const Page = (): ReactElement => {
     <Card sx={{maxWidth: 345}}>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {`${startPoint ? '(Start Point)' : ''} ${view}`}
+          {`${startSign ? '(Start Point)' : ''} ${view}`}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {desc}

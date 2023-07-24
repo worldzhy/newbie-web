@@ -11,6 +11,7 @@ import StatesTable from '@/widgets/workflow/StatesTable';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 
 import styles from './index.module.scss';
+import { RouteItem } from '@/shared/libs/workflow-route';
 
 enum TabState {
   Views = 'Views',
@@ -18,7 +19,7 @@ enum TabState {
   Routes = 'Routes',
 }
 
-type Data = {
+export type Data = {
   description: string | null;
   id: string;
   name: string;
@@ -43,20 +44,37 @@ const Page = (): ReactElement => {
   const getData = async () => {
     if (typeof id !== 'string' || !id) return;
     const data: Data = await workflowService.getWorkflowData(id);
+    const {views, states, routes} = data;
 
-    data.views = data.views.map(({id, workflowId, name, description}) => ({
+    data.views = views.map(({id, workflowId, name, description}) => ({
       id,
       workflowId,
       name,
       description,
     }));
-    data.states = data.states.map(({id, workflowId, name, description}) => ({
+    data.states = states.map(({id, workflowId, name, description}) => ({
       id,
       workflowId,
       name,
       description,
     }));
-    // TODO: mapper and routes
+    data.routes = routes.map((route: RouteItem) => {
+      const {id, startSign, viewId, stateId, nextViewId} = route;
+      const view = views.find(({id}) => id == viewId)?.name || '';
+      const state = states.find(({id}) => id == stateId)?.name || '';
+      const nextView = views.find(({id}) => id == nextViewId)?.name || '';
+      return {
+        id,
+        startSign,
+        view,
+        viewId,
+        state,
+        stateId,
+        nextView,
+        nextViewId,
+        Actions: [],
+      };
+    });
     setData(data);
   };
 
@@ -124,7 +142,7 @@ const Page = (): ReactElement => {
             marginTop: 2,
           }}
         >
-          <RoutesTable />
+          <RoutesTable data={data} refreshData={getData} />
         </TabPanel>
       </TabContext>
     </Box>

@@ -1,7 +1,7 @@
-import React, { type ReactElement, useState, type FC } from "react";
-import User, { type IUser } from "@/shared/libs/user";
-import { raise, sendRequest } from "@/shared/libs/mixins";
-import FormDialogCustom from "@/components/FormDialogCustom";
+import React, {type ReactElement, useState, type FC} from 'react';
+import User, {type IUser} from '@/shared/libs/user';
+import {raise, sendRequest} from '@/shared/libs/mixins';
+import FormDialogCustom from '@/components/FormDialogCustom';
 
 /**
  * Types
@@ -33,7 +33,7 @@ const MembersDeleteModal: FC<Props> = ({
   const deleteMember = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
       await new User().delete(raise(activeMember?.id));
-      setData(data.filter((d) => d.id !== activeMember?.id));
+      setData(data.filter(d => d.id !== activeMember?.id));
       setModal(false);
     });
   };
@@ -41,7 +41,7 @@ const MembersDeleteModal: FC<Props> = ({
   return (
     <FormDialogCustom
       open={modal}
-      title={`You are about to delete ${activeMember?.username ?? ""}`}
+      title={`You are about to delete ${activeMember?.username ?? ''}`}
       contentText="You cannot view this user in your list anymore if you delete. This will permanently delete the user. Are you sure?"
       closeDialogHandler={() => {
         setModal(false);

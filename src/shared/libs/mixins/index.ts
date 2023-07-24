@@ -1,61 +1,61 @@
-import { AxiosError } from "axios";
-import { toast } from "react-toastify";
+import {AxiosError} from 'axios';
+import {toast} from 'react-toastify';
 
 export const log = (err: unknown): void => {
   console.error(JSON.stringify(err, null, 4));
   console.clear();
-  console.log(Array(100).join("\n"));
+  console.log(Array(100).join('\n'));
 };
 
-type toastMode = "info" | "success" | "error" | "default";
+type toastMode = 'info' | 'success' | 'error' | 'default';
 export const showToast = (mode: toastMode, message: string): void => {
   switch (mode) {
-    case "info":
+    case 'info':
       toast.info(message, {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "colored",
+        theme: 'colored',
       });
       break;
-    case "success":
+    case 'success':
       toast.success(message, {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "colored",
+        theme: 'colored',
       });
       break;
-    case "error":
+    case 'error':
       toast.error(message, {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "colored",
+        theme: 'colored',
       });
       break;
-    case "default":
+    case 'default':
       toast(message, {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "colored",
+        theme: 'colored',
       });
       break;
   }
@@ -63,16 +63,16 @@ export const showToast = (mode: toastMode, message: string): void => {
 
 export const showError = (err: unknown): void => {
   let message =
-    "Something is wrong. Please try again or contact us if issue persists.";
+    'Something is wrong. Please try again or contact us if issue persists.';
   if (
     err instanceof AxiosError &&
-    typeof err.response?.data.message === "string"
+    typeof err.response?.data.message === 'string'
   ) {
     message = err.response?.data.message;
-  } else if (typeof err === "string") {
+  } else if (typeof err === 'string') {
     message = err;
   }
-  showToast("error", message);
+  showToast('error', message);
   log(err);
 };
 
@@ -96,7 +96,7 @@ export const delayExecute = (fn: () => void, delayMs = 2000): void => {
 
 export const isUnauthorized = (err: unknown): boolean => {
   return (
-    err instanceof AxiosError && err.response?.data.message === "Unauthorized"
+    err instanceof AxiosError && err.response?.data.message === 'Unauthorized'
   );
 };
 
@@ -105,8 +105,8 @@ export const sortDate = (dateA: string, dateB: string): number => {
 };
 
 export const raise = <T>(val: T): NonNullable<T> => {
-  if (val === null || typeof val === "undefined") {
-    throw new Error("Value is null or undefined");
+  if (val === null || typeof val === 'undefined') {
+    throw new Error('Value is null or undefined');
   }
   return val;
 };

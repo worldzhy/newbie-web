@@ -1,8 +1,8 @@
-import React, { type ReactElement, useState, type FC } from "react";
-import { sendRequest } from "@/shared/libs/mixins";
-import Role, { type IRole } from "@/shared/libs/role";
-import FormDialogCustom from "@/components/FormDialogCustom";
-import FormDialogInputCustom from "@/components/FormDialogInputCustom";
+import React, {type ReactElement, useState, type FC} from 'react';
+import {sendRequest} from '@/shared/libs/mixins';
+import Role, {type IRole} from '@/shared/libs/role';
+import FormDialogCustom from '@/components/FormDialogCustom';
+import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 
 /**
  * Types
@@ -25,7 +25,7 @@ const RolesCreateModal: FC<Props> = ({
    * States
    */
   const [isProcessing, setIsProcessing] = useState(false);
-  const [roleName, setRoleName] = useState("");
+  const [roleName, setRoleName] = useState('');
 
   /**
    * Handlers

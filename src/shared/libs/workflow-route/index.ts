@@ -1,39 +1,45 @@
 import axiosInstance from '@/shared/libs/axiosInstance';
 
-export type StateItem = {
+export type RouteItem = {
   id: number;
+  viewId: number;
+  stateId: number;
   workflowId: string;
-  name: string;
-  description: string | null;
-  createdAt?: string;
+  nextViewId: number;
+  nextRoleId: number;
+  nextUserId: number;
+  startSign: boolean;
   updatedAt?: string;
+  createdAt?: string;
 };
 
-export default class WorkflowState {
-  private readonly url = '/workflow-states';
+export default class WorkflowRoute {
+  private readonly url = '/workflow-routes';
 
-  public async createState(data: {
+  public async createRoute(data: {
     workflowId: string;
-    name: string;
-    description: string;
-  }): Promise<StateItem> {
+    viewId: number;
+    stateId: number;
+    nextViewId: number;
+    startSign?: boolean;
+  }): Promise<RouteItem> {
     const res = await axiosInstance.post(this.url, data);
     return res.data;
   }
 
-  public async updateState({id, ...data}: any) {
+  public async updateRoute({id, ...data}: any) {
     const url = `${this.url}/${id}`;
     const res = await axiosInstance.patch(url, data);
     return res.data;
   }
 
-  public async getState(id: string): Promise<StateItem[]> {
+  public async getRoute(id: string): Promise<RouteItem[]> {
     const url = `${this.url}/${id}`;
     const {data} = await axiosInstance.get(url);
     return Array.isArray(data) ? data : [];
   }
 
-  public async deleteState(id: string): Promise<any> {
+  public async deleteRoute(id: string): Promise<any> {
     const url = `${this.url}/${id}`;
     const res = await axiosInstance.delete(url);
     return res.data;
