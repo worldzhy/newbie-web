@@ -1,6 +1,5 @@
 import {ReactElement} from 'react';
-import {Card, CardActions, CardContent, Typography} from '@mui/material';
-import ButtonCustom from '@/components/ButtonCustom';
+import {Card, CardActions, CardContent, Link, Typography} from '@mui/material';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 
 const mockStep = {
@@ -29,14 +28,9 @@ const Page = (): ReactElement => {
       </CardContent>
       <CardActions>
         {state.map((item, index) => (
-          <ButtonCustom
-            key={index}
-            customColor="link"
-            size="small"
-            onClick={handleNext}
-          >
+          <Link key={index} href="#" onClick={handleNext}>
             {item}
-          </ButtonCustom>
+          </Link>
         ))}
       </CardActions>
     </Card>

@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {
   Box,
   Modal,
@@ -6,13 +6,14 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  Link,
+  Button,
 } from '@mui/material';
 import {Data} from '@/pages/workflow/manage';
 import {ModalStyle} from '@/constants/styleConfig';
 import RouteModal from '../RouteModal';
 import CloseIcon from '@mui/icons-material/Close';
 import TableCustom from '@/components/TableCustom';
-import ButtonCustom from '@/components/ButtonCustom';
 import RouteService from '@/shared/libs/workflow-route';
 
 import styles from './index.module.scss';
@@ -35,26 +36,23 @@ const Table: FC<IProps> = ({data, refreshData}) => {
 
   const actionsRender = (index: number) => (
     <>
-      <ButtonCustom
-        customColor="link"
-        size="small"
+      <Link
+        style={{marginRight: 6}}
         onClick={() => {
           setValues(routes[index]);
           setOpen(true);
         }}
       >
         Edit
-      </ButtonCustom>
-      <ButtonCustom
-        customColor="link"
-        size="small"
+      </Link>
+      <Link
         onClick={() => {
           setValues(routes[index]);
           setOpenDelete(true);
         }}
       >
         Delete
-      </ButtonCustom>
+      </Link>
     </>
   );
   const handleCreate = () => {
@@ -80,17 +78,17 @@ const Table: FC<IProps> = ({data, refreshData}) => {
   return (
     <>
       <div className={styles.addContainer}>
-        <ButtonCustom
+        <Button
           size="small"
-          customColor="light"
+          variant="outlined"
           onClick={() => setOpenStartSign(true)}
           style={{marginRight: 20}}
         >
           Set Starting Point
-        </ButtonCustom>
-        <ButtonCustom size="small" customColor="dark" onClick={handleCreate}>
+        </Button>
+        <Button size="small" variant="contained" onClick={handleCreate}>
           New Route
-        </ButtonCustom>
+        </Button>
       </div>
       <TableCustom
         rows={routes.map(({startSign, view, state, nextView, Actions}) => ({
@@ -121,14 +119,14 @@ const Table: FC<IProps> = ({data, refreshData}) => {
             <h3 style={{marginBottom: 30}}>
               Are you sure you want to delete {values?.view}
             </h3>
-            <ButtonCustom
+            <Button
               size="small"
-              customColor="light"
+              variant="outlined"
               className={styles.submit}
               onClick={handleDelete}
             >
               Delete
-            </ButtonCustom>
+            </Button>
           </div>
         </Box>
       </Modal>
@@ -158,14 +156,14 @@ const Table: FC<IProps> = ({data, refreshData}) => {
                 ))}
               </Select>
             </FormControl>
-            <ButtonCustom
+            <Button
               size="small"
-              customColor="light"
+              variant="outlined"
               className={styles.submit}
               onClick={handleUpdateStartSign}
             >
               Update
-            </ButtonCustom>
+            </Button>
           </div>
         </Box>
       </Modal>

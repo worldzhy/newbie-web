@@ -1,7 +1,6 @@
 import React, {type ReactElement, useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
-import {Stack} from '@mui/material';
-import ButtonCustom from '@/components/ButtonCustom';
+import {Button, Link, Stack} from '@mui/material';
 import {
   delayExecute,
   isUnauthorized,
@@ -80,33 +79,32 @@ const RolesTab = (): ReactElement => {
             <TableCellCustom>{d.name}</TableCellCustom>
             <TableCellCustom>{d.description}</TableCellCustom>
             <TableCellCustom>
-              <ButtonCustom
-                customColor="link"
+              <Link
+                style={{marginRight: 6}}
                 onClick={() => {
                   setActiveRole(d);
                   setEditModal(true);
                 }}
               >
                 Edit
-              </ButtonCustom>
-              <ButtonCustom
-                customColor="link"
+              </Link>
+              <Link
+                style={{marginRight: 6}}
                 onClick={() => {
                   setActiveRole(d);
                   setPermissionModal(true);
                 }}
               >
                 Set Permissions
-              </ButtonCustom>
-              <ButtonCustom
-                customColor="link"
+              </Link>
+              <Link
                 onClick={() => {
                   setActiveRole(d);
                   setDeleteModal(true);
                 }}
               >
                 Delete
-              </ButtonCustom>
+              </Link>
             </TableCellCustom>
           </TableRowCustom>
         ))}
@@ -116,14 +114,14 @@ const RolesTab = (): ReactElement => {
   return (
     <>
       <Stack direction="column" spacing={2} alignItems="flex-end">
-        <ButtonCustom
-          customColor="dark"
+        <Button
+          variant="contained"
           onClick={() => {
             setCreateModal(true);
           }}
         >
           New role
-        </ButtonCustom>
+        </Button>
         {isFetching ? <SkeletonCustom /> : table}
       </Stack>
       <RolesCreateModal

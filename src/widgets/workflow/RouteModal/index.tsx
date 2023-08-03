@@ -8,6 +8,7 @@ import {
   InputLabel,
   FormControl,
   FormControlLabel,
+  Button,
 } from '@mui/material';
 import {useRouter} from 'next/router';
 import {ModalStyle} from '@/constants/styleConfig';
@@ -15,7 +16,6 @@ import {ViewItem} from '@/shared/libs/workflow-view';
 import {StateItem} from '@/shared/libs/workflow-state';
 import CloseIcon from '@mui/icons-material/Close';
 import RouteService from '@/shared/libs/workflow-route';
-import ButtonCustom from '@/components/ButtonCustom';
 
 import styles from './index.module.scss';
 
@@ -154,14 +154,14 @@ const RouteModal: FC<IProps> = ({
               ))}
             </Select>
           </FormControl>
-          <ButtonCustom
+          <Button
             size="small"
-            customColor="light"
+            variant="outlined"
             className={styles.submit}
             onClick={handleUpdate}
           >
             {!id ? 'Create' : 'Update'}
-          </ButtonCustom>
+          </Button>
         </div>
       </Box>
     </Modal>

@@ -6,10 +6,12 @@ import {
   AppBar,
   Box,
   Breadcrumbs,
+  Button,
   CssBaseline,
   Divider,
   Drawer,
   IconButton,
+  Link,
   List,
   ListItem,
   ListItemButton,
@@ -19,8 +21,6 @@ import {
 } from '@mui/material';
 import styles from './index.module.scss';
 import styleConfig from '@/constants/styleConfig';
-import ButtonCustom from '@/components/ButtonCustom';
-import LinkCustom from '@/components/LinkCustom';
 import Logo from '@/widgets/shared/Logo';
 import Pre from '@/widgets/shared/Pre';
 
@@ -67,13 +67,13 @@ const LayoutDashboard = ({window, children, active}: Props): ReactElement => {
         {subMenus.map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
-              <ButtonCustom
+              <Button
                 className={styles.menuButtons}
-                customColor={text === active ? 'dark' : 'light'}
+                variant={text === active ? 'contained' : 'outlined'}
                 href={`/${text.toLowerCase()}`}
               >
                 {text}
-              </ButtonCustom>
+              </Button>
             </ListItemButton>
           </ListItem>
         ))}
@@ -117,7 +117,7 @@ const LayoutDashboard = ({window, children, active}: Props): ReactElement => {
                 aria-label="breadcrumb"
                 separator={<ArrowRightIcon fontSize="medium" />}
               >
-                <LinkCustom href="/">Home</LinkCustom>
+                <Link href="/">Home</Link>
                 <Typography color="text.primary">{active}</Typography>
               </Breadcrumbs>
               <AccountCircleIcon />

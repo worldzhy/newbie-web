@@ -1,7 +1,7 @@
 import {ReactElement, useEffect, useState} from 'react';
+import {Button} from '@mui/material';
 import Workflow, {WorkflowItem} from '@/shared/libs/workflow';
 import EditModal from '@/widgets/workflow/EditModal';
-import ButtonCustom from '@/components/ButtonCustom';
 import WorkflowTable from '@/widgets/workflow/WorkflowTable';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 
@@ -31,13 +31,9 @@ const Page = (): ReactElement => {
   return (
     <>
       <div className={styles.addContainer}>
-        <ButtonCustom
-          size="small"
-          customColor="dark"
-          onClick={() => setOpen(true)}
-        >
+        <Button size="small" variant="contained" onClick={() => setOpen(true)}>
           New Workflow
-        </ButtonCustom>
+        </Button>
       </div>
       <WorkflowTable rows={rows} refreshData={getAllWorkflows} />
       <EditModal

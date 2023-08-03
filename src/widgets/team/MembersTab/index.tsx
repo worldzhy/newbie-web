@@ -7,8 +7,7 @@ import {
   showError,
   sortDate,
 } from '@/shared/libs/mixins';
-import {Stack} from '@mui/material';
-import ButtonCustom from '@/components/ButtonCustom';
+import {Button, Link, Stack} from '@mui/material';
 import TableContainerCustom from '@/components/TableContainerCustom';
 import TableRowCustom from '@/components/TableRowCustom';
 import TableCellCustom from '@/components/TableCellCustom';
@@ -93,24 +92,23 @@ const MembersTab = (): ReactElement => {
               {d.roles.map(r => r.name).join(', ')}
             </TableCellCustom>
             <TableCellCustom>
-              <ButtonCustom
-                customColor="link"
+              <Link
                 onClick={() => {
                   setActiveMember(d);
                   setEditModal(true);
                 }}
+                style={{marginRight: 6}}
               >
                 Edit
-              </ButtonCustom>
-              <ButtonCustom
-                customColor="link"
+              </Link>
+              <Link
                 onClick={() => {
                   setActiveMember(d);
                   setDeleteModal(true);
                 }}
               >
                 Delete
-              </ButtonCustom>
+              </Link>
             </TableCellCustom>
           </TableRowCustom>
         ))}
@@ -120,14 +118,14 @@ const MembersTab = (): ReactElement => {
   return (
     <>
       <Stack direction="column" spacing={2} alignItems="flex-end">
-        <ButtonCustom
-          customColor="dark"
+        <Button
+          variant="contained"
           onClick={() => {
             setCreateModal(true);
           }}
         >
           New member
-        </ButtonCustom>
+        </Button>
         {isFetching ? <SkeletonCustom /> : table}
       </Stack>
       <MembersCreateModal

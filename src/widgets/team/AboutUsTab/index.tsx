@@ -2,8 +2,8 @@ import React, {type ReactElement} from 'react';
 import TableContainerCustom from '@/components/TableContainerCustom';
 import TableRowCustom from '@/components/TableRowCustom';
 import TableCellCustom from '@/components/TableCellCustom';
-import LinkCustom from '@/components/LinkCustom';
 import SkeletonCustom from '@/components/SkeletonCustom';
+import {Link} from '@mui/material';
 
 const createData = (
   name: string,
@@ -33,9 +33,9 @@ const AboutUsTab = (): ReactElement => {
           <TableRowCustom key={key}>
             <TableCellCustom>{name}</TableCellCustom>
             <TableCellCustom>
-              <LinkCustom href={link} openNewTab={true}>
+              <Link href={link} target="_blank">
                 {link}
-              </LinkCustom>
+              </Link>
             </TableCellCustom>
           </TableRowCustom>
         ))}

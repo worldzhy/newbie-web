@@ -1,15 +1,15 @@
 import React, {type ReactElement, type ReactNode, type FC} from 'react';
 import {
+  Button,
   Dialog,
+  DialogTitle,
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
   type DialogProps,
 } from '@mui/material';
-import LoadingButtonCustom from '../LoadingButtonCustom';
-import ButtonCustom from '../ButtonCustom';
 import styleConfig from '@/constants/styleConfig';
+import {LoadingButton} from '@mui/lab';
 
 interface Props {
   open: boolean;
@@ -55,23 +55,23 @@ const FormDialogCustom: FC<Props & DialogProps> = ({
         {children}
       </DialogContent>
       <DialogActions sx={{padding: '16px 24px'}}>
-        <LoadingButtonCustom
-          customColor="dark"
+        <LoadingButton
+          variant="contained"
           loading={isProcessing}
           onClick={() => {
-            void formSubmitHandler();
+            formSubmitHandler();
           }}
         >
           Confirm
-        </LoadingButtonCustom>
-        <ButtonCustom
-          customColor="light"
+        </LoadingButton>
+        <Button
+          variant="outlined"
           onClick={() => {
             closeDialogHandler();
           }}
         >
           Cancel
-        </ButtonCustom>
+        </Button>
       </DialogActions>
     </Dialog>
   );

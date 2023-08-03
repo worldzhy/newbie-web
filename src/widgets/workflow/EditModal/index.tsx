@@ -1,10 +1,16 @@
 import {FC, useState, useEffect} from 'react';
 import {useRouter} from 'next/router';
 import {ModalStyle} from '@/constants/styleConfig';
-import {Box, FormControl, Input, InputLabel, Modal} from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  Input,
+  InputLabel,
+  Modal,
+} from '@mui/material';
 import Workflow from '@/shared/libs/workflow';
 import CloseIcon from '@mui/icons-material/Close';
-import ButtonCustom from '@/components/ButtonCustom';
 import ViewsService from '@/shared/libs/workflow-view';
 import StatesService from '@/shared/libs/workflow-state';
 
@@ -87,14 +93,14 @@ const EditModal: FC<IProps> = ({
               onChange={e => setDesc(e.target.value)}
             />
           </FormControl>
-          <ButtonCustom
+          <Button
             size="small"
-            customColor="light"
+            variant="outlined"
             className={styles.submit}
             onClick={handleUpdate}
           >
             {!id ? 'Create' : 'Update'}
-          </ButtonCustom>
+          </Button>
         </div>
       </Box>
     </Modal>

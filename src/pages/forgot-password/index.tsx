@@ -1,10 +1,8 @@
 import React, {useState, type ReactElement} from 'react';
 import {useRouter} from 'next/router';
-import {Typography, Container, Grid} from '@mui/material';
+import {Typography, Container, Grid, Button, Link} from '@mui/material';
 import styles from './index.module.scss';
-import ButtonCustom from '@/components/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom';
-import LinkCustom from '@/components/LinkCustom';
 import Auth from '@/shared/libs/auth';
 import {delayExecute, sendRequest, showToast} from '@/shared/libs/mixins';
 import Pre from '@/widgets/shared/Pre';
@@ -72,15 +70,16 @@ const Page = (): ReactElement => {
                           setEmail(e.target.value);
                         }}
                       />
-                      <ButtonCustom
+                      <Button
                         className={`${styles.button}`}
-                        customColor="dark"
+                        // customColor="dark"
+                        variant="contained"
                         onClick={() => {
                           void sendVerificationCodeHandler();
                         }}
                       >
                         Send
-                      </ButtonCustom>
+                      </Button>
                     </div>
                   </Grid>
                   <Grid item xs={12}>
@@ -106,20 +105,20 @@ const Page = (): ReactElement => {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <ButtonCustom
-                      customColor="dark"
+                    <Button
+                      variant="contained"
                       onClick={() => {
-                        void forgotPasswordHandler();
+                        forgotPasswordHandler();
                       }}
                     >
                       Reset Password
-                    </ButtonCustom>
+                    </Button>
                   </Grid>
                 </Grid>
               </form>
             </Grid>
             <Grid item xs={12}>
-              <LinkCustom href="/">Return to login</LinkCustom>
+              <Link href="/">Return to login</Link>
             </Grid>
           </Grid>
         </Container>

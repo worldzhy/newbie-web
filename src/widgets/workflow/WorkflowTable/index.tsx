@@ -1,12 +1,11 @@
 import {FC, useState} from 'react';
 import {useRouter} from 'next/router';
-import {Box, Modal} from '@mui/material';
+import {Box, Button, Link, Modal} from '@mui/material';
 import {ModalStyle} from '@/constants/styleConfig';
 import Workflow, {WorkflowItem} from '@/shared/libs/workflow';
 import EditModal from '../EditModal';
 import CloseIcon from '@mui/icons-material/Close';
 import TableCustom from '@/components/TableCustom';
-import ButtonCustom from '@/components/ButtonCustom';
 
 import styles from './index.module.scss';
 
@@ -26,19 +25,17 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
 
   const actionsRender = (index: number) => (
     <>
-      <ButtonCustom
-        customColor="link"
-        size="small"
+      <Link
+        style={{marginRight: 6}}
         onClick={() => {
           setValues(rows[index]);
           setOpen(true);
         }}
       >
         Edit
-      </ButtonCustom>
-      <ButtonCustom
-        customColor="link"
-        size="small"
+      </Link>
+      <Link
+        style={{marginRight: 6}}
         onClick={() =>
           router.push({
             pathname: '/workflow/manage',
@@ -47,10 +44,9 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
         }
       >
         Configure
-      </ButtonCustom>
-      <ButtonCustom
-        customColor="link"
-        size="small"
+      </Link>
+      <Link
+        style={{marginRight: 6}}
         onClick={() =>
           router.push({
             pathname: '/workflow/run',
@@ -59,17 +55,15 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
         }
       >
         Run
-      </ButtonCustom>
-      <ButtonCustom
-        customColor="link"
-        size="small"
+      </Link>
+      <Link
         onClick={() => {
           setValues(rows[index]);
           setOpenDelete(true);
         }}
       >
         Delete
-      </ButtonCustom>
+      </Link>
     </>
   );
   const handleDelete = async () => {
@@ -105,14 +99,14 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
             <h3 style={{marginBottom: 30}}>
               Are you sure you want to delete {values?.name}
             </h3>
-            <ButtonCustom
+            <Button
               size="small"
-              customColor="light"
+              variant="outlined"
               className={styles.submit}
               onClick={handleDelete}
             >
               Delete
-            </ButtonCustom>
+            </Button>
           </div>
         </Box>
       </Modal>

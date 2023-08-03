@@ -1,10 +1,8 @@
 import React, {type ReactElement, useState} from 'react';
 import {useRouter} from 'next/router';
-import {Typography, Container, Grid} from '@mui/material';
+import {Typography, Container, Grid, Button, Link} from '@mui/material';
 import styles from './index.module.scss';
-import ButtonCustom from '@/components/ButtonCustom';
 import InputTextCustom from '@/components/InputTextCustom';
-import LinkCustom from '@/components/LinkCustom';
 import Auth from '@/shared/libs/auth';
 import {delayExecute, sendRequest} from '@/shared/libs/mixins';
 import Pre from '@/widgets/shared/Pre';
@@ -74,22 +72,22 @@ const Page = (): ReactElement => {
                         setPassword(e.target.value);
                       }}
                     />
-                    <LinkCustom
+                    <Link
                       href="/forgot-password"
                       className={`${styles.forgotPassword}`}
                     >
                       Forgot Password
-                    </LinkCustom>
+                    </Link>
                   </Grid>
                   <Grid item xs={12}>
-                    <ButtonCustom
-                      customColor="dark"
+                    <Button
+                      variant="contained"
                       onClick={() => {
-                        void loginHandler();
+                        loginHandler();
                       }}
                     >
                       Login
-                    </ButtonCustom>
+                    </Button>
                   </Grid>
                 </Grid>
               </form>
