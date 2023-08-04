@@ -1,14 +1,3 @@
-const styleConfig = {
-  color: {
-    primaryBlackColor: '#424242',
-    primaryWhiteColor: '#FFFFFF',
-    primaryGrayColor: '#A8A8A8',
-    primaryGrayColorLight: '#A8A8A82E',
-    primaryBlackColorDark: '#2E2E2E',
-    primaryBlueColor: '#2C73FF',
-  },
-};
-
 export const ModalStyle = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -20,4 +9,4 @@ export const ModalStyle = {
   padding: 0,
 };
 
-export default styleConfig;
+export default {};

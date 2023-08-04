@@ -1,6 +1,5 @@
 import React, {type ReactElement, type FC} from 'react';
 import {Stack, TextField, Typography, type TextFieldProps} from '@mui/material';
-import styleConfig from '@/constants/styleConfig';
 
 interface Props {
   label: string;
@@ -42,16 +41,6 @@ const FormDialogInputCustom: FC<Props & TextFieldProps> = ({
         variant="outlined"
         size="small"
         type={type ?? 'string'}
-        sx={{
-          width: '100%',
-          '& fieldset': {
-            border: `2px solid ${styleConfig.color.primaryBlackColor}`,
-          },
-          '& label': {
-            fontWeight: 400,
-            color: `${styleConfig.color.primaryBlackColor}`,
-          },
-        }}
       />
     </Stack>
   );

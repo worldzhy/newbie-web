@@ -8,7 +8,6 @@ import {
   DialogContentText,
   type DialogProps,
 } from '@mui/material';
-import styleConfig from '@/constants/styleConfig';
 import {LoadingButton} from '@mui/lab';
 
 interface Props {
@@ -38,12 +37,6 @@ const FormDialogCustom: FC<Props & DialogProps> = ({
       open={open}
       maxWidth={stretch ? false : undefined}
       onClose={closeDialogHandler}
-      sx={{
-        '.MuiDialog-paper': {
-          border: `2px solid ${styleConfig.color.primaryBlackColor}`,
-          padding: {xs: '0px', sm: '10px'},
-        },
-      }}
     >
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>

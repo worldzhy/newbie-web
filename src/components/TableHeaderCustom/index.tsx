@@ -1,6 +1,5 @@
 import React, {type ReactElement, type FC} from 'react';
-import TableRowCustom from '../TableRowCustom';
-import TableCellCustom from '../TableCellCustom';
+import {TableCell, TableRow} from '@mui/material';
 
 interface Props {
   headers: string[];
@@ -8,11 +7,11 @@ interface Props {
 
 const TableHeaderCustom: FC<Props> = ({headers}): ReactElement => {
   return (
-    <TableRowCustom type="header">
+    <TableRow>
       {headers.map((label: string, key: number) => (
-        <TableCellCustom key={key}>{label}</TableCellCustom>
+        <TableCell key={key}>{label}</TableCell>
       ))}
-    </TableRowCustom>
+    </TableRow>
   );
 };
 

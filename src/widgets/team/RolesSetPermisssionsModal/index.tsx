@@ -1,24 +1,27 @@
 import React, {type ReactElement, type FC, useEffect, useState} from 'react';
-import {useRouter} from 'next/router';
+import {
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  TableCell,
+  TableRow,
+} from '@mui/material';
+import {
+  raise,
+  showError,
+  sendRequest,
+  delayExecute,
+  isUnauthorized,
+} from '@/shared/libs/mixins';
 import Permission, {
   type IPermissionsByResources,
   type IRequest,
 } from '@/shared/libs/permission';
-import {
-  delayExecute,
-  isUnauthorized,
-  raise,
-  sendRequest,
-  showError,
-} from '@/shared/libs/mixins';
-import FormDialogCustom from '@/components/FormDialogCustom';
-import TableContainerCustom from '@/components/TableContainerCustom';
-import TableRowCustom from '@/components/TableRowCustom';
-import TableCellCustom from '@/components/TableCellCustom';
-import {FormControlLabel, FormGroup} from '@mui/material';
-import CheckboxCustom from '@/components/CheckboxCustom';
+import {useRouter} from 'next/router';
 import {type IRole} from '@/shared/libs/role';
+import FormDialogCustom from '@/components/FormDialogCustom';
 import TableSkeletonCustom from '@/components/TableSkeletonCustom';
+import TableContainerCustom from '@/components/TableContainerCustom';
 
 /**
  * Types
@@ -165,15 +168,15 @@ const RolesSetPermisssionsModal: FC<Props> = ({
           data
             .sort((a, b) => a.resource.localeCompare(b.resource))
             .map(({resource, permissions}, key) => (
-              <TableRowCustom key={key}>
-                <TableCellCustom>{resource}</TableCellCustom>
-                <TableCellCustom>
+              <TableRow key={key}>
+                <TableCell align="center">{resource}</TableCell>
+                <TableCell align="center">
                   <FormGroup row={true}>
                     {permissions.map((p, key: number) => (
                       <FormControlLabel
                         key={key}
                         control={
-                          <CheckboxCustom
+                          <Checkbox
                             checked={p.allow}
                             onChange={() => {
                               checkBoxOnChangeHandler(resource, p.action, p.id);
@@ -184,8 +187,8 @@ const RolesSetPermisssionsModal: FC<Props> = ({
                       />
                     ))}
                   </FormGroup>
-                </TableCellCustom>
-              </TableRowCustom>
+                </TableCell>
+              </TableRow>
             ))
         )}
       </TableContainerCustom>

@@ -1,21 +1,19 @@
 import React, {useEffect, type ReactElement, useState} from 'react';
-import {useRouter} from 'next/router';
-import User, {type IUser} from '@/shared/libs/user';
 import {
+  sortDate,
+  showError,
   delayExecute,
   isUnauthorized,
-  showError,
-  sortDate,
 } from '@/shared/libs/mixins';
-import {Button, Link, Stack} from '@mui/material';
-import TableContainerCustom from '@/components/TableContainerCustom';
-import TableRowCustom from '@/components/TableRowCustom';
-import TableCellCustom from '@/components/TableCellCustom';
-import MembersCreateModal from '../MembersCreateModal';
-import MembersEditModal from '../MembersEditModal';
-import SkeletonCustom from '@/components/SkeletonCustom';
+import {useRouter} from 'next/router';
+import User, {type IUser} from '@/shared/libs/user';
 import Role, {type IRole} from '@/shared/libs/role';
+import {Button, Link, Stack, TableCell, TableRow} from '@mui/material';
+import MembersEditModal from '../MembersEditModal';
+import MembersCreateModal from '../MembersCreateModal';
 import MembersDeleteModal from '../MembersDeleteModal';
+import SkeletonCustom from '@/components/SkeletonCustom';
+import TableContainerCustom from '@/components/TableContainerCustom';
 
 /**
  * Types
@@ -84,14 +82,14 @@ const MembersTab = (): ReactElement => {
       {data
         .sort((a, b) => sortDate(a.createdAt, b.createdAt))
         .map((d, rowKey) => (
-          <TableRowCustom key={rowKey}>
-            <TableCellCustom>{d.username}</TableCellCustom>
-            <TableCellCustom>{d.email}</TableCellCustom>
-            <TableCellCustom>{d.phone}</TableCellCustom>
-            <TableCellCustom>
+          <TableRow key={rowKey}>
+            <TableCell align="center">{d.username}</TableCell>
+            <TableCell align="center">{d.email}</TableCell>
+            <TableCell align="center">{d.phone}</TableCell>
+            <TableCell align="center">
               {d.roles.map(r => r.name).join(', ')}
-            </TableCellCustom>
-            <TableCellCustom>
+            </TableCell>
+            <TableCell align="center">
               <Link
                 onClick={() => {
                   setActiveMember(d);
@@ -109,8 +107,8 @@ const MembersTab = (): ReactElement => {
               >
                 Delete
               </Link>
-            </TableCellCustom>
-          </TableRowCustom>
+            </TableCell>
+          </TableRow>
         ))}
     </TableContainerCustom>
   );

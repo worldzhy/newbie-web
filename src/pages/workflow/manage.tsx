@@ -4,14 +4,13 @@ import {Box, Tab} from '@mui/material';
 import {ViewItem} from '@/shared/libs/workflow-view';
 import {TabContext, TabList, TabPanel} from '@mui/lab';
 import Workflow from '@/shared/libs/workflow';
-import styleConfig from '@/constants/styleConfig';
 import ViewsTable from '@/widgets/workflow/ViewsTable';
 import RoutesTable from '@/widgets/workflow/RoutesTable';
 import StatesTable from '@/widgets/workflow/StatesTable';
+import { RouteItem } from '@/shared/libs/workflow-route';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 
 import styles from './index.module.scss';
-import { RouteItem } from '@/shared/libs/workflow-route';
 
 enum TabState {
   Views = 'Views',
@@ -103,12 +102,6 @@ const Page = (): ReactElement => {
                   className={styles.tabItems}
                   label={label}
                   value={label}
-                  sx={{
-                    '&.Mui-selected': {
-                      color: styleConfig.color.primaryWhiteColor,
-                      background: styleConfig.color.primaryBlackColor,
-                    },
-                  }}
                 />
               )
             )}
@@ -118,7 +111,6 @@ const Page = (): ReactElement => {
           value={TabState.Views}
           sx={{
             border: 2,
-            borderColor: styleConfig.color.primaryGrayColor,
             marginTop: 2,
           }}
         >
@@ -128,7 +120,6 @@ const Page = (): ReactElement => {
           value={TabState.States}
           sx={{
             border: 2,
-            borderColor: styleConfig.color.primaryGrayColor,
             marginTop: 2,
           }}
         >
@@ -138,7 +129,6 @@ const Page = (): ReactElement => {
           value={TabState.Routes}
           sx={{
             border: 2,
-            borderColor: styleConfig.color.primaryGrayColor,
             marginTop: 2,
           }}
         >

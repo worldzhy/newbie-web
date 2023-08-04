@@ -1,12 +1,11 @@
 import React, {type ReactElement, type SyntheticEvent} from 'react';
-import {TabContext, TabList, TabPanel} from '@mui/lab';
 import {Box, Tab} from '@mui/material';
-import styles from './index.module.scss';
-import styleConfig from '@/constants/styleConfig';
-import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
+import {TabContext, TabList, TabPanel} from '@mui/lab';
 import MembersTab from '@/widgets/team/MembersTab';
 import RolesTab from '@/widgets/team/RolesTab';
 import AboutUsTab from '@/widgets/team/AboutUsTab';
+import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
+import styles from './index.module.scss';
 
 const Page = (): ReactElement => {
   /**
@@ -42,12 +41,6 @@ const Page = (): ReactElement => {
                   className={styles.tabItems}
                   label={label}
                   value={(index + 1).toString()}
-                  sx={{
-                    '&.Mui-selected': {
-                      color: styleConfig.color.primaryWhiteColor,
-                      background: styleConfig.color.primaryBlackColor,
-                    },
-                  }}
                 />
               )
             )}
@@ -57,7 +50,6 @@ const Page = (): ReactElement => {
           value="1"
           sx={{
             border: 2,
-            borderColor: styleConfig.color.primaryGrayColor,
             marginTop: 2,
           }}
         >
@@ -67,7 +59,6 @@ const Page = (): ReactElement => {
           value="2"
           sx={{
             border: 2,
-            borderColor: styleConfig.color.primaryGrayColor,
             marginTop: 2,
           }}
         >
@@ -77,7 +68,6 @@ const Page = (): ReactElement => {
           value="3"
           sx={{
             border: 2,
-            borderColor: styleConfig.color.primaryGrayColor,
             marginTop: 2,
           }}
         >

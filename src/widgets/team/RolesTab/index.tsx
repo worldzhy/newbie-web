@@ -1,21 +1,19 @@
 import React, {type ReactElement, useEffect, useState} from 'react';
-import {useRouter} from 'next/router';
-import {Button, Link, Stack} from '@mui/material';
 import {
-  delayExecute,
-  isUnauthorized,
   showError,
   sortDate,
+  delayExecute,
+  isUnauthorized,
 } from '@/shared/libs/mixins';
+import {useRouter} from 'next/router';
 import Role, {type IRole} from '@/shared/libs/role';
-import RolesSetPermisssionsModal from '../RolesSetPermisssionsModal';
-import TableCellCustom from '@/components/TableCellCustom';
-import SkeletonCustom from '@/components/SkeletonCustom';
-import RolesCreateModal from '../RolesCreateModal';
-import TableContainerCustom from '@/components/TableContainerCustom';
-import TableRowCustom from '@/components/TableRowCustom';
+import {Button, Link, Stack, TableCell, TableRow} from '@mui/material';
 import RolesEditModal from '../RolesEditModal';
+import RolesCreateModal from '../RolesCreateModal';
 import RolesDeleteModal from '../RolesDeleteModal';
+import SkeletonCustom from '@/components/SkeletonCustom';
+import TableContainerCustom from '@/components/TableContainerCustom';
+import RolesSetPermisssionsModal from '../RolesSetPermisssionsModal';
 
 const RolesTab = (): ReactElement => {
   /**
@@ -75,10 +73,10 @@ const RolesTab = (): ReactElement => {
       {data
         .sort((a, b) => sortDate(a.createdAt, b.createdAt))
         .map((d, key) => (
-          <TableRowCustom key={key}>
-            <TableCellCustom>{d.name}</TableCellCustom>
-            <TableCellCustom>{d.description}</TableCellCustom>
-            <TableCellCustom>
+          <TableRow key={key}>
+            <TableCell align="center">{d.name}</TableCell>
+            <TableCell align="center">{d.description}</TableCell>
+            <TableCell align="center">
               <Link
                 style={{marginRight: 6}}
                 onClick={() => {
@@ -105,8 +103,8 @@ const RolesTab = (): ReactElement => {
               >
                 Delete
               </Link>
-            </TableCellCustom>
-          </TableRowCustom>
+            </TableCell>
+          </TableRow>
         ))}
     </TableContainerCustom>
   );

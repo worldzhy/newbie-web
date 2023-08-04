@@ -1,5 +1,4 @@
 import React, {type ReactElement, type FC, type ReactNode} from 'react';
-import {EMPTY_PLACEHOLDER} from '@/constants';
 import {
   Table,
   Stack,
@@ -11,7 +10,7 @@ import {
   TableHead,
   TableContainer,
 } from '@mui/material';
-import styleConfig from '@/constants/styleConfig';
+import {EMPTY_PLACEHOLDER} from '@/constants';
 import styles from './index.module.scss';
 
 interface Props {
@@ -39,19 +38,7 @@ const TableCustom: FC<Props> = ({
     <TableContainer component={Paper}>
       <Table sx={{minWidth: 650}} aria-label="simple table">
         <TableHead>
-          <TableRow
-            sx={{
-              backgroundColor: `${styleConfig.color.primaryGrayColor}`,
-              '& td, & th': {
-                border: `2px solid ${styleConfig.color.primaryBlackColor}`,
-              },
-              '& th': {
-                color: `${styleConfig.color.primaryWhiteColor}`,
-                fontSize: '14px',
-                fontWeight: '700',
-              },
-            }}
-          >
+          <TableRow>
             {headers.map((label: string, key: number) => (
               <TableCell key={key} align="center">
                 {label}
@@ -61,19 +48,7 @@ const TableCustom: FC<Props> = ({
         </TableHead>
         <TableBody>
           {rows.map((row, rowKey) => (
-            <TableRow
-              key={rowKey}
-              sx={{
-                '& td, & th': {
-                  border: `2px solid ${styleConfig.color.primaryBlackColor}`,
-                },
-                '& th': {
-                  color: `${styleConfig.color.primaryGrayColor}`,
-                  fontSize: '14px',
-                  fontWeight: '400',
-                },
-              }}
-            >
+            <TableRow key={rowKey}>
               {Object.keys(row).map((field: string, key: number) => {
                 if (isLastColActions && Object.keys(row).length - 1 === key) {
                   return (

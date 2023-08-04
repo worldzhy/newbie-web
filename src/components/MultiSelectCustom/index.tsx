@@ -7,10 +7,9 @@ import {
   Select,
   Typography,
   Stack,
+  Checkbox,
 } from '@mui/material';
 import {type SelectChangeEvent} from '@mui/material/Select';
-import styleConfig from '@/constants/styleConfig';
-import CheckboxCustom from '../CheckboxCustom';
 
 interface Props {
   label: string;
@@ -79,25 +78,13 @@ const MultiSelectCustom: FC<Props> = ({
           MenuProps={MenuProps}
           variant="outlined"
           size="small"
-          sx={{
-            border: `2px solid ${styleConfig.color.primaryBlackColor}`,
-            position: 'unset',
-            '& .MuiSelect-icon': {
-              color: `${styleConfig.color.primaryBlackColor}`,
-            },
-          }}
         >
           {options.map(opt => (
             <MenuItem
               key={opt}
               value={opt}
-              sx={{
-                '&.Mui-selected': {
-                  background: `${styleConfig.color.primaryGrayColorLight}`,
-                },
-              }}
             >
-              <CheckboxCustom checked={selected.includes(opt)} />
+              <Checkbox checked={selected.includes(opt)} />
               <ListItemText primary={opt} />
             </MenuItem>
           ))}

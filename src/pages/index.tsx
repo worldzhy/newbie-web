@@ -1,11 +1,17 @@
 import React, {type ReactElement, useState} from 'react';
+import {
+  Typography,
+  Container,
+  Grid,
+  Button,
+  Link,
+  TextField,
+} from '@mui/material';
 import {useRouter} from 'next/router';
-import {Typography, Container, Grid, Button, Link} from '@mui/material';
-import styles from './index.module.scss';
-import InputTextCustom from '@/components/InputTextCustom';
-import Auth from '@/shared/libs/auth';
 import {delayExecute, sendRequest} from '@/shared/libs/mixins';
+import Auth from '@/shared/libs/auth';
 import Pre from '@/widgets/shared/Pre';
+import styles from './index.module.scss';
 
 const Page = (): ReactElement => {
   /**
@@ -52,7 +58,7 @@ const Page = (): ReactElement => {
               <form className={`${styles.form}`}>
                 <Grid container rowSpacing={4}>
                   <Grid item xs={12}>
-                    <InputTextCustom
+                    <TextField
                       label="Email"
                       variant="outlined"
                       value={email}
@@ -60,10 +66,11 @@ const Page = (): ReactElement => {
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setEmail(e.target.value);
                       }}
+                      style={{width: '100%'}}
                     />
                   </Grid>
                   <Grid item xs={12} className={`${styles.password}`}>
-                    <InputTextCustom
+                    <TextField
                       label="Password"
                       variant="outlined"
                       value={password}
@@ -71,6 +78,7 @@ const Page = (): ReactElement => {
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setPassword(e.target.value);
                       }}
+                      style={{width: '100%'}}
                     />
                     <Link
                       href="/forgot-password"

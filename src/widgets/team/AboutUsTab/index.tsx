@@ -1,9 +1,7 @@
 import React, {type ReactElement} from 'react';
-import TableContainerCustom from '@/components/TableContainerCustom';
-import TableRowCustom from '@/components/TableRowCustom';
-import TableCellCustom from '@/components/TableCellCustom';
+import {Link, TableCell, TableRow} from '@mui/material';
 import SkeletonCustom from '@/components/SkeletonCustom';
-import {Link} from '@mui/material';
+import TableContainerCustom from '@/components/TableContainerCustom';
 
 const createData = (
   name: string,
@@ -30,14 +28,14 @@ const AboutUsTab = (): ReactElement => {
       {data
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(({name, link}, key) => (
-          <TableRowCustom key={key}>
-            <TableCellCustom>{name}</TableCellCustom>
-            <TableCellCustom>
+          <TableRow key={key}>
+            <TableCell align="center">{name}</TableCell>
+            <TableCell align="center">
               <Link href={link} target="_blank">
                 {link}
               </Link>
-            </TableCellCustom>
-          </TableRowCustom>
+            </TableCell>
+          </TableRow>
         ))}
     </TableContainerCustom>
   );

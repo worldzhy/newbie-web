@@ -1,7 +1,4 @@
 import React, {type ReactElement, useState} from 'react';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import MenuIcon from '@mui/icons-material/Menu';
 import {
   AppBar,
   Box,
@@ -19,10 +16,12 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import styles from './index.module.scss';
-import styleConfig from '@/constants/styleConfig';
-import Logo from '@/widgets/shared/Logo';
 import Pre from '@/widgets/shared/Pre';
+import Logo from '@/widgets/shared/Logo';
+import MenuIcon from '@mui/icons-material/Menu';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import styles from './index.module.scss';
 
 const drawerWidth = 240;
 
@@ -142,7 +141,6 @@ const LayoutDashboard = ({window, children, active}: Props): ReactElement => {
               '& .MuiDrawer-paper': {
                 boxSizing: 'border-box',
                 width: drawerWidth,
-                borderRight: `2px solid ${styleConfig.color.primaryGrayColor}`,
               },
             }}
           >
@@ -155,7 +153,6 @@ const LayoutDashboard = ({window, children, active}: Props): ReactElement => {
               '& .MuiDrawer-paper': {
                 boxSizing: 'border-box',
                 width: drawerWidth,
-                borderRight: `2px solid ${styleConfig.color.primaryGrayColor}`,
               },
             }}
             open

@@ -1,6 +1,5 @@
 import {type FC, type ReactElement} from 'react';
-import TableRowCustom from '../TableRowCustom';
-import TableCellCustom from '../TableCellCustom';
+import {TableCell, TableRow} from '@mui/material';
 import SkeletonCustom from '../SkeletonCustom';
 
 interface Props {
@@ -11,22 +10,20 @@ interface Props {
 const TableSkeletonCustom: FC<Props> = ({
   numCols,
   numRows = 3,
-}): ReactElement => {
-  return (
-    <>
-      {Array.from(new Array(numRows)).map((_, keyi: number) => (
-        <TableRowCustom key={`rows-${keyi}`}>
-          {Array.from(new Array(numCols)).map((_, keyj: number) => (
-            <>
-              <TableCellCustom key={`cols-${keyj}`}>
-                <SkeletonCustom numRows={1} />
-              </TableCellCustom>
-            </>
-          ))}
-        </TableRowCustom>
-      ))}
-    </>
-  );
-};
+}): ReactElement => (
+  <>
+    {Array.from(new Array(numRows)).map((_, keyi: number) => (
+      <TableRow key={`rows-${keyi}`}>
+        {Array.from(new Array(numCols)).map((_, keyj: number) => (
+          <>
+            <TableCell key={`cols-${keyj}`} align="center">
+              <SkeletonCustom numRows={1} />
+            </TableCell>
+          </>
+        ))}
+      </TableRow>
+    ))}
+  </>
+);
 
 export default TableSkeletonCustom;

@@ -1,11 +1,17 @@
 import React, {useState, type ReactElement} from 'react';
+import {
+  Grid,
+  Link,
+  Button,
+  Container,
+  TextField,
+  Typography,
+} from '@mui/material';
 import {useRouter} from 'next/router';
-import {Typography, Container, Grid, Button, Link} from '@mui/material';
-import styles from './index.module.scss';
-import InputTextCustom from '@/components/InputTextCustom';
-import Auth from '@/shared/libs/auth';
 import {delayExecute, sendRequest, showToast} from '@/shared/libs/mixins';
+import Auth from '@/shared/libs/auth';
 import Pre from '@/widgets/shared/Pre';
+import styles from './index.module.scss';
 
 const Page = (): ReactElement => {
   /**
@@ -61,7 +67,7 @@ const Page = (): ReactElement => {
                 <Grid container rowSpacing={2}>
                   <Grid item xs={12} className={`${styles.email}`}>
                     <div className={`${styles.float}`}>
-                      <InputTextCustom
+                      <TextField
                         label="Email"
                         variant="outlined"
                         value={email}
@@ -71,8 +77,7 @@ const Page = (): ReactElement => {
                         }}
                       />
                       <Button
-                        className={`${styles.button}`}
-                        // customColor="dark"
+                        className={styles.button}
                         variant="contained"
                         onClick={() => {
                           void sendVerificationCodeHandler();
@@ -83,7 +88,7 @@ const Page = (): ReactElement => {
                     </div>
                   </Grid>
                   <Grid item xs={12}>
-                    <InputTextCustom
+                    <TextField
                       label="Verification code"
                       variant="outlined"
                       value={verificationCode}
@@ -94,7 +99,7 @@ const Page = (): ReactElement => {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <InputTextCustom
+                    <TextField
                       label="New password"
                       variant="outlined"
                       value={newPassword}
