@@ -4,11 +4,11 @@ import {
   Modal,
   Switch,
   Select,
+  Button,
   MenuItem,
   InputLabel,
   FormControl,
   FormControlLabel,
-  Button,
 } from '@mui/material';
 import {useRouter} from 'next/router';
 import {ModalStyle} from '@/constants/styleConfig';

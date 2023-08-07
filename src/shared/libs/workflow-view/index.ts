@@ -4,6 +4,7 @@ export type ViewItem = {
   id: number;
   workflowId: string;
   name: string;
+  components: any[];
   startSign?: boolean;
   description: string | null;
   createdAt?: string;
@@ -28,10 +29,10 @@ export default class WorkflowView {
     return res.data;
   }
 
-  public async getView(id: string): Promise<ViewItem[]> {
+  public async getView(id: string): Promise<ViewItem> {
     const url = `${this.url}/${id}`;
-    const {data} = await axiosInstance.get(url);
-    return Array.isArray(data) ? data : [];
+    const res = await axiosInstance.get(url);
+    return res.data;
   }
 
   public async deleteView(id: string): Promise<any> {

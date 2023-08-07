@@ -3,6 +3,7 @@ import {Box, Button, Link, Modal} from '@mui/material';
 import {ModalStyle} from '@/constants/styleConfig';
 import ViewsService, {ViewItem} from '@/shared/libs/workflow-view';
 import EditModal from '../EditModal';
+import ComponentModal from '../ComponentModal';
 import CloseIcon from '@mui/icons-material/Close';
 import TableCustom from '@/components/TableCustom';
 
@@ -18,6 +19,7 @@ const headers = ['Name', 'Description', 'Actions'];
 const Table: FC<IProps> = ({rows, refreshData}) => {
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openComponent, setOpenComponent] = useState(false);
   const [values, setValues] = useState<any>();
   const service = new ViewsService();
 
@@ -31,6 +33,15 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
         }}
       >
         Edit
+      </Link>
+      <Link
+        style={{marginRight: 6}}
+        onClick={() => {
+          setValues(rows[index]);
+          setOpenComponent(true);
+        }}
+      >
+        Components
       </Link>
       <Link
         onClick={() => {
@@ -72,6 +83,12 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
         type="view"
         open={open}
         setOpen={setOpen}
+        values={values}
+        refreshData={refreshData}
+      />
+      <ComponentModal
+        open={openComponent}
+        setOpen={setOpenComponent}
         values={values}
         refreshData={refreshData}
       />
