@@ -1,6 +1,6 @@
 import {FC, useState} from 'react';
-import {Box, Button, Link, Modal} from '@mui/material';
 import {ModalStyle} from '@/constants/styleConfig';
+import {Box, Button, Link, Modal} from '@mui/material';
 import ViewsService, {ViewItem} from '@/shared/libs/workflow-view';
 import EditModal from '../EditModal';
 import ComponentModal from '../ComponentModal';
@@ -71,7 +71,7 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
         </Button>
       </div>
       <TableCustom
-        rows={rows.map(({id, workflowId, ...rest}) => ({
+        rows={rows.map(({id, workflowId, components, ...rest}) => ({
           ...rest,
           Actions: [],
         }))}

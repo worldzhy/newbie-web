@@ -29,8 +29,14 @@ export default class WorkflowView {
     return res.data;
   }
 
-  public async getView(id: string): Promise<ViewItem> {
+  public async getView(id: string): Promise<any> {
     const url = `${this.url}/${id}`;
+    const res = await axiosInstance.get(url);
+    return res.data;
+  }
+
+  public async startView(id: string): Promise<any> {
+    const url = `${this.url}/start-views?workflowId=${id}`;
     const res = await axiosInstance.get(url);
     return res.data;
   }

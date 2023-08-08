@@ -33,9 +33,18 @@ type ComponentPorps = {
   handleRemove: (value: any) => void;
 };
 
-enum ComponentType {
-  Title,
-  Paragraph,
+// [
+//   "INFO_Title",
+//   "INFO_Description",
+//   "INFO_Image",
+//   "INPUT_String",
+//   "INPUT_Number",
+//   "INPUT_Date",
+//   "INPUT_File"
+// ]
+export enum ComponentType {
+  INFO_Title = 'INFO_Title',
+  INFO_Description = 'INFO_Description',
 }
 
 const Component: FC<ComponentPorps> = ({
@@ -43,12 +52,25 @@ const Component: FC<ComponentPorps> = ({
   handleChange,
   handleRemove,
 }) => {
-  const {type, value} = values;
+  const {
+    type,
+    properties: {value},
+  } = values;
   const onChange = (event: any, key: string) => {
     const {value} = event.target;
-    handleChange({
-      [key]: value,
-    });
+    let newVal = {};
+    if (key === 'type') {
+      newVal = {
+        [key]: value,
+      };
+    } else {
+      newVal = {
+        properties: {
+          [key]: value,
+        },
+      };
+    }
+    handleChange(newVal);
   };
   return (
     <>
@@ -105,21 +127,26 @@ const ComponentModal: FC<IProps> = ({
   const viewService = new ViewService();
   const componentService = new ComponentService();
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (!components.length) {
       return showToast('error', 'Please add at least one component');
     }
     const emptyComponent = components.filter(
-      ({type, value}) => !type || !value
+      ({type, properties: {value}}) => !type || !value
     );
     if (emptyComponent.length) {
       return showToast('error', 'Please fill all the components');
     }
-    if (hasComponents) {
-      // TODO: do update when we have componentId
-    } else {
-      // TODO: do create when update the service
-    }
+    components.forEach(async (component, index) => {
+      const {id} = component;
+      if (id) {
+        await componentService.updateViewComponent({...component, sort: index});
+      } else {
+        await componentService.createViewComponent({
+          data: [{...component, sort: index}],
+        });
+      }
+    });
     refreshData();
     setOpen(false);
     setComponents([]);
@@ -132,8 +159,9 @@ const ComponentModal: FC<IProps> = ({
   };
   const handleAdd = () => {
     components.push({
+      viewId,
       type: '',
-      value: '',
+      properties: {value: ''},
     });
     setComponents([...components]);
   };
@@ -144,16 +172,21 @@ const ComponentModal: FC<IProps> = ({
       setComponents([...components]);
     }
   };
-  const handleRemove = (index: number) => {
-    if (components[index]) {
+  const handleRemove = async (index: number) => {
+    const target = components[index];
+    if (target) {
+      const {id} = target;
+      if (id) {
+        await componentService.deleteViewComponent(id);
+      }
       components.splice(index, 1);
       setComponents([...components]);
     }
   };
 
   useEffect(() => {
-    viewId && getComponentValue(viewId);
-  }, [viewId]);
+    open && viewId && getComponentValue(viewId);
+  }, [open]);
 
   return (
     <Modal open={open} onClose={() => setOpen(false)}>

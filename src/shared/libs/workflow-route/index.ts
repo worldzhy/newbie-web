@@ -34,7 +34,7 @@ export default class WorkflowRoute {
   }
 
   public async getRoute(id: string): Promise<RouteItem[]> {
-    const url = `${this.url}/${id}`;
+    const url = `${this.url}?workflowId=${id}`;
     const {data} = await axiosInstance.get(url);
     return Array.isArray(data) ? data : [];
   }

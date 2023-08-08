@@ -1,9 +1,9 @@
 import axiosInstance from '@/shared/libs/axiosInstance';
 
 export type ViewComponent = {
+  id: number;
   viewId: number;
   type: string;
-  subType: string;
   properties: any;
   createdAt?: string;
   updatedAt?: string;
@@ -13,10 +13,12 @@ export default class WorkflowViewComponent {
   private readonly url = '/workflow-view-components';
 
   public async createViewComponent(data: {
-    viewId: number;
-    type: string;
-    subType: string;
-    properties: any;
+    data: {
+      viewId: number;
+      type: string;
+      properties: any;
+      sort: number;
+    }[];
   }): Promise<ViewComponent> {
     const res = await axiosInstance.post(this.url, data);
     return res.data;
