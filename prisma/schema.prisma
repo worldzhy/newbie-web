@@ -1,0 +1,1361 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// !! ------------------------------------------------------------ //
+// !!                       [Prisma] Issues                        //
+// !! ------------------------------------------------------------ //
+// * https://github.com/prisma/prisma/issues/4355                  //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ //
+
+generator client {
+  provider = "prisma-client-js"
+
+  // Enable Full-Text Search which is only available for PostgreSQL.
+  previewFeatures = ["multiSchema", "fullTextSearch"]
+
+  // For production deployment.
+  // binaryTargets   = ["native", "rhel-openssl-1.0.x"]
+  // binaryTargets   = ["native", "linux-arm64-openssl-1.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["microservice/account", "microservice/event-calendar", "microservice/fmgmt", "microservice/location", "microservice/notification", "microservice/order", "microservice/task", "microservice/verification-code", "microservice/workflow", "application/engined", "application/pmgmt", "application/recruitment", "application/tc-request"]
+}
+
+// ! ------------------------------------------------------------ //
+// !                [Microservice] Account models                 //
+// ! ------------------------------------------------------------ //
+// * Organization                                                 //
+// * User                                                         //
+// * UserAccessToken                                              //
+// * UserRefreshToken                                             //
+// * UserProfile                                                  //
+// * Role                                                         //
+// * RoutePermission(unused)                                      //
+// * ComponentPermission(unused)                                  //
+// * EndpointPermission(unused)                                   //
+// * Permission                                                   //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄  //
+
+model Organization {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  roles     Role[]
+  users     User[]
+
+  @@schema("microservice/account")
+}
+
+model User {
+  // [1] The 'User' and 'VerificationCode' models are both used for logging in.
+  // [2] The 'User' is designed for long-term use and the 'VerificationCode' is designed for short-term use.
+  // [3] Actually, the 'User' model should be named 'UserPassword' and the 'VerificationCode' should be named 'UserVerificationCode'.
+  id               String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email            String?                  @unique
+  phone            String?                  @unique
+  name             String?
+  password         String? // automatic hashing
+  status           UserStatus               @default(ACTIVE)
+  lastLoginAt      DateTime?
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  organization     Organization?            @relation(fields: [organizationId], references: [id])
+  organizationId   String?                  @db.Uuid
+  profiles         UserProfile[]
+  roles            Role[]
+  locations        Location[]
+  holdingWorkflows JobApplicationWorkflow[]
+
+  @@schema("microservice/account")
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+
+  @@schema("microservice/account")
+}
+
+model UserAccessToken {
+  id        Int      @id @default(autoincrement())
+  userId    String   @db.Uuid
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@schema("microservice/account")
+}
+
+model UserRefreshToken {
+  id        Int      @id @default(autoincrement())
+  userId    String   @db.Uuid
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@schema("microservice/account")
+}
+
+model UserProfile {
+  id             String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  prefix         String?
+  firstName      String?
+  middleName     String?
+  lastName       String?
+  suffix         String?
+  dateOfBirth    DateTime?          @db.Date
+  gender         UserProfileGender?
+  emails         Json[]
+  phones         Json[]
+  websites       Json? // {'facebook': 'https://www.facebook.com/grace', 'twitter': 'https://twitter.com/elonmusk'}
+  picture        String?
+  organizationId String?            @db.Uuid
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String             @db.Uuid
+
+  @@schema("microservice/account")
+}
+
+enum UserProfileGender {
+  Male
+  Female
+  Intersex
+
+  @@schema("microservice/account")
+}
+
+model Role {
+  // A role is a subgroup of a user group with some specified permissions.
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String
+  description    String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?       @db.Uuid
+  users          User[]
+
+  @@unique([name, organizationId])
+  @@schema("microservice/account")
+}
+
+model Permission {
+  // Permission of Resource
+  id                Int               @id @default(autoincrement())
+  action            PermissionAction
+  resource          String
+  where             Json? // an object of where expression meets the Prisma syntax.
+  inverted          Boolean? // indicates whether rule allows or forbids something
+  reason            String? // message which explains why rule is forbidden
+  trustedEntityType TrustedEntityType
+  trustedEntityId   String            @db.Uuid
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@schema("microservice/account")
+}
+
+enum PermissionAction {
+  List
+  Get
+  Create
+  Update
+  Delete
+
+  @@schema("microservice/account")
+}
+
+enum TrustedEntityType {
+  ORGANIZATION
+  ROLE
+  USER
+
+  @@schema("microservice/account")
+}
+
+model EndpointPermission {
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  endpoint          String
+  trustedEntityType TrustedEntityType
+  trustedEntityId   String            @db.Uuid
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@schema("microservice/account")
+}
+
+model ComponentPermission {
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  component         String
+  trustedEntityType TrustedEntityType
+  trustedEntityId   String            @db.Uuid
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@schema("microservice/account")
+}
+
+model RoutePermission {
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  route             String
+  trustedEntityType TrustedEntityType
+  trustedEntityId   String            @db.Uuid
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@schema("microservice/account")
+}
+
+// !! ------------------------------------------------------------ //
+// !!            [Microservice] Event calendar models              //
+// !! ------------------------------------------------------------ //
+// * Event                                                         //
+// * AvailabilityContainer                                         //
+// * Availability                                                  //
+// * Reservation                                                   //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ //
+
+model Event {
+  id                        Int            @id @default(autoincrement())
+  name                      String
+  hostUserId                String?        @db.Uuid
+  minutesOfDuration         Int
+  minutesOfBreak            Int?
+  minutesInAdvanceToReserve Int?
+  minutesInAdvanceToCancel  Int?
+  numberOfSeats             Int?
+  createdAt                 DateTime       @default(now())
+  updatedAt                 DateTime       @updatedAt
+  availabilities            Availability[]
+
+  @@schema("microservice/event-calendar")
+}
+
+model AvailabilityContainer {
+  id             Int                         @id @default(autoincrement())
+  name           String?
+  status         AvailabilityContainerStatus
+  dateOfOpening  DateTime                    @db.Date
+  dateOfClosure  DateTime?                   @db.Date
+  timezone       String // https://www.iplocate.com/en/resources/timezones/list-of-timezones
+  createdAt      DateTime                    @default(now())
+  updatedAt      DateTime                    @updatedAt
+  availabilities Availability[]
+
+  @@schema("microservice/event-calendar")
+}
+
+enum AvailabilityContainerStatus {
+  ACTIVE
+  INACTIVE
+
+  @@schema("microservice/event-calendar")
+}
+
+model Availability {
+  id             Int                   @id @default(autoincrement())
+  date           DateTime              @db.Date
+  timeOfStarting DateTime              @db.Time(0)
+  timeOfEnding   DateTime              @db.Time(0)
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+  event          Event                 @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId        Int
+  container      AvailabilityContainer @relation(fields: [containerId], references: [id], onDelete: Cascade)
+  containerId    Int
+  reservations   Reservation[]
+
+  @@unique([eventId, containerId, date, timeOfStarting, timeOfEnding])
+  @@schema("microservice/event-calendar")
+}
+
+model Reservation {
+  id             Int          @id @default(autoincrement())
+  clientUserId   String       @db.Uuid
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  availability   Availability @relation(fields: [availabilityId], references: [id], onDelete: Cascade)
+  availabilityId Int
+
+  @@schema("microservice/event-calendar")
+}
+
+// !! ------------------------------------------------------------ //
+// !!            [Microservice] File Management models             //
+// !! ------------------------------------------------------------ //
+// * File                                                          //
+// * Folder                                                        //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ //
+
+model File {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  originalName String
+  mimeType     String
+  size         Int?
+  localPath    String? // Contains path and filename.
+  localName    String?
+  s3Bucket     String
+  s3Key        String // File name in S3 bucket.
+  s3Response   Json
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  folder       Folder?  @relation(fields: [folderId], references: [id])
+  folderId     Int?
+
+  @@schema("microservice/fmgmt")
+}
+
+model Folder {
+  id        Int      @id @default(autoincrement())
+  name      String
+  parentId  String?  @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  files     File[]
+
+  @@unique([name, parentId])
+  @@schema("microservice/fmgmt")
+}
+
+// !! ------------------------------------------------------------ //
+// !!            [Microservice] Location models                    //
+// !! ------------------------------------------------------------ //
+// * Location                                                      //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ //
+
+model Location {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String?
+  address   String?
+  address2  String?
+  city      String?
+  state     String?
+  zipcode   String?
+  geoJSON   Json? // https://datatracker.ietf.org/doc/html/rfc7946
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?  @db.Uuid
+
+  @@schema("microservice/location")
+}
+
+// !! ------------------------------------------------------------ //
+// !!            [Microservice] Notification models                //
+// !! ------------------------------------------------------------ //
+// * EmailNotification                                             //
+// * SmsNotification                                               //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ //
+
+model EmailNotification {
+  id                Int      @id @default(autoincrement())
+  payload           Json // The notification content for one email address.
+  pinpointRequestId String? // RequestId is the Pinpoint request id. One request can contain multiple text messages.
+  pinpointMessageId String? // MessageId is the email message id.
+  pinpointResponse  Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@schema("microservice/notification")
+}
+
+model SmsNotification {
+  id                Int      @id @default(autoincrement())
+  payload           Json // The notification content for one phone.
+  pinpointRequestId String? // RequestId is the Pinpoint request id. One request can contain multiple text messages.
+  pinpointMessageId String? // MessageId is the text message id.
+  pinpointResponse  Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@schema("microservice/notification")
+}
+
+// !! ------------------------------------------------------------ //
+// !!            [Microservice] Order models                       //
+// !! ------------------------------------------------------------ //
+// * Order                                                         //
+// * OrderItem                                                     //
+// * Customer                                                      //
+// * Address                                                       //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ //
+
+model Order {
+  id                  String                @id @default(cuid())
+  status              String?
+  totalPrice          Float
+  totalTax            Float?
+  currency            String
+  note                String?
+  items               OrderItem[]
+  stripePaymentIntent StripePaymentIntent[]
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  customer            Customer?             @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId          String?
+
+  @@schema("microservice/order")
+}
+
+model OrderItem {
+  id         String   @id @default(cuid())
+  name       String
+  totalPrice Float
+  totalTax   Float?
+  pieces     Int?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId    String
+
+  @@schema("microservice/order")
+}
+
+model Customer {
+  id                      String    @id @default(cuid())
+  name                    String?
+  phone                   String?
+  email                   String?
+  identificationNumber    String?
+  taxIdentificationNumber String?
+  addresses               Address[]
+  orders                  Order[]
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  @@schema("microservice/order")
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  address    String
+  city       String
+  state      String?
+  zipcode    String?
+  isPrimary  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId String
+
+  @@schema("microservice/order")
+}
+
+model StripePaymentIntent {
+  id           String   @id
+  status       String
+  amount       Float
+  clientSecret String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  order        Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId      String?
+
+  @@schema("microservice/order")
+}
+
+// ! ------------------------------------------------------------ //
+// !           [Microservice] Task Management models              //
+// ! ------------------------------------------------------------ //
+// * Task (This is an example model.)                             //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄  //
+
+model Task {
+  id           Int       @id @default(autoincrement())
+  state        TaskState @default(PENDING)
+  group        String? // Provided by task microservice's client.
+  payload      Json // Task content
+  sqsMessageId String?
+  sqsResponse  Json?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@schema("microservice/task")
+}
+
+enum TaskState {
+  PENDING
+  DONE
+
+  @@schema("microservice/task")
+}
+
+// ! ------------------------------------------------------------ //
+// !           [Microservice] Verification Code models            //
+// ! ------------------------------------------------------------ //
+// * VerificationCode                                             //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄  //
+
+model VerificationCode {
+  id        Int                    @id @default(autoincrement())
+  email     String?
+  phone     String?
+  code      String
+  status    VerificationCodeStatus
+  use       VerificationCodeUse
+  expiredAt DateTime
+  createdAt DateTime               @default(now())
+  updatedAt DateTime               @updatedAt
+
+  @@schema("microservice/verification-code")
+}
+
+enum VerificationCodeStatus {
+  ACTIVE
+  INACTIVE
+
+  @@schema("microservice/verification-code")
+}
+
+enum VerificationCodeUse {
+  UNKNOWN
+  // For generating JWT.
+  LOGIN_BY_EMAIL
+  LOGIN_BY_PHONE
+  // For closing and recovering account.
+  CLOSE_ACCOUNT_BY_EMAIL
+  CLOSE_ACCOUNT_BY_PHONE
+  RECOVER_ACCOUNT_BY_EMAIL
+  RECOVER_ACCOUNT_BY_PHONE
+  // For other operations
+  BIND_EMAIL
+  BIND_PHONE
+  CHANGE_PASSWORD
+  RESET_PASSWORD
+
+  @@schema("microservice/verification-code")
+}
+
+// ! ------------------------------------------------------------ //
+// !             [Microservice] Workflow models                   //
+// ! ------------------------------------------------------------ //
+// * Workflow                                                     //
+// * WorkflowView                                                 //
+// * WorkflowViewComponent                                        //
+// * WorkflowState                                                //
+// * WorkflowRoute                                                //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄  //
+model Workflow {
+  id          String          @id @default(uuid())
+  name        String          @unique
+  description String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  views       WorkflowView[]
+  states      WorkflowState[]
+
+  @@schema("microservice/workflow")
+}
+
+model WorkflowView {
+  id          Int                     @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+  components  WorkflowViewComponent[]
+  routes      WorkflowRoute[]
+  workflow    Workflow                @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowId  String
+
+  @@schema("microservice/workflow")
+}
+
+model WorkflowViewComponent {
+  id         Int                       @id @default(autoincrement())
+  type       WorkflowViewComponentType
+  sort       Int
+  properties Json
+  createdAt  DateTime                  @default(now())
+  updatedAt  DateTime                  @updatedAt
+  view       WorkflowView              @relation(fields: [viewId], references: [id], onDelete: Cascade)
+  viewId     Int
+
+  @@schema("microservice/workflow")
+}
+
+enum WorkflowViewComponentType {
+  INFO_Title
+  INFO_Description
+  INFO_Image
+  INPUT_String
+  INPUT_Number
+  INPUT_Date
+  INPUT_File
+
+  @@schema("microservice/workflow")
+}
+
+enum WorkflowViewComponentTypePrefix {
+  INFO
+  INPUT
+
+  @@schema("microservice/workflow")
+}
+
+model WorkflowState {
+  id          Int             @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  routes      WorkflowRoute[]
+  workflow    Workflow        @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowId  String
+
+  @@schema("microservice/workflow")
+}
+
+model WorkflowRoute {
+  id         Int           @id @default(autoincrement())
+  startSign  Boolean       @default(false)
+  view       WorkflowView  @relation(fields: [viewId], references: [id], onDelete: Cascade)
+  viewId     Int
+  state      WorkflowState @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  stateId    Int
+  nextViewId Int
+  nextRoleId String?       @db.Uuid // The next role to take over the next step.
+  nextUserId String?       @db.Uuid // The next user to take over the next step.
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@unique([viewId, stateId])
+  @@schema("microservice/workflow")
+}
+
+// ! ------------------------------------------------------------ //
+// !               [Application] Engine D models                  //
+// ! ------------------------------------------------------------ //
+// * PostgresqlDatasource                                         //
+// * PostgresqlDatasourceConstraint                               //
+// * PostgresqlDatasourceTable                                    //
+// * PostgresqlDatasourceTableColumn                              //
+// * ------------------------------------------------------------ //
+// * ElasticsearchDatasource                                      //
+// * ElasticsearchDatasourceIndex                                 //
+// * ElasticsearchDatasourceIndexField                            //
+// * ------------------------------------------------------------ //
+// * DatatransPipeline                                            //
+// * DatatransMission                                             //
+// * ------------------------------------------------------------ //
+// * ElasticsearchDataboard                                       //
+// * ElasticsearchDataboardColumn                                 //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄  //
+
+model PostgresqlDatasource {
+  id          String                           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  host        String
+  port        Int
+  database    String
+  schema      String
+  state       PostgresqlDatasourceState        @default(NOT_LOADED)
+  createdAt   DateTime                         @default(now())
+  updatedAt   DateTime                         @updatedAt
+  tables      PostgresqlDatasourceTable[]
+  constraints PostgresqlDatasourceConstraint[]
+
+  @@schema("application/engined")
+}
+
+enum PostgresqlDatasourceState {
+  LOADED
+  NOT_LOADED
+
+  @@schema("application/engined")
+}
+
+model PostgresqlDatasourceConstraint {
+  id           Int                                   @id @default(autoincrement())
+  schema       String // The schema name.
+  table        String // The table name.
+  keyColumn    String // The table's primary key column or foreign key column.
+  keyType      PostgresqlDatasourceConstraintKeyType
+  foreignTable String? // Has value when the type is FOREIGN_KEY. 
+  createdAt    DateTime                              @default(now())
+  updatedAt    DateTime                              @updatedAt
+  datasource   PostgresqlDatasource                  @relation(fields: [datasourceId], references: [id], onDelete: Cascade)
+  datasourceId String                                @db.Uuid
+
+  @@schema("application/engined")
+}
+
+enum PostgresqlDatasourceConstraintKeyType {
+  PRIMARY_KEY
+  FOREIGN_KEY
+
+  @@schema("application/engined")
+}
+
+model PostgresqlDatasourceTable {
+  id                 Int                               @id @default(autoincrement())
+  name               String
+  schema             String
+  createdAt          DateTime                          @default(now())
+  updatedAt          DateTime                          @updatedAt
+  datasource         PostgresqlDatasource              @relation(fields: [datasourceId], references: [id], onDelete: Cascade)
+  datasourceId       String                            @db.Uuid
+  columns            PostgresqlDatasourceTableColumn[]
+  datatransPipelines DatatransPipeline[]
+
+  @@schema("application/engined")
+}
+
+model PostgresqlDatasourceTableColumn {
+  id              Int                       @id @default(autoincrement())
+  name            String // The column name.
+  type            String
+  constraint      String?
+  ordinalPosition Int? // The sort number of the column in the table.
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+  table           PostgresqlDatasourceTable @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  tableId         Int
+
+  @@schema("application/engined")
+}
+
+model ElasticsearchDatasource {
+  id        String                         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  node      String
+  state     ElasticsearchDatasourceState   @default(NOT_LOADED)
+  createdAt DateTime                       @default(now())
+  updatedAt DateTime                       @updatedAt
+  indices   ElasticsearchDatasourceIndex[]
+
+  @@schema("application/engined")
+}
+
+enum ElasticsearchDatasourceState {
+  LOADED
+  NOT_LOADED
+
+  @@schema("application/engined")
+}
+
+model ElasticsearchDatasourceIndex {
+  id                 Int                                 @id @default(autoincrement())
+  name               String
+  state              ElasticsearchDatasourceIndexState   @default(NO_MAPPING)
+  createdAt          DateTime                            @default(now())
+  updatedAt          DateTime                            @updatedAt
+  datasource         ElasticsearchDatasource             @relation(fields: [datasourceId], references: [id], onDelete: Cascade)
+  datasourceId       String                              @db.Uuid
+  fields             ElasticsearchDatasourceIndexField[]
+  databoards         ElasticsearchDataboard[]
+  datatransPipelines DatatransPipeline[]
+
+  @@schema("application/engined")
+}
+
+enum ElasticsearchDatasourceIndexState {
+  NO_MAPPING
+  HAS_MAPPING
+
+  @@schema("application/engined")
+}
+
+model ElasticsearchDatasourceIndexField {
+  id               Int                            @id @default(autoincrement())
+  name             String // The field name. 
+  type             String?
+  fields           Json?
+  properties       Json?
+  createdAt        DateTime                       @default(now())
+  updatedAt        DateTime                       @updatedAt
+  index            ElasticsearchDatasourceIndex   @relation(fields: [indexId], references: [id], onDelete: Cascade)
+  indexId          Int
+  databoardColumns ElasticsearchDataboardColumn[]
+
+  @@schema("application/engined")
+}
+
+model DatatransPipeline {
+  id                String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String
+  hasManyTables     String[] // The child tables should be loaded into the payload to be transported.
+  belongsToTables   String[] // The parent tables should be loaded into the payload to be transported.
+  createdAt         DateTime                     @default(now())
+  updatedAt         DateTime                     @updatedAt
+  fromTable         PostgresqlDatasourceTable    @relation(fields: [fromTableId], references: [id], onDelete: Cascade)
+  fromTableId       Int
+  toIndex           ElasticsearchDatasourceIndex @relation(fields: [toIndexId], references: [id])
+  toIndexId         Int
+  datatransMissions DatatransMission[]
+
+  @@schema("application/engined")
+}
+
+model DatatransMission {
+  id                  String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  state               DatatransMissionState @default(PENDING)
+  numberOfRecords     Int // Number of records that will be sent from datasource table
+  numberOfBatches     Int
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  datatransPipeline   DatatransPipeline     @relation(fields: [datatransPipelineId], references: [id])
+  datatransPipelineId String                @db.Uuid
+  tasks               DatatransTask[]
+
+  @@schema("application/engined")
+}
+
+enum DatatransMissionState {
+  PENDING
+  SPLIT
+  STARTED
+  STOPPED
+
+  @@schema("application/engined")
+}
+
+model DatatransTask {
+  id           Int                @id @default(autoincrement())
+  state        DatatransTaskState @default(PENDING)
+  take         Int
+  skip         Int
+  sqsMessageId String?
+  sqsResponse  Json?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  mission      DatatransMission   @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  missionId    String             @db.Uuid
+
+  @@schema("application/engined")
+}
+
+enum DatatransTaskState {
+  PENDING
+  IN_QUEUE
+  DONE
+
+  @@schema("application/engined")
+}
+
+model ElasticsearchDataboard {
+  id                String                         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String
+  state             ElasticsearchDataboardState    @default(NOT_LOADED)
+  description       String?
+  createdAt         DateTime                       @default(now())
+  updatedAt         DateTime                       @updatedAt
+  datasourceIndex   ElasticsearchDatasourceIndex   @relation(fields: [datasourceIndexId], references: [id])
+  datasourceIndexId Int
+  columns           ElasticsearchDataboardColumn[]
+
+  @@schema("application/engined")
+}
+
+enum ElasticsearchDataboardState {
+  LOADED
+  NOT_LOADED
+
+  @@schema("application/engined")
+}
+
+model ElasticsearchDataboardColumn {
+  id                     Int                                   @id @default(autoincrement())
+  name                   String
+  ordinalPosition        Int? // The sort number of the column on the board. The first position is 1.
+  visible                Boolean                               @default(true)
+  width                  Int?
+  copyable               Boolean?
+  searchable             Boolean?
+  sortable               Boolean?
+  tooltip                String?
+  formatter              ElasticsearchDataboardColumnFormatter @default(NONE)
+  createdAt              DateTime                              @default(now())
+  updatedAt              DateTime                              @updatedAt
+  databoard              ElasticsearchDataboard                @relation(fields: [databoardId], references: [id], onDelete: Cascade)
+  databoardId            String                                @db.Uuid
+  datasourceIndexField   ElasticsearchDatasourceIndexField     @relation(fields: [datasourceIndexFieldId], references: [id])
+  datasourceIndexFieldId Int
+
+  @@schema("application/engined")
+}
+
+enum ElasticsearchDataboardColumnFormatter {
+  NONE
+  OVER_DUE
+  PAST_DUE
+  DATE_TIME
+  HIGHLIGHT_INCOMPLETE
+  CURRENCY
+
+  @@schema("application/engined")
+}
+
+// ! ------------------------------------------------------------ //
+// !          [Application] Project Management models             //
+// ! ------------------------------------------------------------ //
+// * Project                                                      //
+// * ProjectCheckpoint                                            //
+// * ProjectEnvironment                                           //
+// * CloudFormationStack                                          //
+// * PulumiStack                                                  //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄  //
+
+model Project {
+  id           String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String               @unique
+  state        ProjectState         @default(PLANNING)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  elements     ProjectElement[]
+  checkpoints  ProjectCheckpoint[]
+  environments ProjectEnvironment[]
+
+  @@schema("application/pmgmt")
+}
+
+enum ProjectState {
+  PLANNING
+  DESIGNING
+  DEVELOPING
+  DONE
+
+  @@schema("application/pmgmt")
+}
+
+model ProjectElement {
+  id        Int      @id @default(autoincrement())
+  section   String?
+  label     String
+  content   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?  @db.Uuid
+
+  @@schema("application/pmgmt")
+}
+
+model ProjectCheckpoint {
+  id        Int                    @id @default(autoincrement())
+  type      ProjectCheckpointType
+  state     ProjectCheckpointState @default(TODO)
+  createdAt DateTime               @default(now())
+  updatedAt DateTime               @updatedAt
+  Project   Project                @relation(fields: [projectId], references: [id])
+  projectId String                 @db.Uuid
+
+  @@unique([type, projectId])
+  @@schema("application/pmgmt")
+}
+
+enum ProjectCheckpointType {
+  MANAGER_PRODUCT_REQUIREMENTS
+  MANAGER_PROJECT_KANBAN
+  DESIGNER_WIREFRAMES
+  DESIGNER_PROTOTYPES
+  DEVELOPER_ACCOUNT_APPLE
+  DEVELOPER_ACCOUNT_GOOGLE
+  DEVELOPER_BACKEND_REPO
+  DEVELOPER_BACKEND_FRAMEWORK
+  DEVELOPER_BACKEND_DATABASE
+  DEVELOPER_BACKEND_API
+  DEVELOPER_FRONTEND_REPO
+  DEVELOPER_FRONTEND_FRAMEWORK
+  DEVELOPER_INFRASTRUCTURE
+
+  @@schema("application/pmgmt")
+}
+
+enum ProjectCheckpointState {
+  TODO
+  PROCESSING
+  DONE
+
+  @@schema("application/pmgmt")
+}
+
+model ProjectEnvironment {
+  id                   Int                   @id @default(autoincrement())
+  name                 String
+  awsAccountId         String?
+  awsProfile           String?
+  awsAccessKeyId       String?
+  awsSecretAccessKey   String? // automatic hashing
+  awsRegion            String?
+  s3ForCloudformation  String?
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  project              Project               @relation(fields: [projectId], references: [id])
+  projectId            String                @db.Uuid
+  infrastructureStacks InfrastructureStack[]
+
+  @@schema("application/pmgmt")
+}
+
+model InfrastructureStack {
+  id                  String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                String?                    @unique // Set default value via prisma middleware.
+  manager             InfrastructureStackManager
+  type                String
+  params              Json?
+  state               InfrastructureStackState   @default(PENDING)
+  createStackOutput   Json?
+  describeStackOutput Json?
+  deleteStackOutput   Json?
+  createdAt           DateTime                   @default(now())
+  updatedAt           DateTime                   @updatedAt
+  environment         ProjectEnvironment         @relation(fields: [environmentId], references: [id])
+  environmentId       Int
+
+  @@schema("application/pmgmt")
+}
+
+enum InfrastructureStackManager {
+  CloudFormation
+  Pulumi
+
+  @@schema("application/pmgmt")
+}
+
+enum InfrastructureStackState {
+  PENDING
+  BUILD_PROCESSING
+  BUILD_SUCCEEDED
+  BUILD_FAILED
+  DESTROY_PROCESSING
+  DESTROY_SUCCEEDED
+  DESTROY_FAILED
+
+  @@schema("application/pmgmt")
+}
+
+// ! ------------------------------------------------------------ //
+// !             [Application] Recruitment models                 //
+// ! ------------------------------------------------------------ //
+// * Candidate                                                    //
+// * CandidateLocation                                            //
+// * CandidateProfile                                             //
+// * CandidateCertification                                       //
+// * CandidateTraining                                            //
+// * Job                                                          //
+// * JobApplication                                               //
+// * JobApplicationNote                                           //
+// * JobApplicationTask                                           //
+// * JobApplicationTesting                                        //
+// * JobApplicationTestingAttachment                              //
+// * JobApplicationTestingLog                                     //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄  //
+
+model Candidate {
+  id              String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  status          CandidateStatus          @default(ACTIVE)
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+  profile         CandidateProfile?
+  locationId      String?                  @db.Uuid
+  certifications  CandidateCertification[]
+  trainings       CandidateTraining[]
+  jobApplications JobApplication[]
+
+  @@schema("application/recruitment")
+}
+
+enum CandidateStatus {
+  ACTIVE
+  INACTIVE
+
+  @@schema("application/recruitment")
+}
+
+model CandidateProfile {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  uniqueNumber      String
+  firstName         String
+  middleName        String?
+  lastName          String
+  fullName          String?
+  dateOfBirth       DateTime? @db.Date
+  gender            String?
+  email             String?
+  primaryPhone      String
+  primaryPhoneExt   String?
+  alternatePhone    String?
+  alternatePhoneExt String?
+  websites          Json? // {'facebook': 'https://www.facebook.com/grace', 'twitter': 'https://twitter.com/elonmusk'}
+  picture           String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  candidate         Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  candidateId       String    @unique @db.Uuid
+
+  @@schema("application/recruitment")
+}
+
+model CandidateCertification {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  candidateId String    @db.Uuid
+
+  @@schema("application/recruitment")
+}
+
+model CandidateTraining {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  candidateId String    @db.Uuid
+
+  @@schema("application/recruitment")
+}
+
+model Job {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code        String
+  type        JobType
+  position    String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  locationId  String?  @db.Uuid
+
+  @@schema("application/recruitment")
+}
+
+enum JobType {
+  Hourly
+  Salaried
+
+  @@schema("application/recruitment")
+}
+
+model JobApplication {
+  id          String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  state       String?
+  jobType     JobType
+  jobCode     String? // Only available when jobType is Hourly.
+  jobSite     String
+  testTypes   String[]
+  referredBy  String // This field should user.name or user.id
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+  candidate   Candidate                @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  candidateId String                   @db.Uuid
+  workflows   JobApplicationWorkflow[]
+
+  @@schema("application/recruitment")
+}
+
+model JobApplicationWorkflow {
+  id                 String                         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt          DateTime                       @default(now())
+  updatedAt          DateTime                       @updatedAt
+  jobApplication     JobApplication                 @relation(fields: [jobApplicationId], references: [id], onDelete: Cascade)
+  jobApplicationId   String                         @db.Uuid
+  beingHeldByUser    User?                          @relation(fields: [beingHeldByUserId], references: [id])
+  beingHeldByUserId  String?                        @db.Uuid
+  payload            JobApplicationWorkflowPayload? // workflow payload
+  files              JobApplicationWorkflowFile[] // work payload
+  notes              JobApplicationWorkflowNote[] // workflow payload
+  tasks              JobApplicationWorkflowTask[] // workflow payload
+  trails             JobApplicationWorkflowTrail[]
+  // Below fields copy from latest workflow step.
+  stateId            Int
+  nextViewId         Int
+  nextRoleId         String?
+  processedByUserIds String[] // Store id of users who have processed this workflow.
+
+  @@schema("application/recruitment")
+}
+
+model JobApplicationWorkflowTrail {
+  id                Int                    @id @default(autoincrement())
+  viewId            Int
+  stateId           Int // The state that is selected in this step.
+  nextViewId        Int
+  nextRoleId        String?                @db.Uuid // The role who will process the next step.
+  processedByUserId String                 @db.Uuid // The user who processed this step.
+  comment           String?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  workflow          JobApplicationWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowId        String                 @db.Uuid
+
+  @@schema("application/recruitment")
+}
+
+model JobApplicationWorkflowPayload {
+  id                  Int                    @id @default(autoincrement())
+  testType            String?
+  testSite            String?
+  appointmentStartsAt DateTime?
+  appointmentEndsAt   DateTime?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  workflow            JobApplicationWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowId          String                 @unique @db.Uuid
+
+  @@schema("application/recruitment")
+}
+
+model JobApplicationWorkflowFile {
+  id             Int                    @id @default(autoincrement())
+  fileId         String                 @db.Uuid
+  originalName   String
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  workflow       JobApplicationWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowId     String                 @db.Uuid
+  workflowStepId Int
+
+  @@schema("application/recruitment")
+}
+
+model JobApplicationWorkflowNote {
+  id              Int                    @id @default(autoincrement())
+  reporter        String?
+  reporterUserId  String                 @db.Uuid
+  reporterComment String
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  workflow        JobApplicationWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowId      String                 @db.Uuid
+
+  @@schema("application/recruitment")
+}
+
+model JobApplicationWorkflowTask {
+  id              Int                             @id @default(autoincrement())
+  reporter        String?
+  reporterUserId  String                          @db.Uuid
+  reporterComment String
+  assignee        String?
+  assigneeUserId  String                          @db.Uuid
+  state           JobApplicationWorkflowTaskState @default(PENDING)
+  createdAt       DateTime                        @default(now())
+  updatedAt       DateTime                        @updatedAt
+  workflow        JobApplicationWorkflow          @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowId      String                          @db.Uuid
+
+  @@schema("application/recruitment")
+}
+
+enum JobApplicationWorkflowTaskState {
+  PENDING
+  DONE
+
+  @@schema("application/recruitment")
+}
+
+// ! ------------------------------------------------------------ //
+// !             [Application] TC Request models                  //
+// ! ------------------------------------------------------------ //
+// * TcWorkflow                                                   //
+// * TcWorkflowTrail                                              //
+// * TcPayment                                                    //
+// * ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄ ⌄  //
+
+model TcWorkflow {
+  id                         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  registrationNumber         String
+  orderId                    String? // Payment order
+  status                     String
+  reasonForRefusal           String?
+  folderId                   Int
+  fileIdForCertificate       String?
+  // VIEW1_DETAILS
+  title                      String?
+  firstName                  String?
+  middleName                 String?
+  lastName                   String?
+  fullName                   String?
+  dateOfBirth                DateTime?         @db.Date
+  gender                     String?
+  address                    String?
+  island                     String?
+  district                   String?
+  addressOutsideTC           String?
+  landlinePhone              String?
+  mobile                     String?
+  email                      String? //  If you have made previous Certificate of Character applications, the email you enter here will replace any you have previously entered. This means that all email correspondence we send regarding previous applications will now be sent to this address.
+  fileIdForRecentPhoto       String?           @db.Uuid
+  // VIEW2_PURPOSE
+  purpose                    String?
+  typeOfEmployment           String?
+  countryOfTravel            String?
+  otherPurpose               String?
+  intendedDateOfTravel       DateTime?         @db.Date
+  fileIdForTravelProof       String?
+  otherInformation           String? // If there is no information type "No"
+  // VIEW3_PAYMENT
+  // VIEW4_TYPE
+  scopeOfConvictions         String?
+  hasOutsideConviction       Boolean? // Yes or No
+  outsideConviction          String? // If hasOutsideConviction == Yes, fill in this field.
+  // VIEW5_MARITAL
+  maritalStatus              String?
+  isNameChanged              Boolean? // Name changed through Marriage or Deed Poll?
+  preFirstName               String?
+  preMiddleName              String?
+  preLastName                String?
+  // VIEW6_EMPLOYMENT
+  occupation                 String?
+  nameOfEmployer             String?
+  addressOfEmployer          String?
+  telephoneOfEmployer        String?
+  emailOfEmployer            String?
+  // VIEW7_TCUK_?
+  isTcUk                     Boolean?
+  // VIEW8_TCUK_YES
+  isTc                       Boolean?
+  fileIdOfTcPassport         String?           @db.Uuid
+  fileIdOfTcCertificate      String?           @db.Uuid
+  fileIdOfUkPassport         String?           @db.Uuid
+  fileIdOfUkCertificate      String?           @db.Uuid
+  // VIEW9_TCUK_NO
+  fileIdOfForeignPassport    String?           @db.Uuid
+  fileIdOfForeignCertificate String?           @db.Uuid
+  passportNumber             String?
+  dateOfIssue                DateTime?         @db.Date
+  dateOfExpiry               DateTime?         @db.Date
+  countryOfIssue             String?
+  placeOfBirth               String?
+  // nationality                String
+  // otherNationality           String?
+  statusCardNumber           String?
+  dateOfStatusCardIssue      DateTime?         @db.Date
+  dateOfRequest              DateTime          @default(now()) @db.Date
+  createdAt                  DateTime          @default(now())
+  updatedAt                  DateTime          @updatedAt
+  // Below fields copy from latest workflow trail.
+  view                       String
+  state                      String
+  nextView                   String
+  nextRoleId                 String?
+  processedByUserIds         String[] // Store id of users who have processed this workflow.
+  // Workflow trails
+  trails                     TcWorkflowTrail[]
+
+  @@schema("application/tc-request")
+}
+
+model TcWorkflowTrail {
+  id                Int        @id @default(autoincrement())
+  view              String
+  state             String // The state that is selected in this step.
+  nextView          String
+  nextRoleId        String?    @db.Uuid // The role who will process the next step.
+  processedByUserId String?    @db.Uuid // The user who processed this step.
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  workflow          TcWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  workflowId        String     @db.Uuid
+
+  @@schema("application/tc-request")
+}

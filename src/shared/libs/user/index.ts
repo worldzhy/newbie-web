@@ -1,122 +1,41 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
-import {type IRole} from '@/shared/libs/role';
+import {
+  postRequest,
+  listRequest,
+  getRequest,
+  patchRequest,
+  deleteRequest,
+} from '@/shared/libs/axiosInstance';
+import {Prisma, User, Role} from '@prisma/client';
+import url from '../axiosInstance/url';
 
-export default class User {
-  private readonly url = '/users';
-
-  public async get(): Promise<IGetUserOutput> {
-    const url = `${this.url}?pageSize=100&page=1&roleId=1&name=1`;
-    const res = await axiosInstance.get(url);
+export default class UserApiRequest {
+  public async create(
+    data: Prisma.UserCreateInput & {roles: Role[]}
+  ): Promise<User> {
+    const res = await postRequest(url.user, data);
     return res.data;
   }
 
-  public async create(payload: IAddUserPayload): Promise<IAddUserResponse> {
-    const {email, phone, username, password, roles} = payload;
-    const url = this.url;
-    const data = {
-      email,
-      phone,
-      username,
-      password,
-      status: 'ACTIVE',
-      roleIds: roles.map(r => ({id: r.id})),
-    };
-    const res = await axiosInstance.post(url, data);
+  public async list(params: {page: number; pageSize: number}): Promise<any> {
+    const res = await listRequest(url.user, params);
     return res.data;
   }
 
-  public async update(
-    userid: string,
-    payload: IUpdateUserPayload
-  ): Promise<IUpdateUserResponse> {
-    const {email, phone, username, password, roles} = payload;
-    const url = `${this.url}/${userid}`;
-    const data = {
-      email,
-      phone,
-      username,
-      roleIds: roles.map(r => ({id: r.id})),
-      ...(password !== '' && {password}),
-    };
-    const res = await axiosInstance.patch(url, data);
+  public async get(id: string) {
+    const res = await getRequest(url.user, id);
     return res.data;
   }
 
-  public async delete(userid: string): Promise<IDeleteUserResponse> {
-    const url = `${this.url}/${userid}`;
-    const res = await axiosInstance.delete(url);
+  public async edit(
+    id: string,
+    data: Prisma.UserUpdateInput & {roles: Role[]}
+  ): Promise<User> {
+    const res = await patchRequest(url.user, id, data);
+    return res.data;
+  }
+
+  public async delete(id: string) {
+    const res = await deleteRequest(url.user, id);
     return res.data;
   }
 }
-
-/**
- * Types
- */
-
-export interface IUser {
-  id: string;
-  email: string | null;
-  phone: string | null;
-  username: string;
-  roles: IRole[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface IGetUserOutput {
-  records: Array<
-    IUser & {
-      status: string;
-      lastLoginAt: string;
-      organizationId: null | string;
-      profiles: [];
-      locations: [];
-    }
-  >;
-  pagination: {
-    page: number;
-    pageSize: number;
-    currentNumberOfRecords: number;
-    totalNumberOfRecords: number;
-  };
-}
-
-interface IAddUserPayload {
-  email: string;
-  phone: string;
-  username: string;
-  password: string;
-  roles: IRole[];
-}
-
-interface IAddUserResponse {
-  id: string;
-  email: string;
-  phone: string;
-  username: string;
-  status: string;
-  profiles: [];
-}
-
-interface IUpdateUserPayload {
-  email: string;
-  phone: string;
-  username: string;
-  password: string;
-  roles: IRole[];
-}
-
-interface IUpdateUserResponse {
-  id: string;
-  email: string;
-  phone: string;
-  username: string;
-  password: string;
-  status: string;
-  lastLoginAt: string | null;
-  createdAt: string;
-  updatedAt: string;
-  organizationId: string | null;
-}
-
-interface IDeleteUserResponse extends IUpdateUserResponse {}

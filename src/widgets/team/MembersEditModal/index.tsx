@@ -5,31 +5,31 @@ import React, {
   useReducer,
   useEffect,
 } from 'react';
-import User, {type IUser} from '@/shared/libs/user';
 import {raise, sendRequest, showError} from '@/shared/libs/mixins';
 import {Stack} from '@mui/material';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 import MultiSelectCustom from '@/components/MultiSelectCustom';
-import {type IRole} from '@/shared/libs/role';
+import {User, Role} from '@prisma/client';
+import UserApiRequest from '@/shared/libs/user';
 
 /**
  * Types
  */
 
 interface Props {
-  activeMember: IUser | undefined;
-  data: IUser[];
-  setData: React.Dispatch<React.SetStateAction<IUser[]>>;
+  activeMember: (User & {roles: Role[]}) | undefined;
+  data: (User & {roles: Role[]})[];
+  setData: React.Dispatch<React.SetStateAction<(User & {roles: Role[]})[]>>;
   modal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
-  rolesList: IRole[];
+  rolesList: Role[];
 }
 
 interface INewMember {
   email: string;
   phone: string;
-  username: string;
+  name: string;
   password: string;
 }
 
@@ -53,7 +53,7 @@ const MembersEditModal: FC<Props> = ({
     {
       email: '',
       phone: '',
-      username: '',
+      name: '',
       password: '',
     }
   );
@@ -69,7 +69,7 @@ const MembersEditModal: FC<Props> = ({
           setUpdatedActiveMember({
             email: activeMember?.email ?? '',
             phone: activeMember?.phone ?? '',
-            username: activeMember?.username ?? '',
+            name: activeMember?.name ?? '',
             password: '',
           });
         }
@@ -92,18 +92,18 @@ const MembersEditModal: FC<Props> = ({
    */
   const editRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      const {email, phone, username, password} = updatedActiveMember;
+      const {email, phone, name, password} = updatedActiveMember;
       const roles = rolesList.filter(({name}) =>
         selectedRoleNames.includes(name)
       );
       const payload = {
         email,
         phone,
-        username,
+        name,
         password,
         roles,
       };
-      await new User().update(raise(activeMember?.id), payload);
+      await new UserApiRequest().edit(raise(activeMember?.id), payload);
       setData(
         data.map(d => {
           if (d.id === activeMember?.id) {
@@ -122,7 +122,7 @@ const MembersEditModal: FC<Props> = ({
   return (
     <FormDialogCustom
       open={modal}
-      title={`Edit ${activeMember?.username ?? ''}`}
+      title={`Edit ${activeMember?.name ?? ''}`}
       closeDialogHandler={() => {
         setModal(false);
       }}
@@ -146,10 +146,10 @@ const MembersEditModal: FC<Props> = ({
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
-          label="Username"
-          value={updatedActiveMember.username}
+          label="Name"
+          value={updatedActiveMember.name}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setUpdatedActiveMember({username: e.target.value});
+            setUpdatedActiveMember({name: e.target.value});
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom

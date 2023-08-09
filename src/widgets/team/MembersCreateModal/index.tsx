@@ -1,28 +1,28 @@
 import React, {type ReactElement, useState, type FC, useReducer} from 'react';
-import User, {type IUser} from '@/shared/libs/user';
+import {User, Role} from '@prisma/client';
 import {sendRequest} from '@/shared/libs/mixins';
 import {Stack} from '@mui/material';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 import MultiSelectCustom from '@/components/MultiSelectCustom';
-import {type IRole} from '@/shared/libs/role';
+import UserApiRequest from '@/shared/libs/user';
 
 /**
  * Types
  */
 
 interface Props {
-  data: IUser[];
-  setData: React.Dispatch<React.SetStateAction<IUser[]>>;
+  data: (User & {roles: Role[]})[];
+  setData: React.Dispatch<React.SetStateAction<(User & {roles: Role[]})[]>>;
   modal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
-  rolesList: IRole[];
+  rolesList: Role[];
 }
 
 interface INewMember {
   email: string;
   phone: string;
-  username: string;
+  name: string;
   password: string;
 }
 
@@ -45,7 +45,7 @@ const MembersCreateModal: FC<Props> = ({
     {
       email: '',
       phone: '',
-      username: '',
+      name: '',
       password: '',
     }
   );
@@ -53,22 +53,14 @@ const MembersCreateModal: FC<Props> = ({
   /**
    * Handlers
    */
-  const createRole = async (): Promise<void> => {
+  const createUser = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
       const roles = rolesList.filter(({name}) =>
         selectedRoleNames.includes(name)
       );
       const newMemberData = {...newMember, roles};
-      const res = await new User().create(newMemberData);
-      setData([
-        ...data,
-        {
-          id: res.id,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          ...newMemberData,
-        },
-      ]);
+      const res = await new UserApiRequest().create(newMemberData);
+      setData([...data, {...res, roles}]);
       setModal(false);
     });
   };
@@ -80,7 +72,7 @@ const MembersCreateModal: FC<Props> = ({
       closeDialogHandler={() => {
         setModal(false);
       }}
-      formSubmitHandler={createRole}
+      formSubmitHandler={createUser}
       isProcessing={isProcessing}
     >
       <Stack spacing={{xs: 2, sm: 1}}>
@@ -100,10 +92,10 @@ const MembersCreateModal: FC<Props> = ({
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom
-          label="Username"
-          value={newMember.username}
+          label="Name"
+          value={newMember.name}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            updateNewMember({username: e.target.value});
+            updateNewMember({name: e.target.value});
           }}
         ></FormDialogInputCustom>
         <FormDialogInputCustom

@@ -100,7 +100,11 @@ export const isUnauthorized = (err: unknown): boolean => {
   );
 };
 
-export const sortDate = (dateA: string, dateB: string): number => {
+export const sortDate = (dateA: Date, dateB: Date): number => {
+  return new Date(dateA).getTime() - new Date(dateB).getTime();
+};
+
+export const sortDateString = (dateA: string, dateB: string): number => {
   return new Date(dateA).getTime() - new Date(dateB).getTime();
 };
 

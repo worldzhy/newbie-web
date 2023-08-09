@@ -6,14 +6,15 @@ import {
   isUnauthorized,
 } from '@/shared/libs/mixins';
 import {useRouter} from 'next/router';
-import User, {type IUser} from '@/shared/libs/user';
-import Role, {type IRole} from '@/shared/libs/role';
 import {Button, Link, Stack, TableCell, TableRow} from '@mui/material';
 import MembersEditModal from '../MembersEditModal';
 import MembersCreateModal from '../MembersCreateModal';
 import MembersDeleteModal from '../MembersDeleteModal';
 import SkeletonCustom from '@/components/SkeletonCustom';
 import TableContainerCustom from '@/components/TableContainerCustom';
+import {User, Role} from '@prisma/client';
+import UserApiRequest from '@/shared/libs/user';
+import RoleApiRequest from '@/shared/libs/role';
 
 /**
  * Types
@@ -25,17 +26,17 @@ const MembersTab = (): ReactElement => {
    */
   const router = useRouter();
   const headers = ['Name', 'Email', 'Phone', 'Role', 'Actions'];
-  const [rolesList, setRolesList] = useState<IRole[]>([]);
+  const [rolesList, setRolesList] = useState<Role[]>([]);
 
   /**
    * States
    */
-  const [data, setData] = useState<IUser[]>([]);
+  const [data, setData] = useState<(User & {roles: Role[]})[]>([]);
   const [isFetching, setIsFetching] = useState(true);
   const [createModal, setCreateModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [activeMember, setActiveMember] = useState<IUser>();
+  const [activeMember, setActiveMember] = useState<User & {roles: Role[]}>();
 
   /**
    * Data Fetching
@@ -46,10 +47,13 @@ const MembersTab = (): ReactElement => {
         setData([]);
         setRolesList([]);
         if (!ignore) {
-          const users = await new User().get();
+          const users = await new UserApiRequest().list({
+            page: 1,
+            pageSize: 10,
+          });
           setData(users.records);
 
-          const roles = await new Role().getAll();
+          const roles = await new RoleApiRequest().getAll();
           setRolesList(roles);
 
           setIsFetching(false);
@@ -83,7 +87,7 @@ const MembersTab = (): ReactElement => {
         .sort((a, b) => sortDate(a.createdAt, b.createdAt))
         .map((d, rowKey) => (
           <TableRow key={rowKey}>
-            <TableCell align="center">{d.username}</TableCell>
+            <TableCell align="center">{d.name}</TableCell>
             <TableCell align="center">{d.email}</TableCell>
             <TableCell align="center">{d.phone}</TableCell>
             <TableCell align="center">

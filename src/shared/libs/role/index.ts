@@ -1,59 +1,36 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
+import {
+  deleteRequest,
+  getRequest,
+  listRequest,
+  patchRequest,
+  postRequest,
+} from '@/shared/libs/axiosInstance';
+import {Prisma, Role} from '@prisma/client';
+import url from '../axiosInstance/url';
 
-export default class Role {
-  private readonly url = '/roles';
-
-  public async getAll(): Promise<IRole[]> {
-    const url = this.url;
-    const res = await axiosInstance.get(url);
+export default class RoleApiRequest {
+  public async getAll(): Promise<Role[]> {
+    const res = await listRequest(url.role, {});
     return res.data;
   }
 
-  public async get(roleId: string): Promise<IRole> {
-    const url = `${this.url}/${roleId}`;
-    const res = await axiosInstance.get(url);
+  public async get(roleId: string): Promise<Role> {
+    const res = await getRequest(url.role, roleId);
     return res.data;
   }
 
-  public async create(name: string): Promise<IRole> {
-    const url = this.url;
-    const data = {name};
-    const res = await axiosInstance.post(url, data);
+  public async create(params: Prisma.RoleCreateInput): Promise<Role> {
+    const res = await postRequest(url.role, params);
     return res.data;
   }
 
-  public async update(
-    roleId: string,
-    payload: IUpdateRolePayload
-  ): Promise<IRole> {
-    const {name, description} = payload;
-    const url = `${this.url}/${roleId}`;
-    const data = {name, description};
-    const res = await axiosInstance.patch(url, data);
+  public async update(params: Prisma.RoleUpdateInput): Promise<Role> {
+    const res = await patchRequest(url.role, params.id as string, params);
     return res.data;
   }
 
-  public async delete(roleId: string): Promise<IRole> {
-    const url = `${this.url}/${roleId}`;
-    const res = await axiosInstance.delete(url);
+  public async delete(roleId: string): Promise<Role> {
+    const res = await deleteRequest(url.role, roleId);
     return res.data;
   }
-}
-
-/**
- * Types
- */
-
-export interface IRole {
-  id: string;
-  name: string;
-  description: string | null;
-  createdAt: string;
-  updatedAt: string;
-  organizationId: string | null;
-}
-
-interface IUpdateRolePayload {
-  name: string;
-  description: string;
 }
