@@ -1,15 +1,16 @@
 import {FC, useState} from 'react';
 import {Box, Button, Link, Modal} from '@mui/material';
 import {ModalStyle} from '@/constants/styleConfig';
-import StatesService, {StateItem} from '@/shared/libs/workflow-state';
 import EditModal from '../EditModal';
 import CloseIcon from '@mui/icons-material/Close';
 import TableCustom from '@/components/TableCustom';
+import {WorkflowState} from '@prisma/client';
+import WorkflowStateApiRequest from '@/shared/libs/workflow-state';
 
 import styles from './index.module.scss';
 
 type IProps = {
-  rows: StateItem[];
+  rows: WorkflowState[];
   refreshData: () => void;
 };
 
@@ -19,7 +20,7 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [values, setValues] = useState<any>();
-  const service = new StatesService();
+  const service = new WorkflowStateApiRequest();
 
   const actionsRender = (index: number) => (
     <>
@@ -47,7 +48,7 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
     setOpen(true);
   };
   const handleDelete = async () => {
-    await service.deleteState(values.id);
+    await service.delete(values.id);
     refreshData();
     setOpenDelete(false);
   };

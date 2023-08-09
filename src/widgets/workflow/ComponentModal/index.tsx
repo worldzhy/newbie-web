@@ -140,9 +140,9 @@ const ComponentModal: FC<IProps> = ({
     components.forEach(async (component, index) => {
       const {id} = component;
       if (id) {
-        await componentService.updateViewComponent({...component, sort: index});
+        await componentService.update(id, {...component, sort: index});
       } else {
-        await componentService.createViewComponent({
+        await componentService.createMany({
           data: [{...component, sort: index}],
         });
       }
@@ -153,7 +153,7 @@ const ComponentModal: FC<IProps> = ({
     setHasComponents(false);
   };
   const getComponentValue = async (id: string) => {
-    const {components} = await viewService.getView(id);
+    const {components} = await viewService.get(id);
     setHasComponents(!!components.length);
     setComponents([...components]);
   };
@@ -177,7 +177,7 @@ const ComponentModal: FC<IProps> = ({
     if (target) {
       const {id} = target;
       if (id) {
-        await componentService.deleteViewComponent(id);
+        await componentService.delete(id);
       }
       components.splice(index, 1);
       setComponents([...components]);

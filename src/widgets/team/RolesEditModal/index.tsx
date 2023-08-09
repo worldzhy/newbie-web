@@ -83,7 +83,7 @@ const RolesEditModal: FC<Props> = ({
    */
   const updateRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      const role = await new RoleApiRequest().edit(
+      const role = await new RoleApiRequest().update(
         raise(activeRole?.id),
         updatedActiveRole
       );

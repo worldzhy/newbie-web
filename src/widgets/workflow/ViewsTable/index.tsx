@@ -1,16 +1,17 @@
 import {FC, useState} from 'react';
 import {ModalStyle} from '@/constants/styleConfig';
 import {Box, Button, Link, Modal} from '@mui/material';
-import ViewsService, {ViewItem} from '@/shared/libs/workflow-view';
 import EditModal from '../EditModal';
 import ComponentModal from '../ComponentModal';
 import CloseIcon from '@mui/icons-material/Close';
 import TableCustom from '@/components/TableCustom';
+import {WorkflowView} from '@prisma/client';
+import WorkflowViewApiRequest from '@/shared/libs/workflow-view';
 
 import styles from './index.module.scss';
 
 type IProps = {
-  rows: ViewItem[];
+  rows: WorkflowView[];
   refreshData: () => void;
 };
 
@@ -21,7 +22,7 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openComponent, setOpenComponent] = useState(false);
   const [values, setValues] = useState<any>();
-  const service = new ViewsService();
+  const service = new WorkflowViewApiRequest();
 
   const actionsRender = (index: number) => (
     <>
@@ -58,7 +59,7 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
     setOpen(true);
   };
   const handleDelete = async () => {
-    await service.deleteView(values.id);
+    await service.delete(values.id);
     refreshData();
     setOpenDelete(false);
   };
@@ -71,7 +72,7 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
         </Button>
       </div>
       <TableCustom
-        rows={rows.map(({id, workflowId, components, ...rest}) => ({
+        rows={rows.map(({id, workflowId, ...rest}) => ({
           ...rest,
           Actions: [],
         }))}

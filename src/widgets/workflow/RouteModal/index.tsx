@@ -12,16 +12,15 @@ import {
 } from '@mui/material';
 import {useRouter} from 'next/router';
 import {ModalStyle} from '@/constants/styleConfig';
-import {ViewItem} from '@/shared/libs/workflow-view';
-import {StateItem} from '@/shared/libs/workflow-state';
 import CloseIcon from '@mui/icons-material/Close';
 import RouteService from '@/shared/libs/workflow-route';
+import {WorkflowState, WorkflowView} from '@prisma/client';
 
 import styles from './index.module.scss';
 
 interface IProps {
-  views: ViewItem[];
-  states: StateItem[];
+  views: WorkflowView[];
+  states: WorkflowState[];
   open: boolean;
   values?: Record<string, string>;
   setOpen: (open: boolean) => void;
@@ -73,9 +72,9 @@ const RouteModal: FC<IProps> = ({
       nextViewId,
     };
     if (id) {
-      await service.updateRoute({id, ...params});
+      await service.update(id, params);
     } else {
-      await service.createRoute(params);
+      await service.create(params);
     }
     setFormValues(defaultValues);
     setOpen(false);

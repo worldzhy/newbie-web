@@ -1,4 +1,9 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
+import {
+  deleteRequest,
+  listRequest,
+  postRequest,
+} from '@/shared/libs/axiosInstance';
+import url from '../axiosInstance/url';
 
 export default class Permission {
   private readonly url = '/permissions';
@@ -97,39 +102,27 @@ export default class Permission {
       trustedEntityType: 'USER',
       trustedEntityId: roleId,
     };
-    const res = await axiosInstance.post(url, data);
+    const res = await postRequest(url, data);
     return {...res.data, change: 'Create'};
   }
 
-  public async delete(permissionId: number): Promise<IDeleteUserResponse> {
-    const url = `${this.url}/${permissionId}`;
-    const res = await axiosInstance.delete(url);
+  public async delete(id: number): Promise<IDeleteUserResponse> {
+    const res = await deleteRequest(url.permissions, id);
     return {...res.data, change: 'Delete'};
   }
 
   private async getResources(): Promise<string[]> {
-    const url = `${this.url}/resources`;
-    const res = await axiosInstance.get(url);
+    const res = await listRequest(url.permissionsResources);
     return res.data;
   }
 
   private async getActions(): Promise<string[]> {
-    const url = `${this.url}/actions`;
-    const res = await axiosInstance.get(url);
-    return res.data;
-  }
-
-  private async getPermissionOfResource(
-    resource: string
-  ): Promise<IPermission[]> {
-    const url = `${this.url}?resource=${resource}`;
-    const res = await axiosInstance.get(url);
+    const res = await listRequest(url.permissionsActions);
     return res.data;
   }
 
   private async getAllPermissions(): Promise<IPermission[]> {
-    const url = this.url;
-    const res = await axiosInstance.get(url);
+    const res = await listRequest(url.permissions, {});
     return res.data;
   }
 }

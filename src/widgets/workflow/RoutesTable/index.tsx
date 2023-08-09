@@ -9,7 +9,6 @@ import {
   InputLabel,
   FormControl,
 } from '@mui/material';
-import {Data} from '@/pages/workflow/manage';
 import {ModalStyle} from '@/constants/styleConfig';
 import RouteModal from '../RouteModal';
 import CloseIcon from '@mui/icons-material/Close';
@@ -17,9 +16,20 @@ import TableCustom from '@/components/TableCustom';
 import RouteService from '@/shared/libs/workflow-route';
 
 import styles from './index.module.scss';
+import {WorkflowRoute, WorkflowState, WorkflowView} from '@prisma/client';
 
 type IProps = {
-  data: Data | undefined;
+  data:
+    | {
+        views: WorkflowView[];
+        states: WorkflowState[];
+        routes: (WorkflowRoute & {
+          view: WorkflowView;
+          state: WorkflowState;
+          nextView: WorkflowView;
+        })[];
+      }
+    | undefined;
   refreshData: () => void;
 };
 
@@ -32,7 +42,7 @@ const Table: FC<IProps> = ({data, refreshData}) => {
   const [values, setValues] = useState<any>();
   const [startSignId, setStartSignId] = useState('');
   const {views = [], states = [], routes = []} = data || {};
-  const service = new RouteService();
+  const routeService = new RouteService();
 
   const actionsRender = (index: number) => (
     <>
@@ -60,19 +70,21 @@ const Table: FC<IProps> = ({data, refreshData}) => {
     setOpen(true);
   };
   const handleDelete = async () => {
-    await service.deleteRoute(values.id);
+    await routeService.delete(values.id);
     refreshData();
     setOpenDelete(false);
   };
   const handleUpdateStartSign = async () => {
-    await service.updateRoute({id: startSignId, startSign: true});
+    await routeService.update(startSignId, {startSign: true});
     refreshData();
     setOpenStartSign(false);
     setStartSignId('');
   };
 
   useEffect(() => {
-    setStartSignId(routes.find(({startSign}) => startSign)?.id || '');
+    setStartSignId(
+      routes.find(({startSign}) => startSign)?.id.toString() || ''
+    );
   }, [routes]);
 
   return (
@@ -91,11 +103,11 @@ const Table: FC<IProps> = ({data, refreshData}) => {
         </Button>
       </div>
       <TableCustom
-        rows={routes.map(({startSign, view, state, nextView, Actions}) => ({
-          view: startSign ? `(*) ${view}` : view,
-          state,
-          nextView,
-          Actions,
+        rows={routes.map(({startSign, view, state, nextView}) => ({
+          view: startSign ? `(*) ${view.name}` : view.name,
+          state: state.name,
+          nextView: nextView.name,
+          Actions: [],
         }))}
         headers={headers}
         isLastColActions={true}

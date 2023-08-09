@@ -103,7 +103,7 @@ const MembersEditModal: FC<Props> = ({
         password,
         roles,
       };
-      await new UserApiRequest().edit(raise(activeMember?.id), payload);
+      await new UserApiRequest().update(raise(activeMember?.id), payload);
       setData(
         data.map(d => {
           if (d.id === activeMember?.id) {

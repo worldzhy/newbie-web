@@ -1,41 +1,35 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
+import {Prisma, WorkflowState} from '@prisma/client';
+import {
+  deleteRequest,
+  getRequest,
+  patchRequest,
+  postRequest,
+} from '../axiosInstance';
+import url from '../axiosInstance/url';
 
-export type StateItem = {
-  id: number;
-  workflowId: string;
-  name: string;
-  description: string | null;
-  createdAt?: string;
-  updatedAt?: string;
-};
-
-export default class WorkflowState {
-  private readonly url = '/workflow-states';
-
-  public async createState(data: {
-    workflowId: string;
-    name: string;
-    description: string;
-  }): Promise<StateItem> {
-    const res = await axiosInstance.post(this.url, data);
+export default class WorkflowStateApiRequest {
+  public async create(
+    data: Prisma.WorkflowStateUncheckedCreateInput
+  ): Promise<WorkflowState> {
+    const res = await postRequest(url.workflowStates, data);
     return res.data;
   }
 
-  public async updateState({id, ...data}: any) {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.patch(url, data);
-    return res.data;
-  }
-
-  public async getState(id: string): Promise<StateItem[]> {
-    const url = `${this.url}/${id}`;
-    const {data} = await axiosInstance.get(url);
+  public async getState(id: string): Promise<WorkflowState[]> {
+    const {data} = await getRequest(url.workflowStates, id);
     return Array.isArray(data) ? data : [];
   }
 
-  public async deleteState(id: string): Promise<any> {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.delete(url);
+  public async update(
+    id: string,
+    data: Prisma.WorkflowStateUncheckedUpdateInput
+  ) {
+    const res = await patchRequest(url.workflowStates, id, data);
+    return res.data;
+  }
+
+  public async delete(id: string): Promise<WorkflowState> {
+    const res = await deleteRequest(url.workflowStates, id);
     return res.data;
   }
 }

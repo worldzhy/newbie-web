@@ -31,11 +31,15 @@ export const postRequest = (url: string, data: object) => {
   return axios.post(url, data);
 };
 
-export const listRequest = (url: string, query: object) => {
-  return axios.get(url + '?' + qs.stringify(query));
+export const listRequest = (url: string, query?: object) => {
+  if (query) {
+    return axios.get(url + '?' + qs.stringify(query));
+  } else {
+    return axios.get(url);
+  }
 };
 
-export const getRequest = (url: string, resourceId: string) => {
+export const getRequest = (url: string, resourceId: string | number) => {
   return axios.get(url + '/' + resourceId);
 };
 

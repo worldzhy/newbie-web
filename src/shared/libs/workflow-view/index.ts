@@ -1,49 +1,52 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
+import {
+  Prisma,
+  WorkflowRoute,
+  WorkflowView,
+  WorkflowViewComponent,
+} from '@prisma/client';
+import {
+  deleteRequest,
+  getRequest,
+  listRequest,
+  patchRequest,
+  postRequest,
+} from '../axiosInstance';
+import url from '../axiosInstance/url';
 
-export type ViewItem = {
-  id: number;
-  workflowId: string;
-  name: string;
-  components: any[];
-  startSign?: boolean;
-  description: string | null;
-  createdAt?: string;
-  updatedAt?: string;
-};
-
-export default class WorkflowView {
-  private readonly url = '/workflow-views';
-
-  public async createView(data: {
-    workflowId: string;
-    name: string;
-    description: string;
-  }): Promise<ViewItem> {
-    const res = await axiosInstance.post(this.url, data);
+export default class WorkflowViewApiRequest {
+  public async create(
+    data: Prisma.WorkflowViewUncheckedCreateInput
+  ): Promise<WorkflowView> {
+    const res = await postRequest(url.workflowViews, data);
     return res.data;
   }
 
-  public async updateView({id, ...data}: any) {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.patch(url, data);
+  public async get(id: string): Promise<
+    WorkflowView & {
+      components: WorkflowViewComponent[];
+      outboundRoutes: WorkflowRoute[];
+      inboundRoutes: WorkflowRoute[];
+    }
+  > {
+    const res = await getRequest(url.workflowViews, id);
     return res.data;
   }
 
-  public async getView(id: string): Promise<any> {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.get(url);
+  public async getStartViews(workflowId: string): Promise<any> {
+    const res = await listRequest(url.workflowStartViews, {workflowId});
     return res.data;
   }
 
-  public async startView(id: string): Promise<any> {
-    const url = `${this.url}/start-views?workflowId=${id}`;
-    const res = await axiosInstance.get(url);
+  public async update(
+    id: string,
+    data: Prisma.WorkflowViewUncheckedUpdateInput
+  ) {
+    const res = await patchRequest(url.workflowViews, id, data);
     return res.data;
   }
 
-  public async deleteView(id: string): Promise<any> {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.delete(url);
+  public async delete(id: string): Promise<WorkflowView> {
+    const res = await deleteRequest(url.workflowViews, id);
     return res.data;
   }
 }

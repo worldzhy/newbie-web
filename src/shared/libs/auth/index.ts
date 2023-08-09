@@ -1,23 +1,23 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
+import {patchRequest, postRequest} from '@/shared/libs/axiosInstance';
+import url from '../axiosInstance/url';
 import {setCookie} from 'cookies-next';
 
 export default class Auth {
-  private readonly url = '/account';
-
   public async login(input: ILoginPayload): Promise<ILoginReturn> {
-    const url = `${this.url}/login-by-password`;
     const data = {
       account: input.account,
       password: input.password,
     };
-    const res = await axiosInstance.post(url, data);
+    const res = await postRequest(url.login, data);
     setCookie('token', res.data.token);
     return res.data;
   }
 
   public async sendVerificationCode(email: string): Promise<boolean> {
-    const url = `${this.url}/reset-password/verification-code/email/${email}`;
-    const res = await axiosInstance.get(url);
+    const res = await postRequest(url.sendVerificationCode, {
+      email,
+      use: 'RESET_PASSWORD',
+    });
     return res.data;
   }
 
@@ -25,13 +25,12 @@ export default class Auth {
     payload: IForgotPasswordPayload
   ): Promise<IForgotPasswordReturn> {
     const {email, verificationCode, newPassword} = payload;
-    const url = `${this.url}/reset-password`;
     const data = {
       email,
       verificationCode,
       newPassword,
     };
-    const res = await axiosInstance.patch(url, data);
+    const res = await postRequest(url.forgotPassword, data);
     return res.data;
   }
 }

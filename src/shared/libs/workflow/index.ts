@@ -1,44 +1,38 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
+import {Prisma, Workflow, WorkflowState, WorkflowView} from '@prisma/client';
+import {
+  deleteRequest,
+  getRequest,
+  listRequest,
+  patchRequest,
+  postRequest,
+} from '../axiosInstance';
+import url from '../axiosInstance/url';
 
-export type WorkflowItem = {
-  id: string;
-  name: string;
-  description: string | null;
-  createdAt?: string;
-  updatedAt?: string;
-};
-
-export default class Workflow {
-  private readonly url = '/workflows';
-
-  public async createWorkflows(data: {
-    name: string;
-    description: string;
-  }): Promise<any> {
-    const res = await axiosInstance.post(this.url, data);
+export default class WorkflowApiRequest {
+  public async create(data: Prisma.WorkflowCreateInput): Promise<Workflow> {
+    const res = await postRequest(url.workflows, data);
     return res.data;
   }
 
-  public async updateWorkflow({id, ...data}: any) {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.patch(url, data);
+  public async list(): Promise<Workflow[]> {
+    const res = await listRequest(url.workflows, {});
     return res.data;
   }
 
-  public async getWorkflows(): Promise<WorkflowItem[]> {
-    const res = await axiosInstance.get(this.url);
+  public async get(
+    id: string
+  ): Promise<Workflow & {views: WorkflowView[]; states: WorkflowState[]}> {
+    const res = await getRequest(url.workflows, id);
     return res.data;
   }
 
-  public async getWorkflowData(id: string): Promise<any> {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.get(url);
+  public async update(id: string, data: Prisma.WorkflowUpdateInput) {
+    const res = await patchRequest(url.workflows, id, data);
     return res.data;
   }
 
-  public async deleteWorkflow(id: string): Promise<any> {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.delete(url);
+  public async delete(id: string): Promise<Workflow> {
+    const res = await deleteRequest(url.workflows, id);
     return res.data;
   }
 }

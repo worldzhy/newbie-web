@@ -1,44 +1,35 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
+import {Prisma, WorkflowViewComponent} from '@prisma/client';
+import {
+  deleteRequest,
+  getRequest,
+  patchRequest,
+  postRequest,
+} from '../axiosInstance';
+import url from '../axiosInstance/url';
 
-export type ViewComponent = {
-  id: number;
-  viewId: number;
-  type: string;
-  properties: any;
-  createdAt?: string;
-  updatedAt?: string;
-};
-
-export default class WorkflowViewComponent {
-  private readonly url = '/workflow-view-components';
-
-  public async createViewComponent(data: {
-    data: {
-      viewId: number;
-      type: string;
-      properties: any;
-      sort: number;
-    }[];
-  }): Promise<ViewComponent> {
-    const res = await axiosInstance.post(this.url, data);
+export default class WorkflowViewComponentApiRequest {
+  public async createMany(data: {
+    data: Prisma.WorkflowViewComponentCreateManyInput[];
+  }) {
+    const res = await postRequest(url.workflowViewComponents, data);
     return res.data;
   }
 
-  public async updateViewComponent({id, ...data}: any) {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.patch(url, data);
+  public async getViewComponent(id: string): Promise<WorkflowViewComponent[]> {
+    const res = await getRequest(url.workflowViewComponents, id);
     return res.data;
   }
 
-  public async getViewComponent(id: string): Promise<ViewComponent[]> {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.get(url);
+  public async update(
+    id: string,
+    data: Prisma.WorkflowViewComponentUpdateInput
+  ) {
+    const res = await patchRequest(url.workflowViewComponents, id, data);
     return res.data;
   }
 
-  public async deleteViewComponent(id: string): Promise<any> {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.delete(url);
+  public async delete(id: string): Promise<any> {
+    const res = await deleteRequest(url.workflowViewComponents, id);
     return res.data;
   }
 }

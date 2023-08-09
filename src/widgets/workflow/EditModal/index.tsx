@@ -11,8 +11,8 @@ import {useRouter} from 'next/router';
 import {ModalStyle} from '@/constants/styleConfig';
 import Workflow from '@/shared/libs/workflow';
 import CloseIcon from '@mui/icons-material/Close';
-import ViewsService from '@/shared/libs/workflow-view';
-import StatesService from '@/shared/libs/workflow-state';
+import WorkflowViewApiRequest from '@/shared/libs/workflow-view';
+import WorkflowStateApiRequest from '@/shared/libs/workflow-state';
 
 import styles from './index.module.scss';
 
@@ -37,25 +37,25 @@ const EditModal: FC<IProps> = ({
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
   const workflowService = new Workflow();
-  const viewService = new ViewsService();
-  const stateService = new StatesService();
+  const viewService = new WorkflowViewApiRequest();
+  const stateService = new WorkflowStateApiRequest();
 
   const handleUpdate = async () => {
     if (id) {
       if (type === 'workflow') {
-        await workflowService.updateWorkflow({id, name, description: desc});
+        await workflowService.update(id, {name, description: desc});
       } else if (type === 'view') {
-        await viewService.updateView({id, name, description: desc});
+        await viewService.update(id, {name, description: desc});
       } else if (type === 'state') {
-        await stateService.updateState({id, name, description: desc});
+        await stateService.update(id, {name, description: desc});
       }
     } else {
       if (type === 'workflow') {
-        await workflowService.createWorkflows({name, description: desc});
+        await workflowService.create({name, description: desc});
       } else if (type === 'view') {
-        await viewService.createView({workflowId, name, description: desc});
+        await viewService.create({workflowId, name, description: desc});
       } else if (type === 'state') {
-        await stateService.createState({workflowId, name, description: desc});
+        await stateService.create({workflowId, name, description: desc});
       }
     }
     setName('');

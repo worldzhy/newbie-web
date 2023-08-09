@@ -1,14 +1,19 @@
 import {ReactElement, SyntheticEvent, useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import {Box, Tab} from '@mui/material';
-import {ViewItem} from '@/shared/libs/workflow-view';
 import {TabContext, TabList, TabPanel} from '@mui/lab';
-import RouteService, {RouteItem} from '@/shared/libs/workflow-route';
-import Workflow from '@/shared/libs/workflow';
 import ViewsTable from '@/widgets/workflow/ViewsTable';
 import RoutesTable from '@/widgets/workflow/RoutesTable';
 import StatesTable from '@/widgets/workflow/StatesTable';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
+import {
+  Workflow,
+  WorkflowRoute,
+  WorkflowState,
+  WorkflowView,
+} from '@prisma/client';
+import WorkflowRouteApiRequest from '@/shared/libs/workflow-route';
+import WorkflowApiRequest from '@/shared/libs/workflow';
 
 import styles from './index.module.scss';
 
@@ -18,23 +23,20 @@ enum TabState {
   Routes = 'Routes',
 }
 
-export type Data = {
-  description: string | null;
-  id: string;
-  name: string;
-  views: ViewItem[];
-  states: any[];
-  routes: any[];
-  createdAt?: string;
-  updatedAt?: string;
-};
-
 const Page = (): ReactElement => {
   const router = useRouter();
   const [value, setValue] = useState(TabState.Views);
-  const [data, setData] = useState<Data>();
-  const workflowService = new Workflow();
-  const routeService = new RouteService();
+  const [data, setData] = useState<{
+    views: WorkflowView[];
+    states: WorkflowState[];
+    routes: (WorkflowRoute & {
+      view: WorkflowView;
+      state: WorkflowState;
+      nextView: WorkflowView;
+    })[];
+  }>();
+  const workflowService = new WorkflowApiRequest();
+  const routeService = new WorkflowRouteApiRequest();
   const {id} = router.query;
 
   const handleChange = (_: SyntheticEvent, newValue: TabState): void => {
@@ -43,43 +45,10 @@ const Page = (): ReactElement => {
 
   const getData = async () => {
     if (typeof id !== 'string' || !id) return;
-    const data: Data = await workflowService.getWorkflowData(id);
-    const {views, states} = data;
+    const workflow = await workflowService.get(id);
+    const routes = await routeService.list({workflowId: id});
 
-    data.views = views.map(
-      ({id, workflowId, name, description, components}) => ({
-        id,
-        workflowId,
-        name,
-        description,
-        components,
-      })
-    );
-    data.states = states.map(({id, workflowId, name, description}) => ({
-      id,
-      workflowId,
-      name,
-      description,
-    }));
-    const routes = await routeService.getRoute(id);
-    data.routes = routes.map((route: RouteItem) => {
-      const {id, startSign, viewId, stateId, nextViewId} = route;
-      const view = views.find(({id}) => id == viewId)?.name || '';
-      const state = states.find(({id}) => id == stateId)?.name || '';
-      const nextView = views.find(({id}) => id == nextViewId)?.name || '';
-      return {
-        id,
-        startSign,
-        view,
-        viewId,
-        state,
-        stateId,
-        nextView,
-        nextViewId,
-        Actions: [],
-      };
-    });
-    setData(data);
+    setData({views: workflow.views, states: workflow.states, routes});
   };
 
   useEffect(() => {

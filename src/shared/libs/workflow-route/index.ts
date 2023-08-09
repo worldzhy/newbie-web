@@ -1,47 +1,43 @@
-import axiosInstance from '@/shared/libs/axiosInstance';
+import {
+  Prisma,
+  WorkflowRoute,
+  WorkflowState,
+  WorkflowView,
+} from '@prisma/client';
+import {
+  deleteRequest,
+  listRequest,
+  patchRequest,
+  postRequest,
+} from '../axiosInstance';
+import url from '../axiosInstance/url';
 
-export type RouteItem = {
-  id: number;
-  viewId: number;
-  stateId: number;
-  workflowId: string;
-  nextViewId: number;
-  nextRoleId: number;
-  nextUserId: number;
-  startSign: boolean;
-  updatedAt?: string;
-  createdAt?: string;
-};
-
-export default class WorkflowRoute {
-  private readonly url = '/workflow-routes';
-
-  public async createRoute(data: {
-    workflowId: string;
-    viewId: number;
-    stateId: number;
-    nextViewId: number;
-    startSign?: boolean;
-  }): Promise<RouteItem> {
-    const res = await axiosInstance.post(this.url, data);
+export default class WorkflowRouteApiRequest {
+  public async create(
+    data: Prisma.WorkflowRouteUncheckedCreateInput
+  ): Promise<WorkflowRoute> {
+    const res = await postRequest(url.workflowRoutes, data);
     return res.data;
   }
 
-  public async updateRoute({id, ...data}: any) {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.patch(url, data);
+  public async list(query: {workflowId: string}): Promise<
+    (WorkflowRoute & {
+      view: WorkflowView;
+      state: WorkflowState;
+      nextView: WorkflowView;
+    })[]
+  > {
+    const res = await listRequest(url.workflowRoutes, query);
     return res.data;
   }
 
-  public async getRoute(id: string): Promise<RouteItem[]> {
-    const url = `${this.url}?workflowId=${id}`;
-    const {data} = await axiosInstance.get(url);
-    return Array.isArray(data) ? data : [];
+  public async update(id: string, data: Prisma.WorkflowRouteUpdateInput) {
+    const res = await patchRequest(url.workflowRoutes, id, data);
+    return res.data;
   }
 
-  public async deleteRoute(id: string): Promise<any> {
-    const url = `${this.url}/${id}`;
-    const res = await axiosInstance.delete(url);
+  public async delete(id: string): Promise<WorkflowRoute> {
+    const res = await deleteRequest(url.workflowRoutes, id);
     return res.data;
   }
 }
