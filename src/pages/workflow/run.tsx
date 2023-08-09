@@ -6,12 +6,8 @@ import Title from '@/widgets/workflow/components/Title';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 import Container from '@/widgets/workflow/components/Container';
 import Paragraph from '@/widgets/workflow/components/Paragraph';
-import WorkflowViewApiRequest from '@/shared/libs/workflow-view';
-import {
-  WorkflowRoute,
-  WorkflowViewComponent,
-  WorkflowViewComponentType,
-} from '@prisma/client';
+import WorkflowViewApiRequest from '@/http/api/workflow-view';
+import {WorkflowRoute, WorkflowViewComponent} from '@prisma/client';
 
 import styles from './index.module.scss';
 

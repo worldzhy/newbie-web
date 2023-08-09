@@ -12,11 +12,11 @@ import {
   sendRequest,
   delayExecute,
   isUnauthorized,
-} from '@/shared/libs/mixins';
+} from '@/http/mixins';
 import Permission, {
   type IPermissionsByResources,
   type IRequest,
-} from '@/shared/libs/permission';
+} from '@/http/api/permission';
 import {useRouter} from 'next/router';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import TableSkeletonCustom from '@/components/TableSkeletonCustom';

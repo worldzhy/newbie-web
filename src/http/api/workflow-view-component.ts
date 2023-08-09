@@ -4,8 +4,8 @@ import {
   getRequest,
   patchRequest,
   postRequest,
-} from '../axiosInstance';
-import url from '../axiosInstance/url';
+} from '@/http/methods';
+import url from '@/http/url';
 
 export default class WorkflowViewComponentApiRequest {
   public async createMany(data: {

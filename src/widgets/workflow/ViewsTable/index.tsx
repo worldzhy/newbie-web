@@ -6,7 +6,7 @@ import ComponentModal from '../ComponentModal';
 import CloseIcon from '@mui/icons-material/Close';
 import TableCustom from '@/components/TableCustom';
 import {WorkflowView} from '@prisma/client';
-import WorkflowViewApiRequest from '@/shared/libs/workflow-view';
+import WorkflowViewApiRequest from '@/http/api/workflow-view';
 
 import styles from './index.module.scss';
 

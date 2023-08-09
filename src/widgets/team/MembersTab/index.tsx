@@ -1,10 +1,5 @@
 import React, {useEffect, type ReactElement, useState} from 'react';
-import {
-  sortDate,
-  showError,
-  delayExecute,
-  isUnauthorized,
-} from '@/shared/libs/mixins';
+import {sortDate, showError, delayExecute, isUnauthorized} from '@/http/mixins';
 import {useRouter} from 'next/router';
 import {Button, Link, Stack, TableCell, TableRow} from '@mui/material';
 import MembersEditModal from '../MembersEditModal';
@@ -13,8 +8,8 @@ import MembersDeleteModal from '../MembersDeleteModal';
 import SkeletonCustom from '@/components/SkeletonCustom';
 import TableContainerCustom from '@/components/TableContainerCustom';
 import {User, Role} from '@prisma/client';
-import UserApiRequest from '@/shared/libs/user';
-import RoleApiRequest from '@/shared/libs/role';
+import UserApiRequest from '@/http/api/user';
+import RoleApiRequest from '@/http/api/role';
 
 /**
  * Types

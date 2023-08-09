@@ -8,8 +8,8 @@ import {
   Typography,
 } from '@mui/material';
 import {useRouter} from 'next/router';
-import {delayExecute, sendRequest, showToast} from '@/shared/libs/mixins';
-import Auth from '@/shared/libs/auth';
+import {delayExecute, sendRequest, showToast} from '@/http/mixins';
+import Auth from '@/http/api/account';
 import Pre from '@/widgets/shared/Pre';
 import styles from './index.module.scss';
 

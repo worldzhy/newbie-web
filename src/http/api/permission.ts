@@ -1,9 +1,5 @@
-import {
-  deleteRequest,
-  listRequest,
-  postRequest,
-} from '@/shared/libs/axiosInstance';
-import url from '../axiosInstance/url';
+import {deleteRequest, listRequest, postRequest} from '@/http/methods';
+import url from '@/http/url';
 
 export default class Permission {
   private readonly url = '/permissions';

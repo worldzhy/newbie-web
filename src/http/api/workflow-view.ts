@@ -10,8 +10,8 @@ import {
   listRequest,
   patchRequest,
   postRequest,
-} from '../axiosInstance';
-import url from '../axiosInstance/url';
+} from '@/http/methods';
+import url from '@/http/url';
 
 export default class WorkflowViewApiRequest {
   public async create(

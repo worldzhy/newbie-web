@@ -3,7 +3,7 @@ import {Button} from '@mui/material';
 import EditModal from '@/widgets/workflow/EditModal';
 import WorkflowTable from '@/widgets/workflow/WorkflowTable';
 import {Workflow} from '@prisma/client';
-import WorkflowApiRequest from '@/shared/libs/workflow';
+import WorkflowApiRequest from '@/http/api/workflow';
 
 import styles from './index.module.scss';
 

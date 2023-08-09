@@ -13,7 +13,7 @@ import {
 import {useRouter} from 'next/router';
 import {ModalStyle} from '@/constants/styleConfig';
 import CloseIcon from '@mui/icons-material/Close';
-import RouteService from '@/shared/libs/workflow-route';
+import RouteService from '@/http/api/workflow-route';
 import {WorkflowState, WorkflowView} from '@prisma/client';
 
 import styles from './index.module.scss';

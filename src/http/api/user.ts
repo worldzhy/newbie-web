@@ -4,9 +4,9 @@ import {
   getRequest,
   patchRequest,
   deleteRequest,
-} from '@/shared/libs/axiosInstance';
+} from '@/http/methods';
 import {Prisma, User, Role} from '@prisma/client';
-import url from '../axiosInstance/url';
+import url from '@/http/url';
 
 export default class UserApiRequest {
   public async create(

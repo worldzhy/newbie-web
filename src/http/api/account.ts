@@ -1,5 +1,5 @@
-import {patchRequest, postRequest} from '@/shared/libs/axiosInstance';
-import url from '../axiosInstance/url';
+import {postRequest} from '@/http/methods';
+import url from '@/http/url';
 import {setCookie} from 'cookies-next';
 
 export default class Auth {

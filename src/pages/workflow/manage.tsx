@@ -6,14 +6,9 @@ import ViewsTable from '@/widgets/workflow/ViewsTable';
 import RoutesTable from '@/widgets/workflow/RoutesTable';
 import StatesTable from '@/widgets/workflow/StatesTable';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
-import {
-  Workflow,
-  WorkflowRoute,
-  WorkflowState,
-  WorkflowView,
-} from '@prisma/client';
-import WorkflowRouteApiRequest from '@/shared/libs/workflow-route';
-import WorkflowApiRequest from '@/shared/libs/workflow';
+import {WorkflowRoute, WorkflowState, WorkflowView} from '@prisma/client';
+import WorkflowRouteApiRequest from '@/http/api/workflow-route';
+import WorkflowApiRequest from '@/http/api/workflow';
 
 import styles from './index.module.scss';
 

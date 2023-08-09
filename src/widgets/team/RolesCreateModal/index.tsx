@@ -1,8 +1,8 @@
 import React, {type ReactElement, useState, type FC} from 'react';
-import {sendRequest} from '@/shared/libs/mixins';
+import {sendRequest} from '@/http/mixins';
+import RoleApiRequest from '@/http/api/role';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
-import RoleApiRequest from '@/shared/libs/role';
 import {Role} from '@prisma/client';
 
 /**

@@ -4,9 +4,9 @@ import {
   listRequest,
   patchRequest,
   postRequest,
-} from '@/shared/libs/axiosInstance';
+} from '@/http/methods';
 import {Prisma, Role} from '@prisma/client';
-import url from '../axiosInstance/url';
+import url from '@/http/url';
 
 export default class RoleApiRequest {
   public async create(data: Prisma.RoleCreateInput): Promise<Role> {

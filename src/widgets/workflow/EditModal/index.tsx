@@ -9,10 +9,10 @@ import {
 } from '@mui/material';
 import {useRouter} from 'next/router';
 import {ModalStyle} from '@/constants/styleConfig';
-import Workflow from '@/shared/libs/workflow';
 import CloseIcon from '@mui/icons-material/Close';
-import WorkflowViewApiRequest from '@/shared/libs/workflow-view';
-import WorkflowStateApiRequest from '@/shared/libs/workflow-state';
+import WorkflowApiRequest from '@/http/api/workflow';
+import WorkflowViewApiRequest from '@/http/api/workflow-view';
+import WorkflowStateApiRequest from '@/http/api/workflow-state';
 
 import styles from './index.module.scss';
 
@@ -36,7 +36,7 @@ const EditModal: FC<IProps> = ({
   const {id, name: initName, description: initDesc} = values;
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
-  const workflowService = new Workflow();
+  const workflowService = new WorkflowApiRequest();
   const viewService = new WorkflowViewApiRequest();
   const stateService = new WorkflowStateApiRequest();
 

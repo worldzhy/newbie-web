@@ -13,7 +13,7 @@ import {ModalStyle} from '@/constants/styleConfig';
 import RouteModal from '../RouteModal';
 import CloseIcon from '@mui/icons-material/Close';
 import TableCustom from '@/components/TableCustom';
-import RouteService from '@/shared/libs/workflow-route';
+import RouteService from '@/http/api/workflow-route';
 
 import styles from './index.module.scss';
 import {WorkflowRoute, WorkflowState, WorkflowView} from '@prisma/client';

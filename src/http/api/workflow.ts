@@ -5,8 +5,8 @@ import {
   listRequest,
   patchRequest,
   postRequest,
-} from '../axiosInstance';
-import url from '../axiosInstance/url';
+} from '@/http/methods';
+import url from '@/http/url';
 
 export default class WorkflowApiRequest {
   public async create(data: Prisma.WorkflowCreateInput): Promise<Workflow> {

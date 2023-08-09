@@ -10,13 +10,13 @@ import {
   IconButton,
   FormControl,
 } from '@mui/material';
-import {showToast} from '@/shared/libs/mixins';
+import {showToast} from '@/http/mixins';
 import {ModalStyle} from '@/constants/styleConfig';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ViewService from '@/shared/libs/workflow-view';
-import ComponentService from '@/shared/libs/workflow-view-components';
+import ViewService from '@/http/api/workflow-view';
+import ComponentService from '@/http/api/workflow-view-component';
 
 import styles from './index.module.scss';
 

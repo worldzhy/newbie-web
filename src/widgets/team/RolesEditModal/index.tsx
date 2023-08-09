@@ -5,11 +5,11 @@ import React, {
   useReducer,
   useEffect,
 } from 'react';
-import {raise, sendRequest, showError} from '@/shared/libs/mixins';
+import {raise, sendRequest, showError} from '@/http/mixins';
 import {Stack} from '@mui/material';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
-import RoleApiRequest from '@/shared/libs/role';
+import RoleApiRequest from '@/http/api/role';
 import {Role} from '@prisma/client';
 
 /**

@@ -1,11 +1,11 @@
 import React, {type ReactElement, useState, type FC, useReducer} from 'react';
 import {User, Role} from '@prisma/client';
-import {sendRequest} from '@/shared/libs/mixins';
+import {sendRequest} from '@/http/mixins';
 import {Stack} from '@mui/material';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 import MultiSelectCustom from '@/components/MultiSelectCustom';
-import UserApiRequest from '@/shared/libs/user';
+import UserApiRequest from '@/http/api/user';
 
 /**
  * Types

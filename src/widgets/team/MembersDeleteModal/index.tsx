@@ -1,16 +1,17 @@
 import React, {type ReactElement, useState, type FC} from 'react';
-import User, {type IUser} from '@/shared/libs/user';
-import {raise, sendRequest} from '@/shared/libs/mixins';
+import {raise, sendRequest} from '@/http/mixins';
 import FormDialogCustom from '@/components/FormDialogCustom';
+import {Role, User} from '@prisma/client';
+import UserApiRequest from '@/http/api/user';
 
 /**
  * Types
  */
 
 interface Props {
-  activeMember: IUser | undefined;
-  data: IUser[];
-  setData: React.Dispatch<React.SetStateAction<IUser[]>>;
+  activeMember: (User & {roles: Role[]}) | undefined;
+  data: (User & {roles: Role[]})[];
+  setData: React.Dispatch<React.SetStateAction<(User & {roles: Role[]})[]>>;
   modal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -32,7 +33,7 @@ const MembersDeleteModal: FC<Props> = ({
    */
   const deleteMember = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      await new User().delete(raise(activeMember?.id));
+      await new UserApiRequest().delete(raise(activeMember?.id));
       setData(data.filter(d => d.id !== activeMember?.id));
       setModal(false);
     });
@@ -41,7 +42,7 @@ const MembersDeleteModal: FC<Props> = ({
   return (
     <FormDialogCustom
       open={modal}
-      title={`You are about to delete ${activeMember?.username ?? ''}`}
+      title={`You are about to delete ${activeMember?.name ?? ''}`}
       contentText="You cannot view this user in your list anymore if you delete. This will permanently delete the user. Are you sure?"
       closeDialogHandler={() => {
         setModal(false);

@@ -5,7 +5,7 @@ import EditModal from '../EditModal';
 import CloseIcon from '@mui/icons-material/Close';
 import TableCustom from '@/components/TableCustom';
 import {WorkflowState} from '@prisma/client';
-import WorkflowStateApiRequest from '@/shared/libs/workflow-state';
+import WorkflowStateApiRequest from '@/http/api/workflow-state';
 
 import styles from './index.module.scss';
 

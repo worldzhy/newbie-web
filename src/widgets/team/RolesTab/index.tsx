@@ -1,10 +1,5 @@
 import React, {type ReactElement, useEffect, useState} from 'react';
-import {
-  showError,
-  sortDate,
-  delayExecute,
-  isUnauthorized,
-} from '@/shared/libs/mixins';
+import {showError, sortDate, delayExecute, isUnauthorized} from '@/http/mixins';
 import {useRouter} from 'next/router';
 import {Button, Link, Stack, TableCell, TableRow} from '@mui/material';
 import RolesEditModal from '../RolesEditModal';
@@ -14,7 +9,7 @@ import SkeletonCustom from '@/components/SkeletonCustom';
 import TableContainerCustom from '@/components/TableContainerCustom';
 import RolesSetPermisssionsModal from '../RolesSetPermisssionsModal';
 import {Role} from '@prisma/client';
-import RoleApiRequest from '@/shared/libs/role';
+import RoleApiRequest from '@/http/api/role';
 
 const RolesTab = (): ReactElement => {
   /**

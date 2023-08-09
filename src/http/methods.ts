@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {showToast} from '../mixins';
+import {showToast} from '@/http/mixins';
 import {getCookie} from 'cookies-next';
 var qs = require('qs');
 
@@ -54,5 +54,3 @@ export const patchRequest = (
 export const deleteRequest = (url: string, resourceId: string | number) => {
   return axios.delete(url + '/' + resourceId);
 };
-
-export default axios;
