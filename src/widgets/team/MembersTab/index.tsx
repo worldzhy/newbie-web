@@ -53,7 +53,7 @@ const MembersTab = (): ReactElement => {
           });
           setData(users.records);
 
-          const roles = await new RoleApiRequest().getAll();
+          const roles = await new RoleApiRequest().list();
           setRolesList(roles);
 
           setIsFetching(false);

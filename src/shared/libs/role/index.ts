@@ -9,13 +9,13 @@ import {Prisma, Role} from '@prisma/client';
 import url from '../axiosInstance/url';
 
 export default class RoleApiRequest {
-  public async getAll(): Promise<Role[]> {
+  public async list(): Promise<Role[]> {
     const res = await listRequest(url.role, {});
     return res.data;
   }
 
-  public async get(roleId: string): Promise<Role> {
-    const res = await getRequest(url.role, roleId);
+  public async get(id: string): Promise<Role> {
+    const res = await getRequest(url.role, id);
     return res.data;
   }
 
@@ -24,8 +24,8 @@ export default class RoleApiRequest {
     return res.data;
   }
 
-  public async update(params: Prisma.RoleUpdateInput): Promise<Role> {
-    const res = await patchRequest(url.role, params.id as string, params);
+  public async edit(id: string, data: Prisma.RoleUpdateInput): Promise<Role> {
+    const res = await patchRequest(url.role, id, data);
     return res.data;
   }
 

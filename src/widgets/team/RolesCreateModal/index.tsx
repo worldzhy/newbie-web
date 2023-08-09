@@ -1,16 +1,17 @@
 import React, {type ReactElement, useState, type FC} from 'react';
 import {sendRequest} from '@/shared/libs/mixins';
-import Role, {type IRole} from '@/shared/libs/role';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
+import RoleApiRequest from '@/shared/libs/role';
+import {Role} from '@prisma/client';
 
 /**
  * Types
  */
 
 interface Props {
-  data: IRole[];
-  setData: React.Dispatch<React.SetStateAction<IRole[]>>;
+  data: Role[];
+  setData: React.Dispatch<React.SetStateAction<Role[]>>;
   modal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -32,7 +33,7 @@ const RolesCreateModal: FC<Props> = ({
    */
   const createRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      const res = await new Role().create(roleName);
+      const res = await new RoleApiRequest().create({name: roleName});
       setData([...data, res]);
       setModal(false);
     });

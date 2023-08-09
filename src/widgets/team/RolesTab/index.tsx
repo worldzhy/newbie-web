@@ -6,7 +6,6 @@ import {
   isUnauthorized,
 } from '@/shared/libs/mixins';
 import {useRouter} from 'next/router';
-import Role, {type IRole} from '@/shared/libs/role';
 import {Button, Link, Stack, TableCell, TableRow} from '@mui/material';
 import RolesEditModal from '../RolesEditModal';
 import RolesCreateModal from '../RolesCreateModal';
@@ -14,6 +13,8 @@ import RolesDeleteModal from '../RolesDeleteModal';
 import SkeletonCustom from '@/components/SkeletonCustom';
 import TableContainerCustom from '@/components/TableContainerCustom';
 import RolesSetPermisssionsModal from '../RolesSetPermisssionsModal';
+import {Role} from '@prisma/client';
+import RoleApiRequest from '@/shared/libs/role';
 
 const RolesTab = (): ReactElement => {
   /**
@@ -30,8 +31,8 @@ const RolesTab = (): ReactElement => {
   const [permissionModal, setPermissionModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [activeRole, setActiveRole] = useState<IRole>();
-  const [data, setData] = useState<IRole[]>([]);
+  const [activeRole, setActiveRole] = useState<Role>();
+  const [data, setData] = useState<Role[]>([]);
 
   /**
    * Data Fetching
@@ -41,7 +42,7 @@ const RolesTab = (): ReactElement => {
       try {
         setData([]);
         if (!ignore) {
-          const roles = await new Role().getAll();
+          const roles = await new RoleApiRequest().list();
           setData(roles);
           setIsFetching(false);
         }

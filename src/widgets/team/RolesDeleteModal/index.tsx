@@ -1,16 +1,17 @@
 import React, {type ReactElement, useState, type FC} from 'react';
 import {raise, sendRequest} from '@/shared/libs/mixins';
 import FormDialogCustom from '@/components/FormDialogCustom';
-import Role, {type IRole} from '@/shared/libs/role';
+import RoleApiRequest from '@/shared/libs/role';
+import {Role} from '@prisma/client';
 
 /**
  * Types
  */
 
 interface Props {
-  activeRole: IRole | undefined;
-  data: IRole[];
-  setData: React.Dispatch<React.SetStateAction<IRole[]>>;
+  activeRole: Role | undefined;
+  data: Role[];
+  setData: React.Dispatch<React.SetStateAction<Role[]>>;
   modal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -32,7 +33,7 @@ const RolesDeleteModal: FC<Props> = ({
    */
   const deleteRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      await new Role().delete(raise(activeRole?.id));
+      await new RoleApiRequest().delete(raise(activeRole?.id));
       setData(data.filter(d => d.id !== activeRole?.id));
       setModal(false);
     });

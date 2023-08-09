@@ -9,16 +9,17 @@ import {raise, sendRequest, showError} from '@/shared/libs/mixins';
 import {Stack} from '@mui/material';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
-import Role, {type IRole} from '@/shared/libs/role';
+import RoleApiRequest from '@/shared/libs/role';
+import {Role} from '@prisma/client';
 
 /**
  * Types
  */
 
 interface Props {
-  activeRole: IRole | undefined;
-  data: IRole[];
-  setData: React.Dispatch<React.SetStateAction<IRole[]>>;
+  activeRole: Role | undefined;
+  data: Role[];
+  setData: React.Dispatch<React.SetStateAction<Role[]>>;
   modal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -82,15 +83,16 @@ const RolesEditModal: FC<Props> = ({
    */
   const updateRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      const {name, description} = updatedActiveRole;
-      const payload = {name, description};
-      await new Role().update(raise(activeRole?.id), payload);
+      const role = await new RoleApiRequest().edit(
+        raise(activeRole?.id),
+        updatedActiveRole
+      );
       setData(
         data.map(d => {
           if (d.id === activeRole?.id) {
             return {
               ...d,
-              ...payload,
+              ...role,
             };
           }
           return d;

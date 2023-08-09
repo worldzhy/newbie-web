@@ -18,17 +18,17 @@ import Permission, {
   type IRequest,
 } from '@/shared/libs/permission';
 import {useRouter} from 'next/router';
-import {type IRole} from '@/shared/libs/role';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import TableSkeletonCustom from '@/components/TableSkeletonCustom';
 import TableContainerCustom from '@/components/TableContainerCustom';
+import {Role} from '@prisma/client';
 
 /**
  * Types
  */
 
 interface Props {
-  activeRole: IRole | undefined;
+  activeRole: Role | undefined;
   modal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
