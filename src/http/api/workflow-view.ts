@@ -13,42 +13,40 @@ import {
 } from '@/http/methods';
 import url from '@/http/url';
 
-export default class WorkflowViewApiRequest {
-  private readonly url = url.workflowViews;
-
-  public async create(
+export default class WorkflowViewService {
+  public static async create(
     data: Prisma.WorkflowViewUncheckedCreateInput
   ): Promise<WorkflowView> {
-    const res = await postRequest(this.url, data);
+    const res = await postRequest(url.workflowViews, data);
     return res.data;
   }
 
-  public async get(id: string): Promise<
+  public static async get(id: string): Promise<
     WorkflowView & {
       components: WorkflowViewComponent[];
       outboundRoutes: WorkflowRoute[];
       inboundRoutes: WorkflowRoute[];
     }
   > {
-    const res = await getRequest(this.url, id);
+    const res = await getRequest(url.workflowViews, id);
     return res.data;
   }
 
-  public async getStartViews(workflowId: string): Promise<any> {
-    const res = await listRequest(this.url, {workflowId});
+  public static async getStartViews(workflowId: string): Promise<any> {
+    const res = await listRequest(url.workflowViews, {workflowId});
     return res.data;
   }
 
-  public async update(
+  public static async update(
     id: string,
     data: Prisma.WorkflowViewUncheckedUpdateInput
   ) {
-    const res = await patchRequest(this.url, id, data);
+    const res = await patchRequest(url.workflowViews, id, data);
     return res.data;
   }
 
-  public async delete(id: string): Promise<WorkflowView> {
-    const res = await deleteRequest(this.url, id);
+  public static async delete(id: string): Promise<WorkflowView> {
+    const res = await deleteRequest(url.workflowViews, id);
     return res.data;
   }
 }

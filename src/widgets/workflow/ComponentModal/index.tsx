@@ -15,8 +15,8 @@ import {ModalStyle} from '@/constants/styleConfig';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ViewService from '@/http/api/workflow-view';
-import ComponentService from '@/http/api/workflow-view-component';
+import WorkflowViewComponentService from '@/http/api/workflow-view-component';
+import WorkflowViewService from '@/http/api/workflow-view';
 
 import styles from './index.module.scss';
 
@@ -124,8 +124,6 @@ const ComponentModal: FC<IProps> = ({
   const [components, setComponents] = useState<any[]>([]);
   const [hasComponents, setHasComponents] = useState(false);
   const {id: viewId} = values;
-  const viewService = new ViewService();
-  const componentService = new ComponentService();
 
   const handleUpdate = async () => {
     if (!components.length) {
@@ -140,9 +138,12 @@ const ComponentModal: FC<IProps> = ({
     components.forEach(async (component, index) => {
       const {id} = component;
       if (id) {
-        await componentService.update(id, {...component, sort: index});
+        await WorkflowViewComponentService.update(id, {
+          ...component,
+          sort: index,
+        });
       } else {
-        await componentService.createMany({
+        await WorkflowViewComponentService.createMany({
           data: [{...component, sort: index}],
         });
       }
@@ -153,7 +154,7 @@ const ComponentModal: FC<IProps> = ({
     setHasComponents(false);
   };
   const getComponentValue = async (id: string) => {
-    const {components} = await viewService.get(id);
+    const {components} = await WorkflowViewService.get(id);
     setHasComponents(!!components.length);
     setComponents([...components]);
   };
@@ -177,7 +178,7 @@ const ComponentModal: FC<IProps> = ({
     if (target) {
       const {id} = target;
       if (id) {
-        await componentService.delete(id);
+        await WorkflowViewComponentService.delete(id);
       }
       components.splice(index, 1);
       setComponents([...components]);

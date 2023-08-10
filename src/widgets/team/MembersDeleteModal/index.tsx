@@ -2,7 +2,7 @@ import React, {type ReactElement, useState, type FC} from 'react';
 import {raise, sendRequest} from '@/http/mixins';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import {Role, User} from '@prisma/client';
-import UserApiRequest from '@/http/api/user';
+import UserService from '@/http/api/user';
 
 /**
  * Types
@@ -33,7 +33,7 @@ const MembersDeleteModal: FC<Props> = ({
    */
   const deleteMember = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      await new UserApiRequest().delete(raise(activeMember?.id));
+      await UserService.delete(raise(activeMember?.id));
       setData(data.filter(d => d.id !== activeMember?.id));
       setModal(false);
     });

@@ -2,7 +2,7 @@ import {ReactElement, useEffect, useState} from 'react';
 import {Button} from '@mui/material';
 import {Workflow} from '@prisma/client';
 import EditModal from '@/widgets/workflow/EditModal';
-import WorkflowApiRequest from '@/http/api/workflow';
+import WorkflowService from '@/http/api/workflow';
 import WorkflowTable from '@/widgets/workflow/WorkflowTable';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 
@@ -11,10 +11,9 @@ import styles from './index.module.scss';
 const Page = (): ReactElement => {
   const [open, setOpen] = useState(false);
   const [rows, setRows] = useState<Workflow[]>([]);
-  const workflowService = new WorkflowApiRequest();
 
   const getAllWorkflows = async () => {
-    const workflows = await workflowService.list();
+    const workflows = await WorkflowService.list();
     setRows(workflows);
   };
 

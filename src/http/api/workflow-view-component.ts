@@ -7,31 +7,31 @@ import {
 import {Prisma, WorkflowViewComponent} from '@prisma/client';
 import url from '@/http/url';
 
-export default class WorkflowViewComponentApiRequest {
-  private readonly url = url.workflowViewComponents;
-
-  public async createMany(data: {
+export default class WorkflowViewComponentService {
+  public static async createMany(data: {
     data: Prisma.WorkflowViewComponentCreateManyInput[];
   }) {
-    const res = await postRequest(this.url, data);
+    const res = await postRequest(url.workflowViewComponents, data);
     return res.data;
   }
 
-  public async getViewComponent(id: string): Promise<WorkflowViewComponent[]> {
-    const res = await getRequest(this.url, id);
+  public static async getViewComponent(
+    id: string
+  ): Promise<WorkflowViewComponent[]> {
+    const res = await getRequest(url.workflowViewComponents, id);
     return res.data;
   }
 
-  public async update(
+  public static async update(
     id: string,
     data: Prisma.WorkflowViewComponentUpdateInput
   ) {
-    const res = await patchRequest(this.url, id, data);
+    const res = await patchRequest(url.workflowViewComponents, id, data);
     return res.data;
   }
 
-  public async delete(id: string): Promise<any> {
-    const res = await deleteRequest(this.url, id);
+  public static async delete(id: string): Promise<any> {
+    const res = await deleteRequest(url.workflowViewComponents, id);
     return res.data;
   }
 }

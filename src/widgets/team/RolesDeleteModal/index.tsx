@@ -1,7 +1,7 @@
 import React, {type ReactElement, useState, type FC} from 'react';
 import {raise, sendRequest} from '@/http/mixins';
 import FormDialogCustom from '@/components/FormDialogCustom';
-import RoleApiRequest from '@/http/api/role';
+import RoleService from '@/http/api/role';
 import {Role} from '@prisma/client';
 
 /**
@@ -33,7 +33,7 @@ const RolesDeleteModal: FC<Props> = ({
    */
   const deleteRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      await new RoleApiRequest().delete(raise(activeRole?.id));
+      await RoleService.delete(raise(activeRole?.id));
       setData(data.filter(d => d.id !== activeRole?.id));
       setModal(false);
     });

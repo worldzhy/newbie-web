@@ -13,11 +13,11 @@ import {ModalStyle} from '@/constants/styleConfig';
 import RouteModal from '../RouteModal';
 import CloseIcon from '@mui/icons-material/Close';
 import TableCustom from '@/components/TableCustom';
-import RouteService from '@/http/api/workflow-route';
-
-import styles from './index.module.scss';
+import WorlflowRouteService from '@/http/api/workflow-route';
 import {WorkflowRoute, WorkflowState, WorkflowView} from '@prisma/client';
 import {EMPTY_PLACEHOLDER} from '@/constants';
+
+import styles from './index.module.scss';
 
 type IProps = {
   data:
@@ -43,7 +43,6 @@ const Table: FC<IProps> = ({data, refreshData}) => {
   const [values, setValues] = useState<any>();
   const [startSignId, setStartSignId] = useState('');
   const {views = [], states = [], routes = []} = data || {};
-  const routeService = new RouteService();
 
   const actionsRender = (index: number) => (
     <>
@@ -71,12 +70,12 @@ const Table: FC<IProps> = ({data, refreshData}) => {
     setOpen(true);
   };
   const handleDelete = async () => {
-    await routeService.delete(values.id);
+    await WorlflowRouteService.delete(values.id);
     refreshData();
     setOpenDelete(false);
   };
   const handleUpdateStartSign = async () => {
-    await routeService.update(startSignId, {startSign: true});
+    await WorlflowRouteService.update(startSignId, {startSign: true});
     refreshData();
     setOpenStartSign(false);
     setStartSignId('');

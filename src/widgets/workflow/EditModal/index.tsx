@@ -10,9 +10,9 @@ import {
 import {useRouter} from 'next/router';
 import {ModalStyle} from '@/constants/styleConfig';
 import CloseIcon from '@mui/icons-material/Close';
-import WorkflowApiRequest from '@/http/api/workflow';
-import WorkflowViewApiRequest from '@/http/api/workflow-view';
-import WorkflowStateApiRequest from '@/http/api/workflow-state';
+import WorkflowService from '@/http/api/workflow';
+import WorkflowViewService from '@/http/api/workflow-view';
+import WorkflowStateService from '@/http/api/workflow-state';
 
 import styles from './index.module.scss';
 
@@ -36,26 +36,27 @@ const EditModal: FC<IProps> = ({
   const {id, name: initName, description: initDesc} = values;
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
-  const workflowService = new WorkflowApiRequest();
-  const viewService = new WorkflowViewApiRequest();
-  const stateService = new WorkflowStateApiRequest();
 
   const handleUpdate = async () => {
     if (id) {
       if (type === 'workflow') {
-        await workflowService.update(id, {name, description: desc});
+        await WorkflowService.update(id, {name, description: desc});
       } else if (type === 'view') {
-        await viewService.update(id, {name, description: desc});
+        await WorkflowViewService.update(id, {name, description: desc});
       } else if (type === 'state') {
-        await stateService.update(id, {name, description: desc});
+        await WorkflowStateService.update(id, {name, description: desc});
       }
     } else {
       if (type === 'workflow') {
-        await workflowService.create({name, description: desc});
+        await WorkflowService.create({name, description: desc});
       } else if (type === 'view') {
-        await viewService.create({workflowId, name, description: desc});
+        await WorkflowViewService.create({workflowId, name, description: desc});
       } else if (type === 'state') {
-        await stateService.create({workflowId, name, description: desc});
+        await WorkflowStateService.create({
+          workflowId,
+          name,
+          description: desc,
+        });
       }
     }
     setName('');

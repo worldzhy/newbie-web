@@ -1,6 +1,6 @@
 import React, {type ReactElement, useState, type FC} from 'react';
 import {sendRequest} from '@/http/mixins';
-import RoleApiRequest from '@/http/api/role';
+import RoleService from '@/http/api/role';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 import {Role} from '@prisma/client';
@@ -33,7 +33,7 @@ const RolesCreateModal: FC<Props> = ({
    */
   const createRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      const res = await new RoleApiRequest().create({name: roleName});
+      const res = await RoleService.create({name: roleName});
       setData([...data, res]);
       setModal(false);
     });

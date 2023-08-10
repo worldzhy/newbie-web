@@ -5,7 +5,7 @@ import EditModal from '../EditModal';
 import CloseIcon from '@mui/icons-material/Close';
 import TableCustom from '@/components/TableCustom';
 import {WorkflowState} from '@prisma/client';
-import WorkflowStateApiRequest from '@/http/api/workflow-state';
+import WorkflowStateService from '@/http/api/workflow-state';
 
 import styles from './index.module.scss';
 
@@ -20,7 +20,6 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [values, setValues] = useState<any>();
-  const service = new WorkflowStateApiRequest();
 
   const actionsRender = (index: number) => (
     <>
@@ -48,7 +47,7 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
     setOpen(true);
   };
   const handleDelete = async () => {
-    await service.delete(values.id);
+    await WorkflowStateService.delete(values.id);
     refreshData();
     setOpenDelete(false);
   };

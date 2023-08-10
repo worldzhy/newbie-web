@@ -5,7 +5,7 @@ import {Stack} from '@mui/material';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 import MultiSelectCustom from '@/components/MultiSelectCustom';
-import UserApiRequest from '@/http/api/user';
+import UserService from '@/http/api/user';
 
 /**
  * Types
@@ -59,7 +59,7 @@ const MembersCreateModal: FC<Props> = ({
         selectedRoleNames.includes(name)
       );
       const newMemberData = {...newMember, roles};
-      const res = await new UserApiRequest().create(newMemberData);
+      const res = await UserService.create(newMemberData);
       setData([...data, {...res, roles}]);
       setModal(false);
     });

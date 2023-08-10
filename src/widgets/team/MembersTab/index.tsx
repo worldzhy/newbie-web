@@ -4,13 +4,13 @@ import {User, Role} from '@prisma/client';
 import {EMPTY_PLACEHOLDER} from '@/constants';
 import {Button, Link, Stack, TableCell, TableRow} from '@mui/material';
 import {sortDate, showError, delayExecute, isUnauthorized} from '@/http/mixins';
-import UserApiRequest from '@/http/api/user';
-import RoleApiRequest from '@/http/api/role';
 import MembersEditModal from '../MembersEditModal';
 import MembersCreateModal from '../MembersCreateModal';
 import MembersDeleteModal from '../MembersDeleteModal';
 import SkeletonCustom from '@/components/SkeletonCustom';
 import TableContainerCustom from '@/components/TableContainerCustom';
+import RoleService from '@/http/api/role';
+import UserService from '@/http/api/user';
 
 /**
  * Types
@@ -43,12 +43,12 @@ const MembersTab = (): ReactElement => {
         setData([]);
         setRolesList([]);
         if (!ignore) {
-          const users = await new UserApiRequest().list({
+          const users = await UserService.list({
             page: 1,
             pageSize: 10,
           });
           setData(users.records);
-          const roles = await new RoleApiRequest().list();
+          const roles = await RoleService.list();
           setRolesList(roles);
           setIsFetching(false);
         }

@@ -4,7 +4,7 @@ import {useRouter} from 'next/router';
 import {EMPTY_PLACEHOLDER} from '@/constants';
 import {Button, Link, Stack, TableCell, TableRow} from '@mui/material';
 import {showError, sortDate, delayExecute, isUnauthorized} from '@/http/mixins';
-import RoleApiRequest from '@/http/api/role';
+import RoleService from '@/http/api/role';
 import RolesEditModal from '../RolesEditModal';
 import RolesCreateModal from '../RolesCreateModal';
 import RolesDeleteModal from '../RolesDeleteModal';
@@ -38,7 +38,7 @@ const RolesTab = (): ReactElement => {
       try {
         setData([]);
         if (!ignore) {
-          const roles = await new RoleApiRequest().list();
+          const roles = await RoleService.list();
           setData(roles);
           setIsFetching(false);
         }

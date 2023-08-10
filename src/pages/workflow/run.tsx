@@ -4,7 +4,7 @@ import {useRouter} from 'next/router';
 import {ComponentType} from '@/widgets/workflow/ComponentModal';
 import {WorkflowRoute, WorkflowViewComponent} from '@prisma/client';
 import Title from '@/widgets/workflow/components/Title';
-import WorkflowViewApiRequest from '@/http/api/workflow-view';
+import WorkflowViewService from '@/http/api/workflow-view';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 import Container from '@/widgets/workflow/components/Container';
 import Paragraph from '@/widgets/workflow/components/Paragraph';
@@ -21,10 +21,9 @@ const Page = (): ReactElement => {
   const [states, setStates] = useState<WorkflowRoute[]>([]);
   const router = useRouter();
   const {id} = router.query;
-  const viewService = new WorkflowViewApiRequest();
 
   const getWorkflowStartData = async () => {
-    const workflow = await viewService.getStartViews(id as string);
+    const workflow = await WorkflowViewService.getStartViews(id as string);
     const {components, outboundRoutes} = workflow[0];
     setComponents(components);
     setStates(outboundRoutes);
@@ -33,7 +32,7 @@ const Page = (): ReactElement => {
   const handleNext = async (id: number) => {
     const route: any = states.find(({id: routeId}) => routeId === id);
     if (route) {
-      const {components, outboundRoutes} = await viewService.get(
+      const {components, outboundRoutes} = await WorkflowViewService.get(
         route?.nextViewId
       );
       setComponents(components);

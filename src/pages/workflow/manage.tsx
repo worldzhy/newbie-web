@@ -3,12 +3,12 @@ import {useRouter} from 'next/router';
 import {Box, Tab} from '@mui/material';
 import {TabContext, TabList, TabPanel} from '@mui/lab';
 import {WorkflowRoute, WorkflowState, WorkflowView} from '@prisma/client';
-import WorkflowApiRequest from '@/http/api/workflow';
+import WorkflowService from '@/http/api/workflow';
 import ViewsTable from '@/widgets/workflow/ViewsTable';
 import RoutesTable from '@/widgets/workflow/RoutesTable';
 import StatesTable from '@/widgets/workflow/StatesTable';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
-import WorkflowRouteApiRequest from '@/http/api/workflow-route';
+import WorkflowRouteService from '@/http/api/workflow-route';
 
 import styles from './index.module.scss';
 
@@ -30,8 +30,6 @@ const Page = (): ReactElement => {
       nextView: WorkflowView;
     })[];
   }>();
-  const workflowService = new WorkflowApiRequest();
-  const routeService = new WorkflowRouteApiRequest();
   const {id} = router.query;
 
   const handleChange = (_: SyntheticEvent, newValue: TabState): void => {
@@ -40,8 +38,8 @@ const Page = (): ReactElement => {
 
   const getData = async () => {
     if (typeof id !== 'string' || !id) return;
-    const workflow = await workflowService.get(id);
-    const routes = await routeService.list({workflowId: id});
+    const workflow = await WorkflowService.get(id);
+    const routes = await WorkflowRouteService.list({workflowId: id});
 
     setData({views: workflow.views, states: workflow.states, routes});
   };

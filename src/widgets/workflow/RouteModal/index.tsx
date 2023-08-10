@@ -13,7 +13,7 @@ import {
 import {useRouter} from 'next/router';
 import {ModalStyle} from '@/constants/styleConfig';
 import CloseIcon from '@mui/icons-material/Close';
-import RouteService from '@/http/api/workflow-route';
+import WorlflowRouteService from '@/http/api/workflow-route';
 import {WorkflowState, WorkflowView} from '@prisma/client';
 
 import styles from './index.module.scss';
@@ -54,7 +54,6 @@ const RouteModal: FC<IProps> = ({
   const {id: workflowId} = router.query as {id: string};
   const [formValues, setFormValues] = useState<any>(defaultValues);
   const {startSign, viewId, stateId, nextViewId} = formValues;
-  const service = new RouteService();
 
   const handleChange = (event: any) => {
     const {name, value, checked} = event.target;
@@ -72,9 +71,9 @@ const RouteModal: FC<IProps> = ({
       nextViewId,
     };
     if (id) {
-      await service.update(id, params);
+      await WorlflowRouteService.update(id, params);
     } else {
-      await service.create(params);
+      await WorlflowRouteService.create(params);
     }
     setFormValues(defaultValues);
     setOpen(false);

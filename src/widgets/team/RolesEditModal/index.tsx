@@ -9,7 +9,7 @@ import {raise, sendRequest, showError} from '@/http/mixins';
 import {Stack} from '@mui/material';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
-import RoleApiRequest from '@/http/api/role';
+import RoleService from '@/http/api/role';
 import {Role} from '@prisma/client';
 
 /**
@@ -83,7 +83,7 @@ const RolesEditModal: FC<Props> = ({
    */
   const updateRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
-      const role = await new RoleApiRequest().update(
+      const role = await RoleService.update(
         raise(activeRole?.id),
         updatedActiveRole
       );

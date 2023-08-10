@@ -11,7 +11,7 @@ import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 import MultiSelectCustom from '@/components/MultiSelectCustom';
 import {User, Role} from '@prisma/client';
-import UserApiRequest from '@/http/api/user';
+import UserService from '@/http/api/user';
 
 /**
  * Types
@@ -103,7 +103,7 @@ const MembersEditModal: FC<Props> = ({
         password,
         roles,
       };
-      await new UserApiRequest().update(raise(activeMember?.id), payload);
+      await UserService.update(raise(activeMember?.id), payload);
       setData(
         data.map(d => {
           if (d.id === activeMember?.id) {
