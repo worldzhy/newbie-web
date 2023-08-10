@@ -14,10 +14,12 @@ import {
 import url from '@/http/url';
 
 export default class WorkflowViewApiRequest {
+  private readonly url = url.workflowViews;
+
   public async create(
     data: Prisma.WorkflowViewUncheckedCreateInput
   ): Promise<WorkflowView> {
-    const res = await postRequest(url.workflowViews, data);
+    const res = await postRequest(this.url, data);
     return res.data;
   }
 
@@ -28,12 +30,12 @@ export default class WorkflowViewApiRequest {
       inboundRoutes: WorkflowRoute[];
     }
   > {
-    const res = await getRequest(url.workflowViews, id);
+    const res = await getRequest(this.url, id);
     return res.data;
   }
 
   public async getStartViews(workflowId: string): Promise<any> {
-    const res = await listRequest(url.workflowStartViews, {workflowId});
+    const res = await listRequest(this.url, {workflowId});
     return res.data;
   }
 
@@ -41,12 +43,12 @@ export default class WorkflowViewApiRequest {
     id: string,
     data: Prisma.WorkflowViewUncheckedUpdateInput
   ) {
-    const res = await patchRequest(url.workflowViews, id, data);
+    const res = await patchRequest(this.url, id, data);
     return res.data;
   }
 
   public async delete(id: string): Promise<WorkflowView> {
-    const res = await deleteRequest(url.workflowViews, id);
+    const res = await deleteRequest(this.url, id);
     return res.data;
   }
 }

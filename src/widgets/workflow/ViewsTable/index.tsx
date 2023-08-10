@@ -72,7 +72,7 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
         </Button>
       </div>
       <TableCustom
-        rows={rows.map(({id, workflowId, ...rest}) => ({
+        rows={rows.map(({id, workflowId, updatedAt, createdAt, ...rest}) => ({
           ...rest,
           Actions: [],
         }))}

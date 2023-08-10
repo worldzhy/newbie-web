@@ -1,4 +1,5 @@
 import React, {type ReactElement} from 'react';
+import {EMPTY_PLACEHOLDER} from '@/constants';
 import {Link, TableCell, TableRow} from '@mui/material';
 import SkeletonCustom from '@/components/SkeletonCustom';
 import TableContainerCustom from '@/components/TableContainerCustom';
@@ -29,7 +30,7 @@ const AboutUsTab = (): ReactElement => {
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(({name, link}, key) => (
           <TableRow key={key}>
-            <TableCell align="center">{name}</TableCell>
+            <TableCell align="center">{name || EMPTY_PLACEHOLDER}</TableCell>
             <TableCell align="center">
               <Link href={link} target="_blank">
                 {link}

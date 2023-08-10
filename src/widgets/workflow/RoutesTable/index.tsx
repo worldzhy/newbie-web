@@ -17,6 +17,7 @@ import RouteService from '@/http/api/workflow-route';
 
 import styles from './index.module.scss';
 import {WorkflowRoute, WorkflowState, WorkflowView} from '@prisma/client';
+import {EMPTY_PLACEHOLDER} from '@/constants';
 
 type IProps = {
   data:
@@ -104,9 +105,11 @@ const Table: FC<IProps> = ({data, refreshData}) => {
       </div>
       <TableCustom
         rows={routes.map(({startSign, view, state, nextView}) => ({
-          view: startSign ? `(*) ${view.name}` : view.name,
-          state: state.name,
-          nextView: nextView.name,
+          view: startSign
+            ? `(*) ${view?.name || EMPTY_PLACEHOLDER}`
+            : view?.name || EMPTY_PLACEHOLDER,
+          state: state?.name,
+          nextView: nextView?.name,
           Actions: [],
         }))}
         headers={headers}

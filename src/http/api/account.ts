@@ -1,6 +1,6 @@
+import {setCookie} from 'cookies-next';
 import {postRequest} from '@/http/methods';
 import url from '@/http/url';
-import {setCookie} from 'cookies-next';
 
 export default class Auth {
   public async login(input: ILoginPayload): Promise<ILoginReturn> {

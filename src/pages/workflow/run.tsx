@@ -2,12 +2,12 @@ import {ReactElement, useEffect, useState} from 'react';
 import {Button} from '@mui/material';
 import {useRouter} from 'next/router';
 import {ComponentType} from '@/widgets/workflow/ComponentModal';
+import {WorkflowRoute, WorkflowViewComponent} from '@prisma/client';
 import Title from '@/widgets/workflow/components/Title';
+import WorkflowViewApiRequest from '@/http/api/workflow-view';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 import Container from '@/widgets/workflow/components/Container';
 import Paragraph from '@/widgets/workflow/components/Paragraph';
-import WorkflowViewApiRequest from '@/http/api/workflow-view';
-import {WorkflowRoute, WorkflowViewComponent} from '@prisma/client';
 
 import styles from './index.module.scss';
 

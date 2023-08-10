@@ -1,9 +1,10 @@
 import axios from 'axios';
 import {showToast} from '@/http/mixins';
 import {getCookie} from 'cookies-next';
-var qs = require('qs');
 
+const qs = require('qs');
 const token = getCookie('token');
+
 axios.defaults.baseURL = process.env.BASE_URL ?? '';
 axios.defaults.headers.common['Authorization'] = token
   ? `Bearer ${token}`

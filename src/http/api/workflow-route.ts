@@ -5,18 +5,20 @@ import {
   WorkflowView,
 } from '@prisma/client';
 import {
-  deleteRequest,
   listRequest,
-  patchRequest,
   postRequest,
+  patchRequest,
+  deleteRequest,
 } from '@/http/methods';
 import url from '@/http/url';
 
 export default class WorkflowRouteApiRequest {
+  private readonly url = url.workflowRoutes;
+
   public async create(
     data: Prisma.WorkflowRouteUncheckedCreateInput
   ): Promise<WorkflowRoute> {
-    const res = await postRequest(url.workflowRoutes, data);
+    const res = await postRequest(this.url, data);
     return res.data;
   }
 
@@ -27,17 +29,17 @@ export default class WorkflowRouteApiRequest {
       nextView: WorkflowView;
     })[]
   > {
-    const res = await listRequest(url.workflowRoutes, query);
+    const res = await listRequest(this.url, query);
     return res.data;
   }
 
   public async update(id: string, data: Prisma.WorkflowRouteUpdateInput) {
-    const res = await patchRequest(url.workflowRoutes, id, data);
+    const res = await patchRequest(this.url, id, data);
     return res.data;
   }
 
   public async delete(id: string): Promise<WorkflowRoute> {
-    const res = await deleteRequest(url.workflowRoutes, id);
+    const res = await deleteRequest(this.url, id);
     return res.data;
   }
 }

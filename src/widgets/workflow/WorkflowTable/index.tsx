@@ -76,7 +76,10 @@ const Table: FC<IProps> = ({rows, refreshData}) => {
   return (
     <>
       <TableCustom
-        rows={rows.map(({id, ...rest}) => rest)}
+        rows={rows.map(({id, updatedAt, createdAt, ...rest}) => ({
+          ...rest,
+          Actions: [],
+        }))}
         headers={headers}
         isLastColActions={true}
         children={actionsRender}

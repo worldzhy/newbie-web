@@ -9,7 +9,9 @@ const TableHeaderCustom: FC<Props> = ({headers}): ReactElement => {
   return (
     <TableRow>
       {headers.map((label: string, key: number) => (
-        <TableCell key={key}>{label}</TableCell>
+        <TableCell key={key} align="center">
+          {label}
+        </TableCell>
       ))}
     </TableRow>
   );

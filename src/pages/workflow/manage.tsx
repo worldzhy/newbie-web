@@ -2,13 +2,13 @@ import {ReactElement, SyntheticEvent, useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import {Box, Tab} from '@mui/material';
 import {TabContext, TabList, TabPanel} from '@mui/lab';
+import {WorkflowRoute, WorkflowState, WorkflowView} from '@prisma/client';
+import WorkflowApiRequest from '@/http/api/workflow';
 import ViewsTable from '@/widgets/workflow/ViewsTable';
 import RoutesTable from '@/widgets/workflow/RoutesTable';
 import StatesTable from '@/widgets/workflow/StatesTable';
 import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
-import {WorkflowRoute, WorkflowState, WorkflowView} from '@prisma/client';
 import WorkflowRouteApiRequest from '@/http/api/workflow-route';
-import WorkflowApiRequest from '@/http/api/workflow';
 
 import styles from './index.module.scss';
 

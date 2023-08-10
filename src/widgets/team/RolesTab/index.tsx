@@ -1,15 +1,16 @@
 import React, {type ReactElement, useEffect, useState} from 'react';
-import {showError, sortDate, delayExecute, isUnauthorized} from '@/http/mixins';
+import {Role} from '@prisma/client';
 import {useRouter} from 'next/router';
+import {EMPTY_PLACEHOLDER} from '@/constants';
 import {Button, Link, Stack, TableCell, TableRow} from '@mui/material';
+import {showError, sortDate, delayExecute, isUnauthorized} from '@/http/mixins';
+import RoleApiRequest from '@/http/api/role';
 import RolesEditModal from '../RolesEditModal';
 import RolesCreateModal from '../RolesCreateModal';
 import RolesDeleteModal from '../RolesDeleteModal';
 import SkeletonCustom from '@/components/SkeletonCustom';
 import TableContainerCustom from '@/components/TableContainerCustom';
 import RolesSetPermisssionsModal from '../RolesSetPermisssionsModal';
-import {Role} from '@prisma/client';
-import RoleApiRequest from '@/http/api/role';
 
 const RolesTab = (): ReactElement => {
   /**
@@ -70,8 +71,10 @@ const RolesTab = (): ReactElement => {
         .sort((a, b) => sortDate(a.createdAt, b.createdAt))
         .map((d, key) => (
           <TableRow key={key}>
-            <TableCell align="center">{d.name}</TableCell>
-            <TableCell align="center">{d.description}</TableCell>
+            <TableCell align="center">{d.name || EMPTY_PLACEHOLDER}</TableCell>
+            <TableCell align="center">
+              {d.description || EMPTY_PLACEHOLDER}
+            </TableCell>
             <TableCell align="center">
               <Link
                 style={{marginRight: 6}}
