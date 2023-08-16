@@ -1,16 +1,10 @@
-import React, {
-  type ReactElement,
-  useState,
-  type FC,
-  useReducer,
-  useEffect,
-} from 'react';
-import {raise, sendRequest, showError} from '@/http/mixins';
+import {type FC, useState, useEffect, useReducer} from 'react';
+import {Role} from '@prisma/client';
 import {Stack} from '@mui/material';
+import {raise, sendRequest, showError} from '@/http/mixins';
+import RoleService from '@/http/api/role';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
-import RoleService from '@/http/api/role';
-import {Role} from '@prisma/client';
 
 /**
  * Types
@@ -35,10 +29,7 @@ const RolesEditModal: FC<Props> = ({
   setData,
   modal,
   setModal,
-}): ReactElement => {
-  /**
-   * States
-   */
+}) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [updatedActiveRole, setUpdatedActiveRole] = useReducer(
     (prev: INewRole, next: Record<string, string>): INewRole => {
@@ -50,9 +41,6 @@ const RolesEditModal: FC<Props> = ({
     }
   );
 
-  /**
-   * Data Fetching
-   */
   useEffect(() => {
     const startFetching = async (): Promise<void> => {
       try {
@@ -78,9 +66,6 @@ const RolesEditModal: FC<Props> = ({
     };
   }, [activeRole]);
 
-  /**
-   * Handlers
-   */
   const updateRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
       const role = await RoleService.update(

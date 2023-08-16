@@ -1,4 +1,4 @@
-import React, {type ReactElement, type FC, type ReactNode} from 'react';
+import {type FC, type ReactNode} from 'react';
 import {
   Table,
   Paper,
@@ -13,7 +13,7 @@ interface Props {
   children: ReactNode;
 }
 
-const TableContainerCustom: FC<Props> = ({headers, children}): ReactElement => {
+const TableContainerCustom: FC<Props> = ({headers, children}) => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{minWidth: 650}} aria-label="simple table">

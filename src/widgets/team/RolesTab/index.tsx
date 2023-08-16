@@ -1,4 +1,4 @@
-import React, {type ReactElement, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Role} from '@prisma/client';
 import {useRouter} from 'next/router';
 import {EMPTY_PLACEHOLDER} from '@/constants';
@@ -12,16 +12,9 @@ import SkeletonCustom from '@/components/SkeletonCustom';
 import TableContainerCustom from '@/components/TableContainerCustom';
 import RolesSetPermisssionsModal from '../RolesSetPermisssionsModal';
 
-const RolesTab = (): ReactElement => {
-  /**
-   * Declarations
-   */
+const RolesTab = () => {
   const router = useRouter();
   const headers = ['Name', 'Description', 'Permissions'];
-
-  /**
-   * States
-   */
   const [isFetching, setIsFetching] = useState(true);
   const [createModal, setCreateModal] = useState(false);
   const [permissionModal, setPermissionModal] = useState(false);
@@ -30,9 +23,6 @@ const RolesTab = (): ReactElement => {
   const [activeRole, setActiveRole] = useState<Role>();
   const [data, setData] = useState<Role[]>([]);
 
-  /**
-   * Data Fetching
-   */
   useEffect(() => {
     const startFetching = async (): Promise<void> => {
       try {
@@ -46,7 +36,7 @@ const RolesTab = (): ReactElement => {
         if (!ignore) {
           if (isUnauthorized(err)) {
             delayExecute(() => {
-              void router.push('/');
+              router.push('/');
             }, 0);
           } else {
             showError(err);
@@ -62,9 +52,6 @@ const RolesTab = (): ReactElement => {
     };
   }, [router]);
 
-  /**
-   * Components
-   */
   const table = (
     <TableContainerCustom headers={headers}>
       {data

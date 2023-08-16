@@ -1,4 +1,4 @@
-import React, {useState, type ReactElement} from 'react';
+import {useState} from 'react';
 import {
   Grid,
   Link,
@@ -7,30 +7,20 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import Pre from '@/components/Pre';
 import {useRouter} from 'next/router';
-import {delayExecute, sendRequest, showToast} from '@/http/mixins';
 import Auth from '@/http/api/account';
-import Pre from '@/widgets/shared/Pre';
+import {delayExecute, sendRequest, showToast} from '@/http/mixins';
+
 import styles from './index.module.scss';
 
-const Page = (): ReactElement => {
-  /**
-   * Declarations
-   */
+const Page = () => {
   const auth = new Auth();
   const router = useRouter();
-
-  /**
-   * States
-   */
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
-
-  /**
-   * Handlers
-   */
   const sendVerificationCodeHandler = async (): Promise<void> => {
     await sendRequest(setIsLoading, async () => {
       await auth.sendVerificationCode(email);
@@ -43,7 +33,7 @@ const Page = (): ReactElement => {
       await auth.forgotPassword({email, verificationCode, newPassword});
       showToast('success', 'Password successfully updated');
       delayExecute(() => {
-        void router.push('/');
+        router.push('/');
       });
     });
   };
@@ -80,7 +70,7 @@ const Page = (): ReactElement => {
                         className={styles.button}
                         variant="contained"
                         onClick={() => {
-                          void sendVerificationCodeHandler();
+                          sendVerificationCodeHandler();
                         }}
                       >
                         Send

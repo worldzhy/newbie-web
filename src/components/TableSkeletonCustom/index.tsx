@@ -1,4 +1,4 @@
-import {type FC, type ReactElement} from 'react';
+import {type FC} from 'react';
 import {TableCell, TableRow} from '@mui/material';
 import SkeletonCustom from '../SkeletonCustom';
 
@@ -7,10 +7,7 @@ interface Props {
   numRows?: number;
 }
 
-const TableSkeletonCustom: FC<Props> = ({
-  numCols,
-  numRows = 3,
-}): ReactElement => (
+const TableSkeletonCustom: FC<Props> = ({numCols, numRows = 3}) => (
   <>
     {Array.from(new Array(numRows)).map((_, keyi: number) => (
       <TableRow key={`rows-${keyi}`}>

@@ -1,15 +1,11 @@
-import React, {type ReactElement, useState, type FC, useReducer} from 'react';
+import {useState, type FC, useReducer} from 'react';
+import {Stack} from '@mui/material';
 import {User, Role} from '@prisma/client';
 import {sendRequest} from '@/http/mixins';
-import {Stack} from '@mui/material';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 import MultiSelectCustom from '@/components/MultiSelectCustom';
 import UserService from '@/http/api/user';
-
-/**
- * Types
- */
 
 interface Props {
   data: (User & {roles: Role[]})[];
@@ -32,10 +28,7 @@ const MembersCreateModal: FC<Props> = ({
   modal,
   setModal,
   rolesList,
-}): ReactElement => {
-  /**
-   * States
-   */
+}) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedRoleNames, setSelectedRoleNames] = useState<string[]>([]);
   const [newMember, updateNewMember] = useReducer(
@@ -50,9 +43,6 @@ const MembersCreateModal: FC<Props> = ({
     }
   );
 
-  /**
-   * Handlers
-   */
   const createUser = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
       const roles = rolesList.filter(({name}) =>

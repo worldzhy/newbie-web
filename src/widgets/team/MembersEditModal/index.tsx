@@ -1,21 +1,11 @@
-import React, {
-  type ReactElement,
-  useState,
-  type FC,
-  useReducer,
-  useEffect,
-} from 'react';
-import {raise, sendRequest, showError} from '@/http/mixins';
+import {type FC, useState, useEffect, useReducer} from 'react';
 import {Stack} from '@mui/material';
-import FormDialogCustom from '@/components/FormDialogCustom';
-import FormDialogInputCustom from '@/components/FormDialogInputCustom';
-import MultiSelectCustom from '@/components/MultiSelectCustom';
 import {User, Role} from '@prisma/client';
 import UserService from '@/http/api/user';
-
-/**
- * Types
- */
+import {raise, sendRequest, showError} from '@/http/mixins';
+import FormDialogCustom from '@/components/FormDialogCustom';
+import MultiSelectCustom from '@/components/MultiSelectCustom';
+import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 
 interface Props {
   activeMember: (User & {roles: Role[]}) | undefined;
@@ -40,10 +30,7 @@ const MembersEditModal: FC<Props> = ({
   modal,
   setModal,
   rolesList,
-}): ReactElement => {
-  /**
-   * States
-   */
+}) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedRoleNames, setSelectedRoleNames] = useState<string[]>([]);
   const [updatedActiveMember, setUpdatedActiveMember] = useReducer(
@@ -58,9 +45,6 @@ const MembersEditModal: FC<Props> = ({
     }
   );
 
-  /**
-   * Data Fetching
-   */
   useEffect(() => {
     const startFetching = async (): Promise<void> => {
       try {
@@ -87,9 +71,6 @@ const MembersEditModal: FC<Props> = ({
     };
   }, [activeMember]);
 
-  /**
-   * Handlers
-   */
   const editRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
       const {email, phone, name, password} = updatedActiveMember;

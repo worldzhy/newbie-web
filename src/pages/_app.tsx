@@ -1,30 +1,22 @@
-import React, {type ReactElement, type ReactNode} from 'react';
-import type {NextPage} from 'next';
+import {useEffect} from 'react';
 import type {AppProps} from 'next/app';
 import {theme} from '@/constants/theme';
 import {CssBaseline} from '@mui/material';
 import {ThemeProvider} from '@mui/material/styles';
+import Layout from '@/layouts';
+
 import '@/styles/globals.scss';
 
-export type NextPageWithLayout<
-  P = {
-    /* */
-  },
-  IP = P
-> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
-
-type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
-};
-
-const App = ({Component, pageProps}: AppPropsWithLayout): ReactElement => {
-  const getLayout = Component.getLayout ?? (page => page);
+const App = ({Component, pageProps}: AppProps) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {getLayout(<Component {...pageProps} />)}
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </ThemeProvider>
   );
 };

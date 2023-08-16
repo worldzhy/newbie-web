@@ -1,4 +1,4 @@
-import React, {type ReactElement, type FC} from 'react';
+import {type FC} from 'react';
 import {Stack, TextField, Typography, type TextFieldProps} from '@mui/material';
 
 interface Props {
@@ -9,15 +9,15 @@ interface Props {
 }
 
 const FormDialogInputCustom: FC<Props & TextFieldProps> = ({
-  label,
   type,
-  onChange,
+  label,
   value,
+  rows = 0,
   placeholder,
   multiline = false,
-  rows = 0,
+  onChange,
   ...props
-}): ReactElement => {
+}) => {
   return (
     <Stack
       direction={{xs: 'column', sm: 'row'}}
@@ -41,6 +41,7 @@ const FormDialogInputCustom: FC<Props & TextFieldProps> = ({
         variant="outlined"
         size="small"
         type={type ?? 'string'}
+        {...props}
       />
     </Stack>
   );

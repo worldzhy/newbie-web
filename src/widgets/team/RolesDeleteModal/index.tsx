@@ -1,4 +1,4 @@
-import React, {type ReactElement, useState, type FC} from 'react';
+import {useState, type FC} from 'react';
 import {raise, sendRequest} from '@/http/mixins';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import RoleService from '@/http/api/role';
@@ -22,7 +22,7 @@ const RolesDeleteModal: FC<Props> = ({
   setData,
   modal,
   setModal,
-}): ReactElement => {
+}) => {
   /**
    * States
    */

@@ -1,21 +1,13 @@
-import React, {type ReactElement, type SyntheticEvent} from 'react';
+import {useState, type SyntheticEvent} from 'react';
 import {Box, Tab} from '@mui/material';
 import {TabContext, TabList, TabPanel} from '@mui/lab';
 import MembersTab from '@/widgets/team/MembersTab';
 import RolesTab from '@/widgets/team/RolesTab';
 import AboutUsTab from '@/widgets/team/AboutUsTab';
-import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 import styles from './index.module.scss';
 
-const Page = (): ReactElement => {
-  /**
-   * States
-   */
-  const [value, setValue] = React.useState('1');
-
-  /**
-   * Handlers
-   */
+const Page = () => {
+  const [value, setValue] = useState('1');
   const handleChange = (event: SyntheticEvent, newValue: string): void => {
     setValue(newValue);
   };
@@ -79,10 +71,3 @@ const Page = (): ReactElement => {
 };
 
 export default Page;
-
-/**
- * Layout wrapper
- */
-Page.getLayout = (page: ReactElement) => {
-  return <LayoutDashboard active="Team">{page}</LayoutDashboard>;
-};

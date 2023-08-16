@@ -1,4 +1,4 @@
-import {ReactElement, SyntheticEvent, useEffect, useState} from 'react';
+import {SyntheticEvent, useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import {Box, Tab} from '@mui/material';
 import {TabContext, TabList, TabPanel} from '@mui/lab';
@@ -7,7 +7,6 @@ import WorkflowService from '@/http/api/workflow';
 import ViewsTable from '@/widgets/workflow/ViewsTable';
 import RoutesTable from '@/widgets/workflow/RoutesTable';
 import StatesTable from '@/widgets/workflow/StatesTable';
-import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 import WorkflowRouteService from '@/http/api/workflow-route';
 
 import styles from './index.module.scss';
@@ -18,7 +17,7 @@ enum TabState {
   Routes = 'Routes',
 }
 
-const Page = (): ReactElement => {
+const Page = () => {
   const router = useRouter();
   const [value, setValue] = useState(TabState.Views);
   const [data, setData] = useState<{
@@ -107,10 +106,3 @@ const Page = (): ReactElement => {
 };
 
 export default Page;
-
-/**
- * Layout wrapper
- */
-Page.getLayout = (page: ReactElement) => {
-  return <LayoutDashboard active="Workflow">{page}</LayoutDashboard>;
-};

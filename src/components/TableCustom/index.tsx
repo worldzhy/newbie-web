@@ -1,4 +1,4 @@
-import React, {type ReactElement, type FC, type ReactNode} from 'react';
+import {type FC, type ReactNode} from 'react';
 import {
   Table,
   Stack,
@@ -25,7 +25,7 @@ const TableCustom: FC<Props> = ({
   headers,
   children,
   isLastColActions,
-}): ReactElement => {
+}) => {
   const skeleton = (
     <Stack direction="column" spacing={1} className={styles.skeleton}>
       {Array.from(new Array(3)).map((_, key: number) => (

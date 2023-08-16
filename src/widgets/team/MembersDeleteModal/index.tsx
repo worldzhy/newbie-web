@@ -1,12 +1,8 @@
-import React, {type ReactElement, useState, type FC} from 'react';
-import {raise, sendRequest} from '@/http/mixins';
-import FormDialogCustom from '@/components/FormDialogCustom';
+import {useState, type FC} from 'react';
 import {Role, User} from '@prisma/client';
 import UserService from '@/http/api/user';
-
-/**
- * Types
- */
+import {raise, sendRequest} from '@/http/mixins';
+import FormDialogCustom from '@/components/FormDialogCustom';
 
 interface Props {
   activeMember: (User & {roles: Role[]}) | undefined;
@@ -17,20 +13,14 @@ interface Props {
 }
 
 const MembersDeleteModal: FC<Props> = ({
-  activeMember,
   data,
-  setData,
   modal,
+  activeMember,
+  setData,
   setModal,
-}): ReactElement => {
-  /**
-   * States
-   */
+}) => {
   const [isProcessing, setIsProcessing] = useState(false);
 
-  /**
-   * Handlers
-   */
   const deleteMember = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
       await UserService.delete(raise(activeMember?.id));

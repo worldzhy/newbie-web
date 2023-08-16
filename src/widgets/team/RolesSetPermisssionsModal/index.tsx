@@ -1,10 +1,10 @@
-import React, {type ReactElement, type FC, useEffect, useState} from 'react';
+import {type FC, useEffect, useState} from 'react';
 import {
   Checkbox,
-  FormControlLabel,
+  TableRow,
   FormGroup,
   TableCell,
-  TableRow,
+  FormControlLabel,
 } from '@mui/material';
 import {
   raise,
@@ -14,18 +14,14 @@ import {
   isUnauthorized,
 } from '@/http/mixins';
 import Permission, {
-  type IPermissionsByResources,
   type IRequest,
+  type IPermissionsByResources,
 } from '@/http/api/permission';
+import {Role} from '@prisma/client';
 import {useRouter} from 'next/router';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import TableSkeletonCustom from '@/components/TableSkeletonCustom';
 import TableContainerCustom from '@/components/TableContainerCustom';
-import {Role} from '@prisma/client';
-
-/**
- * Types
- */
 
 interface Props {
   activeRole: Role | undefined;
@@ -37,24 +33,14 @@ const RolesSetPermisssionsModal: FC<Props> = ({
   activeRole,
   modal,
   setModal,
-}): ReactElement => {
-  /**
-   * Declarations
-   */
+}) => {
   const router = useRouter();
   const headers = ['Resouce', 'Permission'];
-
-  /**
-   * States
-   */
   const [isFetching, setIsFetching] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [data, setData] = useState<IPermissionsByResources[]>([]);
   const [requests, setRequests] = useState<Map<string, IRequest>>(new Map());
 
-  /**
-   * Handlers
-   */
   const updatePermissions = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
       const res = await new Permission().update(requests);
@@ -116,9 +102,6 @@ const RolesSetPermisssionsModal: FC<Props> = ({
     setRequests(requests);
   };
 
-  /**
-   * Data Fetching
-   */
   useEffect(() => {
     const startFetching = async (): Promise<void> => {
       try {
@@ -134,7 +117,7 @@ const RolesSetPermisssionsModal: FC<Props> = ({
         if (!ignore) {
           if (isUnauthorized(err)) {
             delayExecute(() => {
-              void router.push('/');
+              router.push('/');
             }, 0);
           } else {
             showError(err);

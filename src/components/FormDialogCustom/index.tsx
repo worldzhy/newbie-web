@@ -1,4 +1,4 @@
-import React, {type ReactElement, type ReactNode, type FC} from 'react';
+import {type ReactNode, type FC} from 'react';
 import {
   Button,
   Dialog,
@@ -24,19 +24,20 @@ interface Props {
 const FormDialogCustom: FC<Props & DialogProps> = ({
   open,
   title,
-  contentText,
-  closeDialogHandler,
-  formSubmitHandler,
-  isProcessing,
   children,
+  contentText,
+  isProcessing,
   stretch = true,
+  formSubmitHandler,
+  closeDialogHandler,
   ...props
-}): ReactElement => {
+}) => {
   return (
     <Dialog
       open={open}
       maxWidth={stretch ? false : undefined}
       onClose={closeDialogHandler}
+      {...props}
     >
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>

@@ -1,60 +1,55 @@
-import React, {type ReactElement, useState} from 'react';
+import {type ReactElement, useState, useMemo} from 'react';
 import {
-  AppBar,
   Box,
-  Breadcrumbs,
-  Button,
-  CssBaseline,
-  Divider,
-  Drawer,
-  IconButton,
   Link,
   List,
-  ListItem,
-  ListItemButton,
   Stack,
+  AppBar,
+  Button,
+  Drawer,
   Toolbar,
+  Divider,
+  ListItem,
+  IconButton,
   Typography,
+  Breadcrumbs,
+  CssBaseline,
+  ListItemButton,
 } from '@mui/material';
-import Pre from '@/widgets/shared/Pre';
-import Logo from '@/widgets/shared/Logo';
+import Pre from '@/components/Pre';
+import Logo from '@/components/Logo';
+import {useRouter} from 'next/router';
+import {EMPTY_PLACEHOLDER} from '@/constants';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import styles from './index.module.scss';
 
-const drawerWidth = 240;
+import styles from './index.module.scss';
 
 interface Props {
   window?: () => Window;
   children: ReactElement;
-  active: 'Projects' | 'Services' | 'Wiki' | 'Team' | 'My space' | 'Workflow';
 }
 
-const LayoutDashboard = ({window, children, active}: Props): ReactElement => {
-  /**
-   * Declarations
-   */
-  const subMenus = [
-    'Projects',
-    'Services',
-    'Wiki',
-    'Team',
-    'My space',
-    'Workflow',
-  ];
+const drawerWidth = 240;
+const subMenus = ['Projects', 'Services', 'Wiki', 'Team', 'Workflow'];
 
-  /**
-   * States
-   */
+const LayoutDashboard = ({window, children}: Props) => {
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  /**
-   * Handlers
-   */
   const handleDrawerToggle = (): void => {
     setMobileOpen(!mobileOpen);
   };
+
+  const active = useMemo(
+    () =>
+      subMenus.find(
+        text =>
+          router.pathname.includes(text.toLowerCase()) || EMPTY_PLACEHOLDER
+      ),
+    [router.pathname]
+  );
 
   const drawer = (
     <div className={styles.menu}>
@@ -63,7 +58,7 @@ const LayoutDashboard = ({window, children, active}: Props): ReactElement => {
       </Toolbar>
       <Divider />
       <List>
-        {subMenus.map((text, index) => (
+        {subMenus.map(text => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <Button

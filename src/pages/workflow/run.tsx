@@ -1,11 +1,10 @@
-import {ReactElement, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Button} from '@mui/material';
 import {useRouter} from 'next/router';
 import {ComponentType} from '@/widgets/workflow/ComponentModal';
 import {WorkflowRoute, WorkflowViewComponent} from '@prisma/client';
 import Title from '@/widgets/workflow/components/Title';
 import WorkflowViewService from '@/http/api/workflow-view';
-import LayoutDashboard from '@/widgets/layout/LayoutDashboard';
 import Container from '@/widgets/workflow/components/Container';
 import Paragraph from '@/widgets/workflow/components/Paragraph';
 
@@ -16,7 +15,7 @@ const ComponentsMapper: any = {
   [ComponentType.INFO_Description]: Paragraph,
 };
 
-const Page = (): ReactElement => {
+const Page = () => {
   const [components, setComponents] = useState<WorkflowViewComponent[]>([]);
   const [states, setStates] = useState<WorkflowRoute[]>([]);
   const router = useRouter();
@@ -71,10 +70,3 @@ const Page = (): ReactElement => {
 };
 
 export default Page;
-
-/**
- * Layout wrapper
- */
-Page.getLayout = (page: ReactElement) => {
-  return <LayoutDashboard active="Workflow">{page}</LayoutDashboard>;
-};

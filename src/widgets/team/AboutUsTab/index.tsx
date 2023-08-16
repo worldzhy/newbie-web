@@ -1,4 +1,3 @@
-import React, {type ReactElement} from 'react';
 import {EMPTY_PLACEHOLDER} from '@/constants';
 import {Link, TableCell, TableRow} from '@mui/material';
 import SkeletonCustom from '@/components/SkeletonCustom';
@@ -18,10 +17,7 @@ const data = [
   createData('Onboarding Guide', 'https://i.feishu.cn/wiki/'),
 ];
 
-const AboutUsTab = (): ReactElement => {
-  /**
-   * Declarations
-   */
+const AboutUsTab = () => {
   const headers = ['Name', 'Link'];
 
   const table = (

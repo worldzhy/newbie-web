@@ -1,4 +1,4 @@
-import React, {useEffect, type ReactElement, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import {User, Role} from '@prisma/client';
 import {EMPTY_PLACEHOLDER} from '@/constants';
@@ -12,21 +12,10 @@ import TableContainerCustom from '@/components/TableContainerCustom';
 import RoleService from '@/http/api/role';
 import UserService from '@/http/api/user';
 
-/**
- * Types
- */
-
-const MembersTab = (): ReactElement => {
-  /**
-   * Declarations
-   */
+const MembersTab = () => {
   const router = useRouter();
   const headers = ['Name', 'Email', 'Phone', 'Role', 'Actions'];
   const [rolesList, setRolesList] = useState<Role[]>([]);
-
-  /**
-   * States
-   */
   const [data, setData] = useState<(User & {roles: Role[]})[]>([]);
   const [isFetching, setIsFetching] = useState(true);
   const [createModal, setCreateModal] = useState(false);
@@ -34,9 +23,6 @@ const MembersTab = (): ReactElement => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [activeMember, setActiveMember] = useState<User & {roles: Role[]}>();
 
-  /**
-   * Data Fetching
-   */
   useEffect(() => {
     const startFetching = async (): Promise<void> => {
       try {
@@ -56,7 +42,7 @@ const MembersTab = (): ReactElement => {
         if (!ignore) {
           if (isUnauthorized(err)) {
             delayExecute(() => {
-              void router.push('/');
+              router.push('/');
             }, 0);
           } else {
             showError(err);
@@ -72,9 +58,6 @@ const MembersTab = (): ReactElement => {
     };
   }, [router]);
 
-  /**
-   * Components
-   */
   const table = (
     <TableContainerCustom headers={headers}>
       {data

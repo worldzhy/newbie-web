@@ -1,4 +1,4 @@
-import React, {type FC} from 'react';
+import {type FC} from 'react';
 import {
   MenuItem,
   OutlinedInput,
@@ -80,10 +80,7 @@ const MultiSelectCustom: FC<Props> = ({
           size="small"
         >
           {options.map(opt => (
-            <MenuItem
-              key={opt}
-              value={opt}
-            >
+            <MenuItem key={opt} value={opt}>
               <Checkbox checked={selected.includes(opt)} />
               <ListItemText primary={opt} />
             </MenuItem>
