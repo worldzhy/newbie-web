@@ -123,10 +123,6 @@ export default class Permission {
   }
 }
 
-/**
- * Types
- */
-
 interface IPermission {
   id: number;
   action: string;

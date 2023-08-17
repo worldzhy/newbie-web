@@ -4,10 +4,6 @@ import FormDialogCustom from '@/components/FormDialogCustom';
 import RoleService from '@/http/api/role';
 import {Role} from '@prisma/client';
 
-/**
- * Types
- */
-
 interface Props {
   activeRole: Role | undefined;
   data: Role[];
@@ -23,14 +19,8 @@ const RolesDeleteModal: FC<Props> = ({
   modal,
   setModal,
 }) => {
-  /**
-   * States
-   */
   const [isProcessing, setIsProcessing] = useState(false);
 
-  /**
-   * Handlers
-   */
   const deleteRole = async (): Promise<void> => {
     await sendRequest(setIsProcessing, async () => {
       await RoleService.delete(raise(activeRole?.id));

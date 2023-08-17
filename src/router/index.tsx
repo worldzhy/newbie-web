@@ -1,6 +1,7 @@
 import Pages from './config';
 import BlankLayout from '@/layouts/BlankLayout';
 import LayoutDashboard from '@/layouts/LayoutDashboard';
+import MuiLayout from '@/layouts/MuiLayout';
 
 type LayoutItem = {
   layout: any;
@@ -17,7 +18,7 @@ const Routers: LayoutItem[] = [
     routes: [Pages.FORGOT_PASSWORD.path],
   },
   {
-    layout: LayoutDashboard,
+    layout: MuiLayout,
     routes: [Pages.PROJECTS.path],
   },
   {

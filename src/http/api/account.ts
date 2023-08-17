@@ -35,10 +35,6 @@ export default class Auth {
   }
 }
 
-/**
- * Types
- */
-
 interface ILoginPayload {
   account: string;
   password: string;

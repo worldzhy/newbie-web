@@ -46,7 +46,7 @@ const LayoutDashboard = ({window, children}: Props) => {
     () =>
       subMenus.find(
         text =>
-          router.pathname.includes(text.toLowerCase()) || EMPTY_PLACEHOLDER
+          router.pathname.includes(text.toLowerCase()) ?? EMPTY_PLACEHOLDER
       ),
     [router.pathname]
   );

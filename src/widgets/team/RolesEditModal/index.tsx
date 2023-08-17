@@ -6,10 +6,6 @@ import RoleService from '@/http/api/role';
 import FormDialogCustom from '@/components/FormDialogCustom';
 import FormDialogInputCustom from '@/components/FormDialogInputCustom';
 
-/**
- * Types
- */
-
 interface Props {
   activeRole: Role | undefined;
   data: Role[];

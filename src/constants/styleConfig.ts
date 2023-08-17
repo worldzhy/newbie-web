@@ -9,4 +9,6 @@ export const ModalStyle = {
   padding: 0,
 };
 
-export default {};
+export default {
+  // TODO: this is globle theme config
+};

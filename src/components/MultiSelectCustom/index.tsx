@@ -24,9 +24,6 @@ const MultiSelectCustom: FC<Props> = ({
   selected,
   setSelected,
 }) => {
-  /**
-   * Declarations
-   */
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -38,9 +35,6 @@ const MultiSelectCustom: FC<Props> = ({
     },
   };
 
-  /**
-   * Handlers
-   */
   const handleChange = (event: SelectChangeEvent<typeof selected>): void => {
     const {
       target: {value},
