@@ -3,11 +3,13 @@ import {
   Box,
   List,
   Drawer,
+  Toolbar,
   ListItem,
   ListItemIcon,
   ListItemText,
   ListItemButton,
 } from '@mui/material';
+import Logo from '../Logo';
 import {useRouter} from 'next/router';
 import {EMPTY_PLACEHOLDER} from '@/constants';
 import MailIcon from '@mui/icons-material/Mail';
@@ -16,13 +18,14 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import styles from './index.module.scss';
 
 type IProps = {
-  top?: number;
+  headerHeight?: number;
+  drawerWidth?: number;
 };
 
-const drawerWidth = 240;
+const DrawerWidth = 240;
 const subMenus = ['Projects', 'Services', 'Wiki', 'Team', 'Workflow'];
 
-const NavBar: FC<IProps> = ({top}) => {
+const NavBar: FC<IProps> = ({headerHeight, drawerWidth = DrawerWidth}) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
 
@@ -37,6 +40,9 @@ const NavBar: FC<IProps> = ({top}) => {
 
   const drawer = (
     <div className={styles.menu}>
+      <Toolbar style={{height: headerHeight}}>
+        <Logo />
+      </Toolbar>
       <List>
         {subMenus.map((text, index) => (
           <ListItem
@@ -76,7 +82,6 @@ const NavBar: FC<IProps> = ({top}) => {
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
             width: drawerWidth,
-            top,
           },
         }}
       >
@@ -89,7 +94,6 @@ const NavBar: FC<IProps> = ({top}) => {
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
             width: drawerWidth,
-            top,
           },
         }}
         open

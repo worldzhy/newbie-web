@@ -8,12 +8,13 @@ import ThemeContext from '@/context/ThemeContext';
 import styles from './index.module.scss';
 
 const HEADER_HEIGHT = 64;
+const DRAWER_WIDTH = 240;
 
 const MuiDashboardLayout: FC<PropsWithChildren> = ({children}) => (
   <ThemeContext>
-    <Header withNav={false} height={HEADER_HEIGHT} />
+    <Header withNav={false} height={HEADER_HEIGHT} drawerWidth={DRAWER_WIDTH} />
     <Container sx={{display: 'flex'}} id="main-container">
-      <NavBar top={HEADER_HEIGHT} />
+      <NavBar headerHeight={HEADER_HEIGHT} drawerWidth={DRAWER_WIDTH} />
       <main id="main-content" className={styles.mainContent}>
         <Toolbar style={{height: 64}} />
         {children}

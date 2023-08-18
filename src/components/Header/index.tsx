@@ -1,13 +1,13 @@
 import {FC} from 'react';
 import {
   Box,
-  Link,
   Stack,
   Tooltip,
   Container,
   IconButton,
   GlobalStyles,
 } from '@mui/material';
+import Logo from '../Logo';
 import AppSearch from '../AppSearch';
 import HeaderNavBar from '../HeaderNavBar';
 import {styled} from '@mui/material/styles';
@@ -16,11 +16,16 @@ import HeaderNavDropdown from '../HeaderNavDropdown';
 import HeaderUserDropdown from '../HeaderUserDropdown';
 import {useThemeContext} from '@/context/ThemeContext';
 
-type IProps = {withNav?: boolean; height?: number};
+type IProps = {withNav?: boolean; height?: number; drawerWidth?: number};
 
 const HEIGHT = 64;
+const DrawerWidth = 240;
 
-const Header: FC<IProps> = ({height = HEIGHT, withNav = true}) => {
+const Header: FC<IProps> = ({
+  height = HEIGHT,
+  withNav = true,
+  drawerWidth = DrawerWidth,
+}) => {
   const {
     theme: {header},
   } = useThemeContext();
@@ -50,18 +55,19 @@ const Header: FC<IProps> = ({height = HEIGHT, withNav = true}) => {
       <Container
         sx={{display: 'flex', alignItems: 'center', minHeight: HEIGHT}}
       >
-        <Box
-          component={Link}
-          href="/"
-          aria-label="Go to homepage"
-          sx={{lineHeight: 0, mr: 2}}
-        >
-          <h1>Logo</h1>
-        </Box>
+        <Logo />
         {withNav && (
           <Box sx={{display: {xs: 'none', md: 'initial'}}}>
             <HeaderNavBar />
           </Box>
+        )}
+        {!withNav && (
+          <Box
+            sx={{
+              width: `${drawerWidth}px`,
+              display: {xs: 'none', sm: 'block'},
+            }}
+          />
         )}
         <Stack direction="row" spacing={1} style={{marginLeft: 20}}>
           <AppSearch />
