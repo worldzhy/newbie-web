@@ -1,3 +1,4 @@
+import {FC} from 'react';
 import {
   Box,
   Link,
@@ -15,16 +16,19 @@ import HeaderNavDropdown from '../HeaderNavDropdown';
 import HeaderUserDropdown from '../HeaderUserDropdown';
 import {useThemeContext} from '@/context/ThemeContext';
 
+type IProps = {withNav?: boolean; height?: number};
+
 const HEIGHT = 64;
 
-const Header = () => {
+const Header: FC<IProps> = ({height = HEIGHT, withNav = true}) => {
   const {
     theme: {header},
   } = useThemeContext();
 
   const HeaderWapper = styled('header')(({theme}) => [
     {
-      position: 'sticky',
+      position: 'fixed',
+      width: '100%',
       top: 0,
       transition: theme.transitions.create('top'),
       zIndex: theme.zIndex.appBar,
@@ -39,7 +43,7 @@ const Header = () => {
       <GlobalStyles
         styles={{
           ':root': {
-            '--MuiDocs-header-height': `${HEIGHT}px`,
+            '--MuiDocs-header-height': `${height}px`,
           },
         }}
       />
@@ -54,9 +58,11 @@ const Header = () => {
         >
           <h1>Logo</h1>
         </Box>
-        <Box sx={{display: {xs: 'none', md: 'initial'}}}>
-          <HeaderNavBar />
-        </Box>
+        {withNav && (
+          <Box sx={{display: {xs: 'none', md: 'initial'}}}>
+            <HeaderNavBar />
+          </Box>
+        )}
         <Stack direction="row" spacing={1} style={{marginLeft: 20}}>
           <AppSearch />
           <Tooltip title="Mock buttom" enterDelay={300}>
@@ -80,9 +86,16 @@ const Header = () => {
         <Box>
           <HeaderUserDropdown />
         </Box>
-        <Box sx={{display: {md: 'none'}, ml: 1}}>
-          <HeaderNavDropdown />
-        </Box>
+        {withNav && (
+          <Box sx={{display: {md: 'none'}, ml: 1}}>
+            <HeaderNavDropdown />
+          </Box>
+        )}
+        {!withNav && (
+          <Box sx={{display: {sm: 'none'}, ml: 1}}>
+            <HeaderNavDropdown />
+          </Box>
+        )}
       </Container>
     </HeaderWapper>
   );

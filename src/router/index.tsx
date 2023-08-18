@@ -1,7 +1,8 @@
 import Pages from './config';
+import MuiLayout from '@/layouts/MuiLayout';
 import BlankLayout from '@/layouts/BlankLayout';
 import LayoutDashboard from '@/layouts/LayoutDashboard';
-import MuiLayout from '@/layouts/MuiLayout';
+import MuiDashboardLayout from '@/layouts/MuiDashboardLayout';
 
 type LayoutItem = {
   layout: any;
@@ -22,7 +23,7 @@ const Routers: LayoutItem[] = [
     routes: [Pages.PROJECTS.path],
   },
   {
-    layout: LayoutDashboard,
+    layout: MuiDashboardLayout,
     routes: [Pages.SERVICES.path],
   },
   {
